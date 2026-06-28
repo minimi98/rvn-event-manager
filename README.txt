@@ -15,5 +15,4 @@ Bitte den bisherigen Repository-Inhalt ersetzen und die Ordner css, js und asset
 
 Bestehende Firebase-Daten bleiben erhalten.
 
-Admin-Passwort:
-RVN2026!
+
