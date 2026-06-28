@@ -1,18 +1,29 @@
-RVN Event Manager Version 4 modular
+RVN Event Manager Version 5 Clean
 
-Diese Version ist sauber in mehrere Dateien aufgeteilt:
-- js/app.js
-- js/firebase.js
-- js/state.js
-- js/utils.js
-- js/views.js
-- css/style.css
-- assets/logo.jpg
+Saubere Neuaufsetzung nach Versionskonflikten.
+
+Enthalten:
+- O-Ritt Startseite
+- Meldestelle
+- manuelle Startzeiten
+- Paddock-Nr. je Teilnehmer
+- Helferverwaltung
+- Stationen/Bereiche mit Reihenfolge
+- Maximalpunkte je Station
+- Punkteingabe
+- Rangliste
+- CSV-Export
+- Archiv-Platzhalter
+- Original-RVN-Logo im Ordner assets/logo.jpg
 
 Wichtig:
-Diese Version ist ein einmaliger Struktur-Umbau.
-Bitte den bisherigen Repository-Inhalt ersetzen und die Ordner css, js und assets mit hochladen.
+Bitte den lokalen Repository-Ordner einmal vollständig mit diesem Paket ersetzen.
+Danach in GitHub Desktop:
+1. Summary: Version 5 Clean
+2. Commit to main
+3. Push origin
 
 Bestehende Firebase-Daten bleiben erhalten.
 
-
+Admin-Passwort:
+RVN2026!

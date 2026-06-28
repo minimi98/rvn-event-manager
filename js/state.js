@@ -9,13 +9,13 @@ export const defaultSettings = {
 };
 
 export const defaultRoles = [
+  { id: "aufbau", order: -2, name: "Aufbauteam", icon: "🔧", max: 6, maxPoints: 0, description: "Aufbau vor der Veranstaltung." },
+  { id: "meldestelle", order: 0, name: "Meldestelle", icon: "📋", max: 4, maxPoints: 0, description: "Anmeldung, Startunterlagen und Rückfragen." },
   ...Array.from({ length: 9 }, (_, i) => ({ id: `station-${i + 1}`, order: i + 1, name: `Station ${i + 1}`, icon: "🐴", max: 5, maxPoints: 10, description: "" })),
-  { id: "meldestelle", order: 0, name: "Meldestelle", icon: "📋", max: 4, description: "Anmeldung, Startunterlagen und Rückfragen." },
-  { id: "haengerplatz", order: 10, name: "Hängerplatz", icon: "🚗", max: 4, description: "Einweisung und Ordnung am Hängerparkplatz." },
-  { id: "grillen", order: 14, name: "Grillteam", icon: "🔥", max: 6, description: "Unterstützung beim Grillen und Abspülen am Abend." },
-  { id: "aufbau", order: -2, name: "Aufbauteam", icon: "🔧", max: 6, description: "Aufbau vor der Veranstaltung." },
-  { id: "abbau", order: 15, name: "Abbauteam", icon: "🔨", max: 6, description: "Abbau nach der Veranstaltung." },
-  { id: "springer-kfz", order: 13, name: "Springer mit KFZ", icon: "🚙", max: 4, description: "Kontrolle der Stationen mit Fahrzeug." }
+  { id: "haengerplatz", order: 10, name: "Hängerplatz", icon: "🚗", max: 4, maxPoints: 0, description: "Einweisung und Ordnung am Hängerparkplatz." },
+  { id: "springer-kfz", order: 13, name: "Springer mit KFZ", icon: "🚙", max: 4, maxPoints: 0, description: "Kontrolle der Stationen mit Fahrzeug." },
+  { id: "grillen", order: 14, name: "Grillteam", icon: "🔥", max: 6, maxPoints: 0, description: "Unterstützung beim Grillen und Abspülen am Abend." },
+  { id: "abbau", order: 15, name: "Abbauteam", icon: "🔨", max: 6, maxPoints: 0, description: "Abbau nach der Veranstaltung." }
 ];
 
 export const state = {
