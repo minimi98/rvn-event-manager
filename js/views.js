@@ -3,7 +3,7 @@ import { esc, slug, toast, downloadCSV } from "./utils.js";
 import { db, collection, addDoc, deleteDoc, doc, setDoc, serverTimestamp } from "./firebase.js";
 
 export function shell(content) {
-  return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" onclick="go('home')">☰</button><div><h1>RVN Event Manager</h1><p>${esc(state.currentEventName)} · O-Ritt & Turnier</p></div></div><img class="logo" src="assets/logo.jpg" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Home")}${nav("oritt","🐴","O-Ritt")}${nav("turnier","🏇","Turnier")}${nav("helfer","👥","Helfer")}${nav("admin","👑","Admin")}</nav></div>`;
+  return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" onclick="go('home')">☰</button><div><h1>RVN Event Manager</h1><p>${esc(state.currentEventName)} · O-Ritt & Turnier</p></div></div><img class="logo" src="assets/logo.png" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Home")}${nav("oritt","🐴","O-Ritt")}${nav("turnier","🏇","Turnier")}${nav("helfer","👥","Helfer")}${nav("admin","👑","Admin")}</nav></div>`;
 }
 const nav = (id, icon, label) => `<button class="nav ${state.page === id ? "active" : ""}" onclick="go('${id}')"><span>${icon}</span>${label}</button>`;
 
