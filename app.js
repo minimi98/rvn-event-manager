@@ -30,7 +30,7 @@ let eventArchive = [
 let helpers = [];
 let news = [];
 let settings = { ...defaultSettings };
-let roles = sortRoles(defaultRoles);
+let roles = (a,b)=>Number(a.order||999)-Number(b.order||999)(defaultRoles);
 let participants = [];
 let scores = [];
 let db = null;
@@ -48,7 +48,7 @@ const scoringStations = () => roles.filter(r => r.id.startsWith("station-"));
 const scoreKey = (participantId, stationId) => participantId + "__" + stationId;
 const stationNumber = (id) => { const m = String(id || "").match(/station-(\d+)/); return m ? Number(m[1]) : 999; };
 const roleOrder = (r) => Number.isFinite(Number(r.order)) ? Number(r.order) : stationNumber(r.id);
-const sortRoles = (arr) => [...arr].sort((a, b) => roleOrder(a) - roleOrder(b) || String(a.name || "").localeCompare(String(b.name || "")));
+const (a,b)=>Number(a.order||999)-Number(b.order||999) = (arr) => [...arr].sort((a, b) => roleOrder(a) - roleOrder(b) || String(a.name || "").localeCompare(String(b.name || "")));
 const scoreFor = (participantId, stationId) => scores.find(s => s.participantId === participantId && s.stationId === stationId);
 const totalFor = (participantId) => scoringStations().reduce((sum, st) => sum + Number(scoreFor(participantId, st.id)?.points || 0), 0);
 const rankedParticipants = () => [...participants].sort((a, b) => totalFor(b.id) - totalFor(a.id) || String(a.startNumber || "").localeCompare(String(b.startNumber || "")));
@@ -410,7 +410,7 @@ function init() {
     db = getFirestore(app);
     ensureDefaults();
     onSnapshot(doc(db, "settings", "main"), s => { if (s.exists()) settings = { ...defaultSettings, ...s.data() }; render(); });
-    onSnapshot(query(collection(db, "roles"), orderBy("createdAt", "asc")), snap => { const custom = snap.docs.map(d => ({ id: d.id, ...d.data() })); roles = sortRoles(custom.length ? custom : defaultRoles); render(); });
+    onSnapshot(query(collection(db, "roles"), orderBy("createdAt", "asc")), snap => { const custom = snap.docs.map(d => ({ id: d.id, ...d.data() })); roles = (a,b)=>Number(a.order||999)-Number(b.order||999)(custom.length ? custom : defaultRoles); render(); });
     onSnapshot(query(collection(db, "helpers"), orderBy("createdAt", "asc")), snap => { helpers = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); });
     onSnapshot(query(collection(db, "news"), orderBy("createdAt", "desc")), snap => { news = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); });
     onSnapshot(query(collection(db, "participants"), orderBy("createdAt", "asc")), snap => { participants = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); });
