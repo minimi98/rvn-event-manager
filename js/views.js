@@ -152,6 +152,65 @@ function alertsPage(){if(!(state.isAdmin||isMeldestelle()||isSpringer()))return 
 function resultsPage(){if(state.isAdmin||isMeldestelle()||stationAccess().startsWith("station-")){const rank=rankedParticipants();return `<section class="panel"><h2>🏆 Vollständige Ergebnisansicht</h2>${rank.map((p,i)=>`<div class="entry"><div><strong>${i+1}. ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")}</small></div><strong>${totalFor(p.id)} Punkte</strong></div>`).join("")}</section>`}return `<section class="panel"><h2>🏅 Eigenen Rang suchen</h2><div class="notice">Punktzahlen und vollständige Rangliste bleiben bis zur Siegerehrung verborgen.</div><form id="rankForm" class="form"><label>Gruppenname<input id="rankName"></label><label>Pferdename<input id="rankHorse"></label><button class="btn full">Rang suchen</button></form><div id="rankResult"></div></section>`}
 
 
+
+function adminHelperOverview(){
+  const total=state.helpers.length;
+  const full=state.roles.filter(r=>peopleFor(r.id).length>=Number(r.max||0)).length;
+  const empty=state.roles.filter(r=>peopleFor(r.id).length===0).length;
+  const partial=state.roles.length-full-empty;
+
+  return `<section class="panel">
+    <div class="head">
+      <div>
+        <h2>👥 Komplette Helferverteilung</h2>
+        <p class="sub">Alle Helfer nach Bereichen gruppiert und direkt bearbeitbar.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><strong>${total}</strong><span>Helfer gesamt</span></div>
+      <div class="stat"><strong>${full}</strong><span>voll besetzt</span></div>
+      <div class="stat"><strong>${partial}</strong><span>teilweise besetzt</span></div>
+      <div class="stat"><strong>${empty}</strong><span>unbesetzt</span></div>
+    </div>
+
+    ${state.roles.map(r=>{
+      const assigned=peopleFor(r.id);
+      const count=assigned.length;
+      const free=Math.max(0,Number(r.max||0)-count);
+      const signal=count===0?"🔴":free===0?"🟢":"🟡";
+
+      return `<div class="panel" style="margin:14px 0;padding:16px">
+        <div class="head">
+          <div>
+            <h3>${signal} ${r.icon} ${esc(r.name)}</h3>
+            <p class="sub">${count} / ${r.max} eingetragen · ${free===0?"voll":free+" frei"}</p>
+          </div>
+        </div>
+
+        ${assigned.length?assigned.map(h=>`
+          <div class="entry">
+            <div style="width:100%">
+              <div class="form">
+                <label>Name<input id="helper-name-${h.id}" value="${esc(h.name||"")}"></label>
+                <label>Telefon<input id="helper-phone-${h.id}" value="${esc(h.phone||"")}"></label>
+                <label>Zeitraum<input id="helper-time-${h.id}" value="${esc(h.time||"")}"></label>
+                <label>Bereich
+                  <select id="helper-role-${h.id}">
+                    ${state.roles.map(role=>`<option value="${role.id}" ${role.id===h.role?"selected":""}>${role.icon} ${esc(role.name)}</option>`).join("")}
+                  </select>
+                </label>
+                <label class="full">Bemerkung<textarea id="helper-note-${h.id}">${esc(h.note||"")}</textarea></label>
+              </div>
+              <button class="btn alt" onclick="saveHelper('${h.id}')">Speichern / Verschieben</button>
+              <button class="btn danger" onclick="deleteHelper('${h.id}')">Löschen</button>
+            </div>
+          </div>`).join(""):`<p class="sub">Noch keine Helfer in diesem Bereich.</p>`}
+      </div>`;
+    }).join("")}
+  </section>`;
+}
+
 function adminExtras(){
   return `<section class="panel">
     <h2>📄 Dokumentencenter</h2>
@@ -187,7 +246,7 @@ function adminExtras(){
   </section>`;
 }
 
-function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 Admin</h2><form id="adminForm" class="form"><label>Passwort<input id="adminPassword" type="password"></label><button class="btn full">Einloggen</button></form></section>`;return `<section class="panel"><div class="head"><h2>👑 Admin Dashboard</h2><button class="btn light" onclick="adminLogout()">Abmelden</button></div><div class="stats"><div class="stat"><strong>${state.participants.length}</strong><span>Teilnehmer</span></div><div class="stat"><strong>${state.helpers.length}</strong><span>Helfer</span></div><div class="stat"><strong>${state.alerts.filter(a=>a.status!=="erledigt").length}</strong><span>offene Meldungen</span></div><div class="stat"><strong>${scoringStations().length}</strong><span>Stationen</span></div></div><button class="btn" onclick="go('meldestelle')">Meldestelle</button><button class="btn" onclick="go('springer')">Meldungen</button><button class="btn" onclick="go('ergebnisse')">Ergebnisse</button></section>${adminExtras()}`}
+function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 Admin</h2><form id="adminForm" class="form"><label>Passwort<input id="adminPassword" type="password"></label><button class="btn full">Einloggen</button></form></section>`;return `<section class="panel"><div class="head"><h2>👑 Admin Dashboard</h2><button class="btn light" onclick="adminLogout()">Abmelden</button></div><div class="stats"><div class="stat"><strong>${state.participants.length}</strong><span>Teilnehmer</span></div><div class="stat"><strong>${state.helpers.length}</strong><span>Helfer</span></div><div class="stat"><strong>${state.alerts.filter(a=>a.status!=="erledigt").length}</strong><span>offene Meldungen</span></div><div class="stat"><strong>${scoringStations().length}</strong><span>Stationen</span></div></div><button class="btn" onclick="go('meldestelle')">Meldestelle</button><button class="btn" onclick="go('springer')">Meldungen</button><button class="btn" onclick="go('ergebnisse')">Ergebnisse</button></section>${adminHelperOverview()}${adminExtras()}`}
 
 export function attachForms(render){
 const a=document.getElementById("accessForm");if(a)a.addEventListener("submit",accessLogin);
@@ -282,6 +341,29 @@ window.moveHelper=async id=>{
   }
   await setDoc(doc(db,"helpers",id),{role,updatedAt:serverTimestamp()},{merge:true});
   toast("Helfer verschoben.");
+};
+
+window.saveHelper=async id=>{
+  if(!state.isAdmin) return toast("Keine Berechtigung.");
+
+  const targetRole=document.getElementById("helper-role-"+id).value;
+  const target=roleById(targetRole);
+  const count=peopleFor(targetRole).filter(h=>h.id!==id).length;
+
+  if(target && count>=Number(target.max||0)){
+    return toast("Der Zielbereich ist bereits voll.");
+  }
+
+  await setDoc(doc(db,"helpers",id),{
+    name:document.getElementById("helper-name-"+id).value,
+    phone:document.getElementById("helper-phone-"+id).value,
+    time:document.getElementById("helper-time-"+id).value,
+    role:targetRole,
+    note:document.getElementById("helper-note-"+id).value,
+    updatedAt:serverTimestamp()
+  },{merge:true});
+
+  toast("Helfer gespeichert.");
 };
 
 window.deleteHelper=async id=>{
