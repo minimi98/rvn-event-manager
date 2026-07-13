@@ -1,78 +1,27 @@
-import { db, collection, doc, setDoc, getDoc, serverTimestamp, onSnapshot, query, orderBy } from "./firebase.js";
-import { state, defaultSettings, defaultRoles, sortRoles } from "./state.js";
-import { shell, pageView, attachForms } from "./views.js";
-import { toast } from "./utils.js";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js";
+import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js";
+import {shell,pageView,attachForms} from "./views.js";
+import {toast} from "./utils.js";
 
-const appEl = document.getElementById("app");
+const appEl=document.getElementById("app");
+function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
+window.renderApp=renderApp;
+window.go=id=>{state.page=id;renderApp();scrollTo({top:0,behavior:"smooth"})};
 
-function renderApp() {
-  appEl.innerHTML = shell(pageView());
-  attachForms(renderApp);
-}
-window.renderApp = renderApp;
-
-window.go = (id) => {
-  state.page = id;
-  renderApp();
-  scrollTo({ top: 0, behavior: "smooth" });
-};
-
-async function ensureDefaults() {
-  const settings = await getDoc(doc(db, "settings", "main"));
-  if (!settings.exists()) await setDoc(doc(db, "settings", "main"), defaultSettings);
-
-  const seeded = await getDoc(doc(db, "meta", "rolesSeeded"));
-  if (!seeded.exists()) {
-    for (const r of defaultRoles) {
-      await setDoc(doc(db, "roles", r.id), { ...r, createdAt: serverTimestamp() }, { merge: true });
-    }
-    await setDoc(doc(db, "meta", "rolesSeeded"), { done: true, createdAt: serverTimestamp() });
-  }
+async function ensureDefaults(){
+const s=await getDoc(doc(db,"settings","main"));if(!s.exists())await setDoc(doc(db,"settings","main"),defaultSettings);
+const seeded=await getDoc(doc(db,"meta","rolesSeededV6"));if(!seeded.exists()){for(const r of defaultRoles)await setDoc(doc(db,"roles",r.id),{...r,createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"meta","rolesSeededV6"),{done:true,createdAt:serverTimestamp()})}
 }
 
-function init() {
-  try {
-    ensureDefaults();
-
-    onSnapshot(doc(db, "settings", "main"), snap => {
-      if (snap.exists()) state.settings = { ...defaultSettings, ...snap.data() };
-      renderApp();
-    });
-
-    onSnapshot(query(collection(db, "roles"), orderBy("createdAt", "asc")), snap => {
-      const custom = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      state.roles = sortRoles(custom.length ? custom : defaultRoles);
-      renderApp();
-    });
-
-    onSnapshot(query(collection(db, "helpers"), orderBy("createdAt", "asc")), snap => {
-      state.helpers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderApp();
-    });
-
-    onSnapshot(query(collection(db, "news"), orderBy("createdAt", "desc")), snap => {
-      state.news = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderApp();
-    });
-
-    onSnapshot(query(collection(db, "participants"), orderBy("createdAt", "asc")), snap => {
-      state.participants = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderApp();
-    });
-
-    onSnapshot(collection(db, "scores"), snap => {
-      state.scores = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderApp();
-    });
-
-    setInterval(() => {
-      if (state.page === "oritt") renderApp();
-    }, 1000);
-  } catch (e) {
-    console.error(e);
-    toast("App konnte nicht geladen werden. Bitte Console prüfen.");
-    renderApp();
-  }
+function init(){
+try{
+ensureDefaults();
+onSnapshot(doc(db,"settings","main"),s=>{if(s.exists())state.settings={...defaultSettings,...s.data()};renderApp()});
+onSnapshot(query(collection(db,"roles"),orderBy("createdAt","asc")),s=>{const x=s.docs.map(d=>({id:d.id,...d.data()}));state.roles=sortRoles(x.length?x:defaultRoles);renderApp()});
+onSnapshot(query(collection(db,"helpers"),orderBy("createdAt","asc")),s=>{state.helpers=s.docs.map(d=>({id:d.id,...d.data()}));renderApp()});
+onSnapshot(query(collection(db,"participants"),orderBy("createdAt","asc")),s=>{state.participants=s.docs.map(d=>({id:d.id,...d.data()}));renderApp()});
+onSnapshot(collection(db,"scores"),s=>{state.scores=s.docs.map(d=>({id:d.id,...d.data()}));renderApp()});
+onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.alerts=s.docs.map(d=>({id:d.id,...d.data()}));renderApp()});
+}catch(e){console.error(e);toast("Fehler beim Laden.");renderApp()}
 }
-
 init();

@@ -1,29 +1,24 @@
-RVN Event Manager Version 5 Clean
-
-Saubere Neuaufsetzung nach Versionskonflikten.
+RVN Event Manager Version 6 Complete
 
 Enthalten:
-- O-Ritt Startseite
-- Meldestelle
-- manuelle Startzeiten
-- Paddock-Nr. je Teilnehmer
-- Helferverwaltung
-- Stationen/Bereiche mit Reihenfolge
-- Maximalpunkte je Station
-- Punkteingabe
-- Rangliste
-- CSV-Export
-- Archiv-Platzhalter
-- Original-RVN-Logo im Ordner assets/logo.jpg
+- Admin
+- Meldestellen-Zugang per Telefonnummer
+- Stationszugang per Telefonnummer
+- Springer-Zugang per Telefonnummer
+- Startzeiten und Paddocks nur durch Admin/Meldestelle
+- Stationspunkte nur durch eingetragene Stationshelfer/Admin
+- Stationsmeldungen: Info, Hilfe, Notfall
+- Springerstatus: übernommen, unterwegs, erledigt
+- Teilnehmerbereich mit Startnummer + Pferdename
+- nur eigener Rang, keine Punktzahlen
+- Reitkarte als GPX-/OsmAnd-Link oder Kartenausschnitt
+- Freigabe 30 Minuten vor Startzeit
+- 26 Paare vorbereitet
+- bestehende Firebase-Daten bleiben erhalten
 
-Wichtig:
-Bitte den lokalen Repository-Ordner einmal vollständig mit diesem Paket ersetzen.
-Danach in GitHub Desktop:
-1. Summary: Version 5 Clean
+Einmaliger Upload:
+Den kompletten Inhalt des lokalen Repository-Ordners durch diese Version ersetzen.
+Dann GitHub Desktop:
+1. Summary: Version 6 Complete
 2. Commit to main
 3. Push origin
-
-Bestehende Firebase-Daten bleiben erhalten.
-
-Admin-Passwort:
-RVN2026!
