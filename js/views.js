@@ -12,7 +12,7 @@ const canEditStation=id=>state.isAdmin||stationAccess()===id;
 const currentParticipant=()=>state.participants.find(p=>p.id===participantAccess())||null;
 
 export function shell(content){
-return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" onclick="go('home')">☰</button><div><h1>RVN Event Manager</h1><p>O-Ritt 2026 · 26 Paare</p></div></div><img class="logo" src="assets/logo.jpg" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Home")}${nav("oritt","🐴","O-Ritt")}${nav("teilnehmer","🗺️","Teilnehmer")}${nav("zugang","🔑","Zugang")}${nav("admin","👑","Admin")}</nav></div>`}
+return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" onclick="go('home')">☰</button><div><h1>RVN Event Manager</h1><p>O-Ritt 2026 · 26 Paare</p></div></div><img class="logo" src="assets/logo.jpg" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Home")}${nav("oritt","🐴","O-Ritt")}${nav("helfer","🙋","Helfer")}${nav("zugang","🔑","Zugang")}${nav("admin","👑","Admin")}</nav></div>`}
 const nav=(id,i,l)=>`<button class="nav ${state.page===id?"active":""}" onclick="go('${id}')"><span>${i}</span>${l}</button>`;
 
 function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;return `<div class="countdown"><div class="countbox"><strong>${d}</strong><span>Tage</span></div><div class="countbox"><strong>${h}</strong><span>Std</span></div><div class="countbox"><strong>${m}</strong><span>Min</span></div><div class="countbox"><strong>${s}</strong><span>Sek</span></div></div>`}
@@ -33,7 +33,30 @@ return homePage();
 
 function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>RVN Event<br>Manager</h2><p>O-Ritt Organisation & Veranstaltungstag</p></div></section><section class="grid two"><article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>26 Paare, Meldestelle, Stationen, Reitkarte und Ergebnisse.</p><button class="arrow" onclick="go('oritt')">›</button></article><article class="card"><div class="icon">🔐</div><h3>Zugänge</h3><p>Stationshelfer, Meldestelle und Springer melden sich per Telefonnummer an.</p><button class="arrow" onclick="go('zugang')">›</button></article></section>`}
 
-function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section><section class="grid"><article class="card"><div class="icon">🙋</div><h3>Helferanmeldung</h3><p>Bereiche ansehen und direkt anmelden.</p><button class="arrow" onclick="go('helfer')">›</button></article><article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Teilnehmer, Startzeiten und Paddocks verwalten.</p><button class="arrow" onclick="go('meldestelle')">›</button></article><article class="card"><div class="icon">🐴</div><h3>Stationsmodus</h3><p>Punkte eingeben und Meldungen senden.</p><button class="arrow" onclick="go('station')">›</button></article><article class="card"><div class="icon">🚙</div><h3>Springer</h3><p>Stationsmeldungen übernehmen und bearbeiten.</p><button class="arrow" onclick="go('springer')">›</button></article><article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Teilnehmer sehen nur den eigenen Rang.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article></section>`}
+function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section><section class="grid"><article class="card"><div class="icon">🙋</div><h3>Helferanmeldung</h3><p>Bereiche ansehen und direkt anmelden.</p><button class="arrow" onclick="go('helfer')">›</button></article><article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Teilnehmer, Startzeiten und Paddocks verwalten.</p><button class="arrow" onclick="go('meldestelle')">›</button></article><article class="card"><div class="icon">🐴</div><h3>Stationsmodus</h3><p>Punkte eingeben und Meldungen senden.</p><button class="arrow" onclick="go('station')">›</button></article><article class="card"><div class="icon">🚙</div><h3>Springer</h3><p>Stationsmeldungen übernehmen und bearbeiten.</p><button class="arrow" onclick="go('springer')">›</button></article><article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Teilnehmer sehen nur den eigenen Rang.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article></section>
+  <section class="panel">
+    <div class="head">
+      <div>
+        <h2>🐴 Stations- und Helferübersicht</h2>
+        <p class="sub">Hier sehen Helfer sofort, welche Bereiche es gibt und wo noch Unterstützung gebraucht wird.</p>
+      </div>
+      <button class="btn alt" onclick="go('helfer')">Zur Helferanmeldung</button>
+    </div>
+    <div class="cards">
+      ${state.roles.map(r=>{
+        const count=peopleFor(r.id).length;
+        const free=Math.max(0,Number(r.max||0)-count);
+        return `<div class="info">
+          <h3>${r.icon} ${esc(r.name)}</h3>
+          <p>${esc(r.description||"Beschreibung folgt.")}</p>
+          ${r.location?`<p><strong>📍 Standort:</strong> ${esc(r.location)}</p>`:""}
+          ${r.dutyTime?`<p><strong>🕒 Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}
+          <p><strong>${count} / ${r.max}</strong> eingetragen · ${free===0?"voll":free+" frei"}</p>
+          <button class="btn light" onclick="selectHelperRole('${r.id}');go('helfer')">Bereich wählen</button>
+        </div>`;
+      }).join("")}
+    </div>
+  </section>`}
 
 
 function helperPage(){
@@ -164,7 +187,7 @@ function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 A
 
 export function attachForms(render){
 const a=document.getElementById("accessForm");if(a)a.addEventListener("submit",accessLogin);
-const hs=document.getElementById("helperSignupForm");if(hs)hs.addEventListener("submit",submitHelperSignup);
+const hs=document.getElementById("helperSignupForm");if(hs){hs.addEventListener("submit",submitHelperSignup);const pre=sessionStorage.getItem("rvn_preselect_helper_role");if(pre){const sel=document.getElementById("helperRole");if(sel)sel.value=pre;sessionStorage.removeItem("rvn_preselect_helper_role");}}
 const p=document.getElementById("participantLoginForm");if(p)p.addEventListener("submit",participantLogin);
 const pf=document.getElementById("participantForm");if(pf)pf.addEventListener("submit",addParticipant);
 const af=document.getElementById("alertForm");if(af)af.addEventListener("submit",sendAlert);
@@ -224,6 +247,7 @@ async function submitHelperSignup(e){
 }
 
 window.selectHelperRole=id=>{
+  sessionStorage.setItem("rvn_preselect_helper_role",id);
   const select=document.getElementById("helperRole");
   if(select){
     select.value=id;
