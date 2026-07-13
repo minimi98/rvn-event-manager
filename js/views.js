@@ -20,6 +20,7 @@ function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(d
 export function pageView(){
 if(state.page==="home")return homePage();
 if(state.page==="oritt")return orittPage();
+if(state.page==="helfer")return helperPage();
 if(state.page==="teilnehmer")return participantPage();
 if(state.page==="zugang")return accessPage();
 if(state.page==="meldestelle")return meldestellePage();
@@ -32,7 +33,82 @@ return homePage();
 
 function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>RVN Event<br>Manager</h2><p>O-Ritt Organisation & Veranstaltungstag</p></div></section><section class="grid two"><article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>26 Paare, Meldestelle, Stationen, Reitkarte und Ergebnisse.</p><button class="arrow" onclick="go('oritt')">›</button></article><article class="card"><div class="icon">🔐</div><h3>Zugänge</h3><p>Stationshelfer, Meldestelle und Springer melden sich per Telefonnummer an.</p><button class="arrow" onclick="go('zugang')">›</button></article></section>`}
 
-function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section><section class="grid"><article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Teilnehmer, Startzeiten und Paddocks verwalten.</p><button class="arrow" onclick="go('meldestelle')">›</button></article><article class="card"><div class="icon">🐴</div><h3>Stationsmodus</h3><p>Punkte eingeben und Meldungen senden.</p><button class="arrow" onclick="go('station')">›</button></article><article class="card"><div class="icon">🚙</div><h3>Springer</h3><p>Stationsmeldungen übernehmen und bearbeiten.</p><button class="arrow" onclick="go('springer')">›</button></article><article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Teilnehmer sehen nur den eigenen Rang.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article></section>`}
+function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section><section class="grid"><article class="card"><div class="icon">🙋</div><h3>Helferanmeldung</h3><p>Bereiche ansehen und direkt anmelden.</p><button class="arrow" onclick="go('helfer')">›</button></article><article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Teilnehmer, Startzeiten und Paddocks verwalten.</p><button class="arrow" onclick="go('meldestelle')">›</button></article><article class="card"><div class="icon">🐴</div><h3>Stationsmodus</h3><p>Punkte eingeben und Meldungen senden.</p><button class="arrow" onclick="go('station')">›</button></article><article class="card"><div class="icon">🚙</div><h3>Springer</h3><p>Stationsmeldungen übernehmen und bearbeiten.</p><button class="arrow" onclick="go('springer')">›</button></article><article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Teilnehmer sehen nur den eigenen Rang.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article></section>`}
+
+
+function helperPage(){
+  return `<section class="panel">
+    <div class="head">
+      <div>
+        <h2>🙋 Helferanmeldung</h2>
+        <p class="sub">Wähle einen Bereich und trag dich direkt ein.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      ${state.roles.map(r=>{
+        const count=peopleFor(r.id).length;
+        const free=Math.max(0,Number(r.max||0)-count);
+        return `<div class="info">
+          <h3>${r.icon} ${esc(r.name)}</h3>
+          <p>${esc(r.description||"Beschreibung folgt.")}</p>
+          ${r.location?`<p><strong>📍 Standort:</strong> ${esc(r.location)}</p>`:""}
+          ${r.dutyTime?`<p><strong>🕒 Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}
+          ${r.contact?`<p><strong>👤 Ansprechpartner:</strong> ${esc(r.contact)}</p>`:""}
+          <p><strong>${count} / ${r.max}</strong> eingetragen · ${free===0?"voll":free+" frei"}</p>
+          <button class="btn ${free===0?"light":"alt"}" ${free===0?"disabled":""} onclick="selectHelperRole('${r.id}')">${free===0?"Voll":"Diesen Bereich wählen"}</button>
+        </div>`;
+      }).join("")}
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>📝 Als Helfer eintragen</h2>
+    <div class="notice">Die Telefonnummer wird später zugleich für den Zugang zu deiner Station, der Meldestelle oder dem Springerbereich verwendet.</div>
+    <form id="helperSignupForm" class="form">
+      <label>Name<input id="helperName" required placeholder="Vor- und Nachname"></label>
+      <label>Telefonnummer<input id="helperPhone" required placeholder="Telefonnummer"></label>
+      <label>Bereich
+        <select id="helperRole">
+          ${state.roles.map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}
+        </select>
+      </label>
+      <label>Zeitraum
+        <select id="helperTime">
+          <option>ganztags</option>
+          <option>vormittags</option>
+          <option>nachmittags</option>
+          <option>abends</option>
+          <option>nach Absprache</option>
+        </select>
+      </label>
+      <label class="full">Bemerkung<textarea id="helperNote" placeholder="z. B. mit Auto, erst ab 12 Uhr"></textarea></label>
+      <button class="btn full" type="submit">Verbindlich eintragen</button>
+    </form>
+  </section>
+
+  ${state.isAdmin?adminHelperManagement():""}`;
+}
+
+function adminHelperManagement(){
+  return `<section class="panel">
+    <h2>👑 Helferverwaltung</h2>
+    ${state.helpers.length?state.helpers.map(h=>`
+      <div class="entry">
+        <div>
+          <strong>${esc(h.name)}</strong><br>
+          <small>${esc(h.phone||"-")} · ${esc(h.time||"-")} · ${esc(h.note||"keine Bemerkung")}</small>
+        </div>
+        <div>
+          <select id="helper-role-${h.id}">
+            ${state.roles.map(r=>`<option value="${r.id}" ${r.id===h.role?"selected":""}>${r.icon} ${esc(r.name)}</option>`).join("")}
+          </select>
+          <button class="btn light" onclick="moveHelper('${h.id}')">Verschieben</button>
+          <button class="btn danger" onclick="deleteHelper('${h.id}')">Löschen</button>
+        </div>
+      </div>`).join(""):`<p class="sub">Noch keine Helfer eingetragen.</p>`}
+  </section>`;
+}
 
 function accessPage(){return `<section class="panel"><h2>🔑 Helferzugang</h2><div class="notice">Station auswählen und die bei der Helferanmeldung hinterlegte Telefonnummer eingeben.</div><form id="accessForm" class="form"><label>Bereich<select id="accessRole">${state.roles.filter(r=>r.id==="meldestelle"||r.id==="springer-kfz"||r.id.startsWith("station-")).map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}</select></label><label>Telefonnummer<input id="accessPhone"></label><button class="btn full">Freischalten</button></form>${stationAccess()?`<div class="notice">Aktuell freigeschaltet: <strong>${esc(roleById(stationAccess())?.name||stationAccess())}</strong><br><button class="btn light" onclick="helperLogout()">Abmelden</button></div>`:""}</section>`}
 
@@ -88,6 +164,7 @@ function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 A
 
 export function attachForms(render){
 const a=document.getElementById("accessForm");if(a)a.addEventListener("submit",accessLogin);
+const hs=document.getElementById("helperSignupForm");if(hs)hs.addEventListener("submit",submitHelperSignup);
 const p=document.getElementById("participantLoginForm");if(p)p.addEventListener("submit",participantLogin);
 const pf=document.getElementById("participantForm");if(pf)pf.addEventListener("submit",addParticipant);
 const af=document.getElementById("alertForm");if(af)af.addEventListener("submit",sendAlert);
@@ -115,6 +192,63 @@ window.saveStationInfo=async id=>{
     updatedAt:serverTimestamp()
   },{merge:true});
   toast("Station gespeichert.");
+};
+
+
+async function submitHelperSignup(e){
+  e.preventDefault();
+  const role=document.getElementById("helperRole").value;
+  const roleData=roleById(role);
+  const count=peopleFor(role).length;
+
+  if(roleData && count>=Number(roleData.max||0)){
+    return toast("Dieser Bereich ist bereits voll.");
+  }
+
+  const payload={
+    name:document.getElementById("helperName").value.trim(),
+    phone:document.getElementById("helperPhone").value.trim(),
+    role,
+    time:document.getElementById("helperTime").value,
+    note:document.getElementById("helperNote").value.trim(),
+    createdAt:serverTimestamp()
+  };
+
+  if(!payload.name||!payload.phone){
+    return toast("Bitte Name und Telefonnummer eintragen.");
+  }
+
+  await addDoc(collection(db,"helpers"),payload);
+  e.target.reset();
+  toast("Danke! Du bist als Helfer eingetragen.");
+}
+
+window.selectHelperRole=id=>{
+  const select=document.getElementById("helperRole");
+  if(select){
+    select.value=id;
+    select.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+};
+
+window.moveHelper=async id=>{
+  if(!state.isAdmin) return toast("Keine Berechtigung.");
+  const role=document.getElementById("helper-role-"+id).value;
+  const roleData=roleById(role);
+  const count=peopleFor(role).filter(h=>h.id!==id).length;
+  if(roleData && count>=Number(roleData.max||0)){
+    return toast("Der Zielbereich ist bereits voll.");
+  }
+  await setDoc(doc(db,"helpers",id),{role,updatedAt:serverTimestamp()},{merge:true});
+  toast("Helfer verschoben.");
+};
+
+window.deleteHelper=async id=>{
+  if(!state.isAdmin) return toast("Keine Berechtigung.");
+  if(confirm("Helfer wirklich löschen?")){
+    await deleteDoc(doc(db,"helpers",id));
+    toast("Helfer gelöscht.");
+  }
 };
 
 async function accessLogin(e){e.preventDefault();const role=document.getElementById("accessRole").value,phone=document.getElementById("accessPhone").value;if(!helperCanAccess(role,phone))return toast("Keine passende Helferanmeldung gefunden.");localStorage.setItem("rvn_station_access",role);toast("Zugang freigeschaltet.");window.go(role==="meldestelle"?"meldestelle":role==="springer-kfz"?"springer":"station")}
