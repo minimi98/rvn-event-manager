@@ -1,0 +1,1115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<gpx version="1.1" creator="OsmAndRouterV2" xmlns="http://www.topografix.com/GPX/1/1" xmlns:osmand="https://osmand.net/docs/technical/osmand-file-formats/osmand-gpx" xmlns:gpxtpx="https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Fri 17 Jul 2026</name>
+    <extensions>
+      <osmand:activity>horse_riding</osmand:activity>
+    </extensions>
+  </metadata>
+  <rte>
+    <rtept lat="49.2906251" lon="10.7816476">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>0</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2909816" lon="10.7827327">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>7</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2947054" lon="10.7817477">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>16</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2954795" lon="10.7806691">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>20</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2964155" lon="10.7823111">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>23</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2970579" lon="10.7816711">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>25</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2971057" lon="10.7815572">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>30</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2979158" lon="10.7831572">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>34</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2983413" lon="10.782345">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>38</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2990219" lon="10.7839047">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>41</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2991038" lon="10.784017">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>44</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3005563" lon="10.7844181">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>48</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3005705" lon="10.7847299">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>51</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3006165" lon="10.7848641">
+      <extensions>
+        <osmand:trkpt_idx>53</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3008887" lon="10.7848817">
+      <extensions>
+        <osmand:trkpt_idx>55</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3012295" lon="10.7847896">
+      <extensions>
+        <osmand:trkpt_idx>57</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3015615" lon="10.7846683">
+      <extensions>
+        <osmand:trkpt_idx>59</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3016587" lon="10.7847454">
+      <extensions>
+        <osmand:trkpt_idx>61</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3019274" lon="10.786383">
+      <extensions>
+        <osmand:trkpt_idx>63</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3020837" lon="10.7865936">
+      <extensions>
+        <osmand:trkpt_idx>65</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3022925" lon="10.7866512">
+      <extensions>
+        <osmand:trkpt_idx>67</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3026914" lon="10.7864561">
+      <extensions>
+        <osmand:trkpt_idx>69</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3030751" lon="10.7864546">
+      <extensions>
+        <osmand:trkpt_idx>71</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3031303" lon="10.7868459">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>73</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.304388" lon="10.8027866">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>99</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3044055" lon="10.8030161">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>102</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3039412" lon="10.802914">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>106</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3037903" lon="10.8040385">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>110</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3034088" lon="10.8077103">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>114</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.3022377" lon="10.8091644">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>117</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2975961" lon="10.8023527">
+      <extensions>
+        <osmand:trkpt_idx>138</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2973831" lon="10.80188">
+      <extensions>
+        <osmand:trkpt_idx>140</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2963615" lon="10.8006041">
+      <extensions>
+        <osmand:trkpt_idx>142</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2956802" lon="10.7998068">
+      <extensions>
+        <osmand:trkpt_idx>144</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.295823" lon="10.7991433">
+      <extensions>
+        <osmand:trkpt_idx>146</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2958932" lon="10.7989532">
+      <extensions>
+        <osmand:trkpt_idx>148</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2957472" lon="10.7959342">
+      <extensions>
+        <osmand:trkpt_idx>150</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.296024" lon="10.7958405">
+      <extensions>
+        <osmand:trkpt_idx>152</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2958249" lon="10.794779">
+      <extensions>
+        <osmand:trkpt_idx>154</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2956507" lon="10.7936136">
+      <extensions>
+        <osmand:trkpt_idx>156</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2957727" lon="10.7917034">
+      <extensions>
+        <osmand:trkpt_idx>158</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2958497" lon="10.791468">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>160</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2975673" lon="10.7891081">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>165</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2973476" lon="10.7845635">
+      <extensions>
+        <osmand:trkpt_idx>187</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2973367" lon="10.7844989">
+      <extensions>
+        <osmand:trkpt_idx>189</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2972503" lon="10.7845194">
+      <extensions>
+        <osmand:trkpt_idx>191</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2971242" lon="10.7846802">
+      <extensions>
+        <osmand:trkpt_idx>193</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2969723" lon="10.7846488">
+      <extensions>
+        <osmand:trkpt_idx>195</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.29682" lon="10.7847187">
+      <extensions>
+        <osmand:trkpt_idx>197</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2967191" lon="10.7849024">
+      <extensions>
+        <osmand:trkpt_idx>199</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.296661" lon="10.7850989">
+      <extensions>
+        <osmand:trkpt_idx>201</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2965813" lon="10.7851759">
+      <extensions>
+        <osmand:trkpt_idx>203</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2961456" lon="10.7838237">
+      <extensions>
+        <osmand:trkpt_idx>205</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2961119" lon="10.7836768">
+      <extensions>
+        <osmand:trkpt_idx>207</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2960555" lon="10.7834879">
+      <extensions>
+        <osmand:trkpt_idx>209</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2958997" lon="10.7829277">
+      <extensions>
+        <osmand:trkpt_idx>211</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2953453" lon="10.783479">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>213</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="49.2905975" lon="10.7817022">
+      <extensions>
+        <osmand:profile>horse</osmand:profile>
+        <osmand:trkpt_idx>226</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+  </rte>
+  <trk>
+    <name>Fri 17 Jul 2026</name>
+    <trkseg>
+      <trkpt lat="49.2905592" lon="10.781814">
+        <ele>440.6</ele>
+      </trkpt>
+      <trkpt lat="49.290615" lon="10.781866">
+        <ele>440.5</ele>
+      </trkpt>
+      <trkpt lat="49.2906622" lon="10.7819331">
+        <ele>440.2</ele>
+      </trkpt>
+      <trkpt lat="49.2907707" lon="10.7823944">
+        <ele>440.8</ele>
+      </trkpt>
+      <trkpt lat="49.2908039" lon="10.7825553">
+        <ele>441</ele>
+      </trkpt>
+      <trkpt lat="49.2909788" lon="10.7826948">
+        <ele>441.5</ele>
+      </trkpt>
+      <trkpt lat="49.2909788" lon="10.7826948">
+        <ele>441.5</ele>
+      </trkpt>
+      <trkpt lat="49.2909788" lon="10.7826948">
+        <ele>441.5</ele>
+      </trkpt>
+      <trkpt lat="49.291348" lon="10.7825714">
+        <ele>441</ele>
+      </trkpt>
+      <trkpt lat="49.2930728" lon="10.7821852">
+        <ele>435.2</ele>
+      </trkpt>
+      <trkpt lat="49.2936448" lon="10.7818928">
+        <ele>432.5</ele>
+      </trkpt>
+      <trkpt lat="49.2937288" lon="10.7818499">
+        <ele>431.5</ele>
+      </trkpt>
+      <trkpt lat="49.2942221" lon="10.78174">
+        <ele>429</ele>
+      </trkpt>
+      <trkpt lat="49.2945265" lon="10.781799">
+        <ele>429.2</ele>
+      </trkpt>
+      <trkpt lat="49.2947084" lon="10.7817641">
+        <ele>428.9</ele>
+      </trkpt>
+      <trkpt lat="49.2947122" lon="10.7817586">
+        <ele>428.9</ele>
+      </trkpt>
+      <trkpt lat="49.2947122" lon="10.7817586">
+        <ele>428.9</ele>
+      </trkpt>
+      <trkpt lat="49.2951317" lon="10.7811525">
+        <ele>427.8</ele>
+      </trkpt>
+      <trkpt lat="49.2954746" lon="10.7806617">
+        <ele>426.2</ele>
+      </trkpt>
+      <trkpt lat="49.2954791" lon="10.7806696">
+        <ele>426.2</ele>
+      </trkpt>
+      <trkpt lat="49.295479" lon="10.7806696">
+        <ele>426.2</ele>
+      </trkpt>
+      <trkpt lat="49.2964069" lon="10.7823113">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.2964131" lon="10.7823052">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.2964131" lon="10.7823052">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.2970611" lon="10.7816786">
+        <ele>425.2</ele>
+      </trkpt>
+      <trkpt lat="49.2970611" lon="10.7816786">
+        <ele>425.2</ele>
+      </trkpt>
+      <trkpt lat="49.2970698" lon="10.7816702">
+        <ele>425.2</ele>
+      </trkpt>
+      <trkpt lat="49.2970803" lon="10.781638">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.2971066" lon="10.7815602">
+        <ele>425.5</ele>
+      </trkpt>
+      <trkpt lat="49.2971072" lon="10.7815584">
+        <ele>425.5</ele>
+      </trkpt>
+      <trkpt lat="49.2971072" lon="10.7815584">
+        <ele>425.5</ele>
+      </trkpt>
+      <trkpt lat="49.2971066" lon="10.7815602">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.2979129" lon="10.7831696">
+        <ele>422</ele>
+      </trkpt>
+      <trkpt lat="49.2979182" lon="10.7831602">
+        <ele>422</ele>
+      </trkpt>
+      <trkpt lat="49.2979182" lon="10.7831602">
+        <ele>422</ele>
+      </trkpt>
+      <trkpt lat="49.2982925" lon="10.7824963">
+        <ele>425.5</ele>
+      </trkpt>
+      <trkpt lat="49.2983397" lon="10.7823515">
+        <ele>426</ele>
+      </trkpt>
+      <trkpt lat="49.2983383" lon="10.7823485">
+        <ele>426</ele>
+      </trkpt>
+      <trkpt lat="49.2983383" lon="10.7823485">
+        <ele>426</ele>
+      </trkpt>
+      <trkpt lat="49.2983397" lon="10.7823515">
+        <ele>426</ele>
+      </trkpt>
+      <trkpt lat="49.2990223" lon="10.7839042">
+        <ele>424.8</ele>
+      </trkpt>
+      <trkpt lat="49.2990224" lon="10.7839042">
+        <ele>424.8</ele>
+      </trkpt>
+      <trkpt lat="49.2990236" lon="10.7839072">
+        <ele>424.8</ele>
+      </trkpt>
+      <trkpt lat="49.2991021" lon="10.7840198">
+        <ele>424.5</ele>
+      </trkpt>
+      <trkpt lat="49.2991021" lon="10.7840198">
+        <ele>424.5</ele>
+      </trkpt>
+      <trkpt lat="49.2991076" lon="10.7840279">
+        <ele>424.5</ele>
+      </trkpt>
+      <trkpt lat="49.3005558" lon="10.7844248">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.3005549" lon="10.7844186">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.3005549" lon="10.7844186">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.3005558" lon="10.7844248">
+        <ele>425</ele>
+      </trkpt>
+      <trkpt lat="49.3005855" lon="10.7846287">
+        <ele>424</ele>
+      </trkpt>
+      <trkpt lat="49.3005855" lon="10.7846287">
+        <ele>424</ele>
+      </trkpt>
+      <trkpt lat="49.3006165" lon="10.7848641">
+        <ele>424</ele>
+      </trkpt>
+      <trkpt lat="49.3006165" lon="10.7848641" />
+      <trkpt lat="49.3008887" lon="10.7848817" />
+      <trkpt lat="49.3008887" lon="10.7848817" />
+      <trkpt lat="49.3012295" lon="10.7847896" />
+      <trkpt lat="49.3012295" lon="10.7847896" />
+      <trkpt lat="49.3015615" lon="10.7846683" />
+      <trkpt lat="49.3015615" lon="10.7846683" />
+      <trkpt lat="49.3016587" lon="10.7847454" />
+      <trkpt lat="49.3016587" lon="10.7847454" />
+      <trkpt lat="49.3019274" lon="10.786383" />
+      <trkpt lat="49.3019274" lon="10.786383" />
+      <trkpt lat="49.3020837" lon="10.7865936" />
+      <trkpt lat="49.3020837" lon="10.7865936" />
+      <trkpt lat="49.3022925" lon="10.7866512" />
+      <trkpt lat="49.3022925" lon="10.7866512" />
+      <trkpt lat="49.3026914" lon="10.7864561" />
+      <trkpt lat="49.3026914" lon="10.7864561" />
+      <trkpt lat="49.3030751" lon="10.7864546" />
+      <trkpt lat="49.3030751" lon="10.7864546" />
+      <trkpt lat="49.3031303" lon="10.7868459" />
+      <trkpt lat="49.3031532" lon="10.7868457">
+        <ele>411.7</ele>
+      </trkpt>
+      <trkpt lat="49.3031548" lon="10.7877964">
+        <ele>410.2</ele>
+      </trkpt>
+      <trkpt lat="49.3032073" lon="10.7879385">
+        <ele>410</ele>
+      </trkpt>
+      <trkpt lat="49.3032405" lon="10.7880244">
+        <ele>409.8</ele>
+      </trkpt>
+      <trkpt lat="49.3033699" lon="10.7880887">
+        <ele>409.5</ele>
+      </trkpt>
+      <trkpt lat="49.3035588" lon="10.7882738">
+        <ele>409.8</ele>
+      </trkpt>
+      <trkpt lat="49.303662" lon="10.788424">
+        <ele>410.2</ele>
+      </trkpt>
+      <trkpt lat="49.3037389" lon="10.7886896">
+        <ele>410.5</ele>
+      </trkpt>
+      <trkpt lat="49.3037145" lon="10.7910606">
+        <ele>410</ele>
+      </trkpt>
+      <trkpt lat="49.3035868" lon="10.7926914">
+        <ele>407</ele>
+      </trkpt>
+      <trkpt lat="49.303585" lon="10.7931018">
+        <ele>407</ele>
+      </trkpt>
+      <trkpt lat="49.303599" lon="10.7938206">
+        <ele>406</ele>
+      </trkpt>
+      <trkpt lat="49.3038211" lon="10.7954514">
+        <ele>405.2</ele>
+      </trkpt>
+      <trkpt lat="49.3038596" lon="10.7958028">
+        <ele>404</ele>
+      </trkpt>
+      <trkpt lat="49.3040048" lon="10.7958671">
+        <ele>403.8</ele>
+      </trkpt>
+      <trkpt lat="49.3041569" lon="10.795902">
+        <ele>403.9</ele>
+      </trkpt>
+      <trkpt lat="49.3043056" lon="10.7959288">
+        <ele>404</ele>
+      </trkpt>
+      <trkpt lat="49.3042286" lon="10.7972404">
+        <ele>400.8</ele>
+      </trkpt>
+      <trkpt lat="49.3041097" lon="10.7977983">
+        <ele>398.8</ele>
+      </trkpt>
+      <trkpt lat="49.3040782" lon="10.7984447">
+        <ele>397.5</ele>
+      </trkpt>
+      <trkpt lat="49.3041797" lon="10.7989061">
+        <ele>399.2</ele>
+      </trkpt>
+      <trkpt lat="49.3042916" lon="10.7994103">
+        <ele>400.2</ele>
+      </trkpt>
+      <trkpt lat="49.3043248" lon="10.7996571">
+        <ele>401</ele>
+      </trkpt>
+      <trkpt lat="49.3043004" lon="10.8004323">
+        <ele>401</ele>
+      </trkpt>
+      <trkpt lat="49.3042969" lon="10.8012772">
+        <ele>401.1</ele>
+      </trkpt>
+      <trkpt lat="49.3043832" lon="10.8027871">
+        <ele>401.2</ele>
+      </trkpt>
+      <trkpt lat="49.3043832" lon="10.8027871">
+        <ele>401.2</ele>
+      </trkpt>
+      <trkpt lat="49.3043895" lon="10.8028999">
+        <ele>401.2</ele>
+      </trkpt>
+      <trkpt lat="49.3044006" lon="10.8030171">
+        <ele>401.2</ele>
+      </trkpt>
+      <trkpt lat="49.3044006" lon="10.8030171">
+        <ele>401.2</ele>
+      </trkpt>
+      <trkpt lat="49.3043895" lon="10.8028999">
+        <ele>401</ele>
+      </trkpt>
+      <trkpt lat="49.3039803" lon="10.8028892">
+        <ele>399.8</ele>
+      </trkpt>
+      <trkpt lat="49.3039453" lon="10.8029235">
+        <ele>400</ele>
+      </trkpt>
+      <trkpt lat="49.3039453" lon="10.8029235">
+        <ele>400</ele>
+      </trkpt>
+      <trkpt lat="49.3039121" lon="10.8029562">
+        <ele>400.2</ele>
+      </trkpt>
+      <trkpt lat="49.3037757" lon="10.8038199">
+        <ele>402</ele>
+      </trkpt>
+      <trkpt lat="49.3038013" lon="10.8040355">
+        <ele>402.4</ele>
+      </trkpt>
+      <trkpt lat="49.3038013" lon="10.8040355">
+        <ele>402.4</ele>
+      </trkpt>
+      <trkpt lat="49.3038841" lon="10.8047372">
+        <ele>403.8</ele>
+      </trkpt>
+      <trkpt lat="49.3039453" lon="10.8064109">
+        <ele>403.2</ele>
+      </trkpt>
+      <trkpt lat="49.3034003" lon="10.8077017">
+        <ele>405.6</ele>
+      </trkpt>
+      <trkpt lat="49.3034003" lon="10.8077016">
+        <ele>405.6</ele>
+      </trkpt>
+      <trkpt lat="49.3030131" lon="10.8086184">
+        <ele>407.2</ele>
+      </trkpt>
+      <trkpt lat="49.3022411" lon="10.8091753">
+        <ele>412.6</ele>
+      </trkpt>
+      <trkpt lat="49.3022412" lon="10.8091753">
+        <ele>412.6</ele>
+      </trkpt>
+      <trkpt lat="49.3021841" lon="10.8092165">
+        <ele>412.7</ele>
+      </trkpt>
+      <trkpt lat="49.3021684" lon="10.8091173">
+        <ele>413</ele>
+      </trkpt>
+      <trkpt lat="49.3021002" lon="10.8088651">
+        <ele>413.8</ele>
+      </trkpt>
+      <trkpt lat="49.3018955" lon="10.8084655">
+        <ele>415.8</ele>
+      </trkpt>
+      <trkpt lat="49.3015807" lon="10.8080953">
+        <ele>418.2</ele>
+      </trkpt>
+      <trkpt lat="49.3014181" lon="10.8078861">
+        <ele>419</ele>
+      </trkpt>
+      <trkpt lat="49.3012344" lon="10.8076957">
+        <ele>420</ele>
+      </trkpt>
+      <trkpt lat="49.3011155" lon="10.8075133">
+        <ele>420.8</ele>
+      </trkpt>
+      <trkpt lat="49.3009266" lon="10.8070278">
+        <ele>422.2</ele>
+      </trkpt>
+      <trkpt lat="49.3006607" lon="10.8063224">
+        <ele>424.8</ele>
+      </trkpt>
+      <trkpt lat="49.3005068" lon="10.8059791">
+        <ele>426.5</ele>
+      </trkpt>
+      <trkpt lat="49.2994749" lon="10.8046997">
+        <ele>435</ele>
+      </trkpt>
+      <trkpt lat="49.2990096" lon="10.8041954">
+        <ele>437</ele>
+      </trkpt>
+      <trkpt lat="49.2986545" lon="10.8039138">
+        <ele>437.5</ele>
+      </trkpt>
+      <trkpt lat="49.2983187" lon="10.8036429">
+        <ele>437.8</ele>
+      </trkpt>
+      <trkpt lat="49.2980476" lon="10.8032888">
+        <ele>438.8</ele>
+      </trkpt>
+      <trkpt lat="49.2977992" lon="10.8028731">
+        <ele>438.9</ele>
+      </trkpt>
+      <trkpt lat="49.2976226" lon="10.8025512">
+        <ele>438.9</ele>
+      </trkpt>
+      <trkpt lat="49.2975788" lon="10.802401">
+        <ele>439</ele>
+      </trkpt>
+      <trkpt lat="49.2975848" lon="10.8023495">
+        <ele>439</ele>
+      </trkpt>
+      <trkpt lat="49.2975961" lon="10.8023527" />
+      <trkpt lat="49.2973831" lon="10.80188" />
+      <trkpt lat="49.2973831" lon="10.80188" />
+      <trkpt lat="49.2963615" lon="10.8006041" />
+      <trkpt lat="49.2963615" lon="10.8006041" />
+      <trkpt lat="49.2956802" lon="10.7998068" />
+      <trkpt lat="49.2956802" lon="10.7998068" />
+      <trkpt lat="49.295823" lon="10.7991433" />
+      <trkpt lat="49.295823" lon="10.7991433" />
+      <trkpt lat="49.2958932" lon="10.7989532" />
+      <trkpt lat="49.2958932" lon="10.7989532" />
+      <trkpt lat="49.2957472" lon="10.7959342" />
+      <trkpt lat="49.2957472" lon="10.7959342" />
+      <trkpt lat="49.296024" lon="10.7958405" />
+      <trkpt lat="49.296024" lon="10.7958405" />
+      <trkpt lat="49.2958249" lon="10.794779" />
+      <trkpt lat="49.2958249" lon="10.794779" />
+      <trkpt lat="49.2956507" lon="10.7936136" />
+      <trkpt lat="49.2956507" lon="10.7936136" />
+      <trkpt lat="49.2957727" lon="10.7917034" />
+      <trkpt lat="49.2957727" lon="10.7917034" />
+      <trkpt lat="49.2958497" lon="10.791468" />
+      <trkpt lat="49.2958509" lon="10.7914757">
+        <ele>433.9</ele>
+      </trkpt>
+      <trkpt lat="49.2961148" lon="10.7913879">
+        <ele>433</ele>
+      </trkpt>
+      <trkpt lat="49.2965066" lon="10.7914361">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.297201" lon="10.7897115">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.2975676" lon="10.7891081">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.2975676" lon="10.7891081">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.2975823" lon="10.7890838">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.2967917" lon="10.7884187">
+        <ele>428.5</ele>
+      </trkpt>
+      <trkpt lat="49.2962897" lon="10.7881156">
+        <ele>427.3</ele>
+      </trkpt>
+      <trkpt lat="49.296253" lon="10.7880726">
+        <ele>427.2</ele>
+      </trkpt>
+      <trkpt lat="49.2962827" lon="10.7879224">
+        <ele>427.5</ele>
+      </trkpt>
+      <trkpt lat="49.2963264" lon="10.7879466">
+        <ele>427.2</ele>
+      </trkpt>
+      <trkpt lat="49.2964016" lon="10.7879519">
+        <ele>427.1</ele>
+      </trkpt>
+      <trkpt lat="49.2964419" lon="10.7879359">
+        <ele>427</ele>
+      </trkpt>
+      <trkpt lat="49.2965363" lon="10.7878795">
+        <ele>426.8</ele>
+      </trkpt>
+      <trkpt lat="49.2965975" lon="10.7878339">
+        <ele>426.5</ele>
+      </trkpt>
+      <trkpt lat="49.2966675" lon="10.7877535">
+        <ele>426</ele>
+      </trkpt>
+      <trkpt lat="49.2967357" lon="10.7876489">
+        <ele>425.5</ele>
+      </trkpt>
+      <trkpt lat="49.2968564" lon="10.7874262">
+        <ele>424.8</ele>
+      </trkpt>
+      <trkpt lat="49.2969386" lon="10.7872251">
+        <ele>424</ele>
+      </trkpt>
+      <trkpt lat="49.2974581" lon="10.7859752">
+        <ele>422.5</ele>
+      </trkpt>
+      <trkpt lat="49.2975246" lon="10.7858008">
+        <ele>422.2</ele>
+      </trkpt>
+      <trkpt lat="49.2975281" lon="10.7856426">
+        <ele>421.5</ele>
+      </trkpt>
+      <trkpt lat="49.2974354" lon="10.785023">
+        <ele>420.2</ele>
+      </trkpt>
+      <trkpt lat="49.2974074" lon="10.7848218">
+        <ele>420.5</ele>
+      </trkpt>
+      <trkpt lat="49.2973672" lon="10.7846555">
+        <ele>420.8</ele>
+      </trkpt>
+      <trkpt lat="49.2973466" lon="10.784564">
+        <ele>420.8</ele>
+      </trkpt>
+      <trkpt lat="49.2973476" lon="10.7845635" />
+      <trkpt lat="49.2973367" lon="10.7844989" />
+      <trkpt lat="49.2973367" lon="10.7844989" />
+      <trkpt lat="49.2972503" lon="10.7845194" />
+      <trkpt lat="49.2972503" lon="10.7845194" />
+      <trkpt lat="49.2971242" lon="10.7846802" />
+      <trkpt lat="49.2971242" lon="10.7846802" />
+      <trkpt lat="49.2969723" lon="10.7846488" />
+      <trkpt lat="49.2969723" lon="10.7846488" />
+      <trkpt lat="49.29682" lon="10.7847187" />
+      <trkpt lat="49.29682" lon="10.7847187" />
+      <trkpt lat="49.2967191" lon="10.7849024" />
+      <trkpt lat="49.2967191" lon="10.7849024" />
+      <trkpt lat="49.296661" lon="10.7850989" />
+      <trkpt lat="49.296661" lon="10.7850989" />
+      <trkpt lat="49.2965813" lon="10.7851759" />
+      <trkpt lat="49.2965813" lon="10.7851759" />
+      <trkpt lat="49.2961456" lon="10.7838237" />
+      <trkpt lat="49.2961456" lon="10.7838237" />
+      <trkpt lat="49.2961119" lon="10.7836768" />
+      <trkpt lat="49.2961119" lon="10.7836768" />
+      <trkpt lat="49.2960555" lon="10.7834879" />
+      <trkpt lat="49.2960555" lon="10.7834879" />
+      <trkpt lat="49.2958997" lon="10.7829277" />
+      <trkpt lat="49.2958997" lon="10.7829277" />
+      <trkpt lat="49.2953453" lon="10.783479" />
+      <trkpt lat="49.2953438" lon="10.7834802">
+        <ele>432</ele>
+      </trkpt>
+      <trkpt lat="49.2947084" lon="10.7817641">
+        <ele>428.9</ele>
+      </trkpt>
+      <trkpt lat="49.2945265" lon="10.781799">
+        <ele>429.2</ele>
+      </trkpt>
+      <trkpt lat="49.2942221" lon="10.78174">
+        <ele>429</ele>
+      </trkpt>
+      <trkpt lat="49.2937288" lon="10.7818499">
+        <ele>431.5</ele>
+      </trkpt>
+      <trkpt lat="49.2936448" lon="10.7818928">
+        <ele>432.5</ele>
+      </trkpt>
+      <trkpt lat="49.2930728" lon="10.7821852">
+        <ele>435.2</ele>
+      </trkpt>
+      <trkpt lat="49.291348" lon="10.7825714">
+        <ele>441</ele>
+      </trkpt>
+      <trkpt lat="49.2909788" lon="10.7826948">
+        <ele>441.5</ele>
+      </trkpt>
+      <trkpt lat="49.2908039" lon="10.7825553">
+        <ele>441</ele>
+      </trkpt>
+      <trkpt lat="49.2907707" lon="10.7823944">
+        <ele>440.8</ele>
+      </trkpt>
+      <trkpt lat="49.2906622" lon="10.7819331">
+        <ele>440.2</ele>
+      </trkpt>
+      <trkpt lat="49.290615" lon="10.781866">
+        <ele>440.5</ele>
+      </trkpt>
+      <trkpt lat="49.2905548" lon="10.7818099">
+        <ele>440.6</ele>
+      </trkpt>
+      <extensions>
+        <osmand:route>
+          <segment id="149849244" length="5" startTrkptIdx="0" segmentTime="37.49" speed="1.66" turnType="C" types="0,1,2" pointTypes=";;3;;" />
+          <segment id="27094699" length="3" startTrkptIdx="4" segmentTime="13.21" speed="1.66" types="4,5,6,7,8,9" pointTypes="3;;" names="36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59" />
+          <segment id="27094699" length="2" startTrkptIdx="7" segmentTime="25.31" speed="1.66" turnType="C" types="4,5,6,7,8,9" pointTypes=";" names="36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59" />
+          <segment id="99517438" length="8" startTrkptIdx="8" segmentTime="229.72" speed="1.66" types="10,11,6,7,12" pointTypes=";3;13;;13;;;" names="37,38,40,41,36,42,43,44,45,39,46,58,48,47,53,52,54,51,55,56,57,49,50" />
+          <segment id="99517438" length="4" startTrkptIdx="16" segmentTime="70.51" speed="1.66" turnType="C" types="10,11,6,7,12" pointTypes=";3;3;" names="37,38,40,41,36,42,43,44,45,39,46,58,48,47,53,52,54,51,55,56,57,49,50" />
+          <segment id="99517438" length="2" startTrkptIdx="20" segmentTime="94.93" speed="1.66" turnType="C" skipTurn="true" types="10,11,6,7,12" pointTypes=";" names="37,38,40,41,36,42,43,44,45,39,46,58,48,47,53,52,54,51,55,56,57,49,50" />
+          <segment id="1419448006" length="2" startTrkptIdx="21" segmentTime="0.49" speed="1.66" turnType="TL" turnAngle="-81.32" types="10,14,15,6,7,12" pointTypes=";" names="60,61,62,63,64,65,66,67,68,69,36,37,38,39,40,70,41,42,71,43,44,45,72,46,73,58,48,47,53,51,52,54,55,56,74,57,49,75,50" />
+          <segment id="1419448006" length="2" startTrkptIdx="23" segmentTime="51.33" speed="1.66" turnType="C" types="10,14,15,6,7,12" pointTypes=";" names="60,61,62,63,64,65,66,67,68,69,36,37,38,39,40,70,41,42,71,43,44,45,72,46,73,58,48,47,53,51,52,54,55,56,74,57,49,75,50" />
+          <segment id="1419448006" length="3" startTrkptIdx="25" segmentTime="2.26" speed="1.66" turnType="C" types="10,14,15,6,7,12" pointTypes=";;" names="60,61,62,63,64,65,66,67,68,69,36,37,38,39,40,70,41,42,71,43,44,45,72,46,73,58,48,47,53,51,52,54,55,56,74,57,49,75,50" />
+          <segment id="182323042" length="3" startTrkptIdx="27" segmentTime="3.92" speed="1.66" types="10,14,15,6,7,12" pointTypes=";;" names="60,61,62,63,64,65,66,67,68,69,36,37,38,39,40,70,41,42,71,43,44,45,72,46,73,58,48,47,53,51,52,54,55,56,74,57,49,75,50" />
+          <segment id="182323042" length="2" startTrkptIdx="30" segmentTime="0.09" speed="1.66" turnType="C" skipTurn="true" types="10,14,15,6,7,12" pointTypes=";" names="60,61,62,63,64,65,66,67,68,69,36,37,38,39,40,70,41,42,71,43,44,45,72,46,73,58,48,47,53,51,52,54,55,56,74,57,49,75,50" />
+          <segment id="446320774" length="2" startTrkptIdx="31" segmentTime="88.68" speed="1.66" turnType="TL" turnAngle="-65.63" types="10,16,17,18" pointTypes=";3" />
+          <segment id="446320777" length="2" startTrkptIdx="32" segmentTime="0.54" speed="1.66" turnType="TL" turnAngle="-101.62" types="10,16,17,18" pointTypes=";" />
+          <segment id="446320777" length="3" startTrkptIdx="34" segmentTime="45.42" speed="1.66" turnType="C" skipTurn="true" types="10,16,17,18" pointTypes=";;" />
+          <segment id="446320780" length="2" startTrkptIdx="36" segmentTime="0.16" speed="1.66" turnType="TL" turnAngle="-63.45" types="10,16,17,18" pointTypes="3;" />
+          <segment id="446320780" length="3" startTrkptIdx="38" segmentTime="81.98" speed="1.66" turnType="C" types="10,16,17,18" pointTypes=";3;" />
+          <segment id="446320780" length="3" startTrkptIdx="41" segmentTime="7.36" speed="1.66" turnType="C" types="10,16,17,18" pointTypes=";;" />
+          <segment id="446320780" length="3" startTrkptIdx="44" segmentTime="99.08" speed="1.66" turnType="C" skipTurn="true" types="10,16,17,18" pointTypes=";3;" />
+          <segment id="158413633" length="2" startTrkptIdx="46" segmentTime="0.28" speed="1.66" turnType="TL" turnAngle="-113.21" types="10,12" pointTypes="13;" />
+          <segment id="158413633" length="2" startTrkptIdx="48" segmentTime="0.28" speed="1.66" turnType="C" types="10,12" pointTypes=";13" />
+          <segment id="446320775" length="2" startTrkptIdx="49" segmentTime="9.13" speed="1.66" types="10,12" pointTypes=";13" />
+          <segment id="446320775" length="2" startTrkptIdx="51" segmentTime="0" speed="1.66" turnType="C" types="10,12" pointTypes="13;" />
+          <segment id="-1" length="2" startTrkptIdx="53" segmentTime="11.61" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="55" segmentTime="20.2" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="57" segmentTime="25.66" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="59" segmentTime="25.31" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="61" segmentTime="8.11" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="63" segmentTime="81.65" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="65" segmentTime="15.43" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="67" segmentTime="15.73" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="69" segmentTime="31.05" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="71" segmentTime="28.45" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="73" segmentTime="19.36" speed="1.5" turnType="C" types="19" />
+          <segment id="148726554" length="3" startTrkptIdx="74" segmentTime="48.67" speed="1.66" turnType="C" types="20,21,22,6,7,8" pointTypes=";;" names="44,45,46,58,48,54,56,57,50,52,53" />
+          <segment id="1419447526" length="2" startTrkptIdx="76" segmentTime="4.36" speed="1.66" types="20,21,22,6,7,8" pointTypes="3;" names="44,45,46,58,48,54,56,57,50,52,53" />
+          <segment id="1419447526" length="2" startTrkptIdx="77" segmentTime="9.12" speed="1.66" types="20,21,22,6,7,8" pointTypes=";3" names="44,45,46,58,48,54,56,57,50,52,53" />
+          <segment id="1419447526" length="6" startTrkptIdx="78" segmentTime="212.61" speed="1.66" types="20,21,22,6,7,8" pointTypes="3;13;3;;;" names="44,45,46,58,48,54,56,57,50,52,53" />
+          <segment id="478292223" length="2" startTrkptIdx="83" segmentTime="17.93" speed="1.66" types="20,21,22,14,23,6,7,15,8" names="76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,71,100,101,102,103,37,104,105,106,107,108,48,109,42,44,45,110,111,46,112,58,53,52,54,55,56,113,57,114,115,50" />
+          <segment id="478292224" length="4" startTrkptIdx="84" segmentTime="119.77" speed="1.66" types="20,21,22,24,14,23,6,7,15,8" pointTypes=";;;" names="76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,71,100,101,102,103,37,104,105,106,107,108,48,109,42,44,45,110,111,46,112,58,53,52,54,55,56,113,57,114,115,50" />
+          <segment id="1419162925" length="4" startTrkptIdx="87" segmentTime="30.46" speed="1.66" turnType="TL" turnAngle="-64.34" types="20,21,24,14,23,6,7,15,8" pointTypes=";3;;" names="76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,71,100,101,102,103,37,104,105,106,107,108,48,109,42,44,45,110,111,46,112,58,53,52,54,55,56,113,57,114,115,50" />
+          <segment id="23033709" length="7" startTrkptIdx="90" segmentTime="167.05" speed="1.66" turnType="TR" turnAngle="88.43" types="10,25,24,26,6,7,8" pointTypes=";13;13;3;;;" names="116,117,118,119,120,121,51,43,36,37,39,40,41,42,38,122,123,124,125,126,127,49,128,129,48,47,53,130,55,56,131,132,133" />
+          <segment id="160505410" length="4" startTrkptIdx="96" segmentTime="137.04" speed="1.66" types="10,25,27,28,6,7,18" pointTypes=";;;" names="116,117,118,119,120,121,51,43,36,37,39,40,41,42,38,122,123,124,125,126,127,49,128,129,48,47,53,130,55,56,131,132,133" />
+          <segment id="160505410" length="3" startTrkptIdx="99" segmentTime="10.12" speed="1.66" turnType="C" types="10,25,27,28,6,7,18" pointTypes=";;" names="116,117,118,119,120,121,51,43,36,37,39,40,41,42,38,122,123,124,125,126,127,49,128,129,48,47,53,130,55,56,131,132,133" />
+          <segment id="160505410" length="2" startTrkptIdx="102" segmentTime="5.17" speed="1.66" turnType="C" skipTurn="true" types="10,25,27,28,6,7,18" pointTypes=";" names="116,117,118,119,120,121,51,43,36,37,39,40,41,42,38,122,123,124,125,126,127,49,128,129,48,47,53,130,55,56,131,132,133" />
+          <segment id="149539787" length="3" startTrkptIdx="103" segmentTime="30.21" speed="1.66" turnType="TL" turnAngle="-80.82" types="10,11,12" pointTypes=";3;" />
+          <segment id="149539787" length="3" startTrkptIdx="106" segmentTime="41.47" speed="1.66" turnType="C" types="10,11,12" pointTypes=";;" />
+          <segment id="860343439" length="2" startTrkptIdx="108" segmentTime="9.57" speed="1.66" types="10,17,18" pointTypes="3;" />
+          <segment id="860343439" length="4" startTrkptIdx="110" segmentTime="171.58" speed="1.66" turnType="C" types="10,17,18" pointTypes=";;3;" />
+          <segment id="860343439" length="3" startTrkptIdx="114" segmentTime="104.89" speed="1.66" turnType="C" types="10,17,18" pointTypes=";29;" />
+          <segment id="860343439" length="2" startTrkptIdx="117" segmentTime="4.23" speed="1.66" turnType="C" skipTurn="true" types="10,17,18" pointTypes=";" />
+          <segment id="443059972" length="2" startTrkptIdx="118" segmentTime="4.46" speed="1.66" turnType="TR" turnAngle="101.52" types="10,30,14,23,15,31,32" pointTypes=";" names="134,135,77,136,79,84,137,138,112,111,139,88,95,92,94,89,78,99,104,91,90,85,96,71,81,107,98,97,140,113,102" />
+          <segment id="22696816" length="19" startTrkptIdx="119" segmentTime="435.21" speed="1.66" types="10,11,14,23,15,12" pointTypes="13;29;29;3;13;13;13;13;29;29;13;3;;3;;;;;" names="134,135,77,136,79,84,137,138,112,111,139,88,95,92,94,89,78,99,104,91,90,85,96,71,81,107,98,97,140,113,102" />
+          <segment id="-1" length="2" startTrkptIdx="138" segmentTime="27.78" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="140" segmentTime="97.7" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="142" segmentTime="63.55" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="144" segmentTime="33.79" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="146" segmentTime="10.56" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="148" segmentTime="146.39" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="150" segmentTime="21.02" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="152" segmentTime="53.41" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="154" segmentTime="57.82" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="156" segmentTime="92.82" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="158" segmentTime="12.73" speed="1.5" turnType="C" types="19" />
+          <segment id="1231985719" length="3" startTrkptIdx="160" segmentTime="44.43" speed="1.66" turnType="C" skipTurn="true" types="33,24,14,23,15,6,7,8" pointTypes=";;" names="76,79,81,82,80,84,86,88,89,90,91,87,141,113,104,78,99,107,111,142,143,85,144,97,145,98,146,128,112,58,48,56,147,102,148,96,71,77,53,92,94,95,93,149" />
+          <segment id="632455167" length="3" startTrkptIdx="162" segmentTime="124.6" speed="1.66" turnType="TL" turnAngle="-62.9" types="10,12" />
+          <segment id="632455167" length="6" startTrkptIdx="165" segmentTime="107.98" speed="1.66" turnType="C" types="10,12" pointTypes=";;;;" />
+          <segment id="182326253" length="17" startTrkptIdx="170" segmentTime="186.9" speed="1.66" turnType="TR" turnAngle="82.3" types="10,11,12" pointTypes=";;;;;;;;;;;;;3;3;3;" />
+          <segment id="-1" length="2" startTrkptIdx="187" segmentTime="3.22" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="189" segmentTime="6.48" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="191" segmentTime="12.16" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="193" segmentTime="11.36" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="195" segmentTime="11.79" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="197" segmentTime="11.62" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="199" segmentTime="10.43" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="201" segmentTime="6.98" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="203" segmentTime="72.93" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="205" segmentTime="7.53" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="207" segmentTime="10.05" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="209" segmentTime="29.45" speed="1.5" turnType="C" types="19" />
+          <segment id="-1" length="2" startTrkptIdx="211" segmentTime="49" speed="1.5" turnType="C" types="19" />
+          <segment id="446320776" length="2" startTrkptIdx="213" segmentTime="86.23" speed="1.66" turnType="C" skipTurn="true" types="10,28,12" pointTypes=";" />
+          <segment id="99517438" length="7" startTrkptIdx="214" segmentTime="229.37" speed="1.66" turnType="TL" turnAngle="-67.54" types="10,11,6,7,12" pointTypes=";;13;;13;3;" names="37,38,40,41,36,42,43,44,45,39,46,58,48,47,53,52,54,51,55,56,57,49,50" />
+          <segment id="27094699" length="3" startTrkptIdx="220" segmentTime="38.52" speed="1.66" types="4,5,6,7,8,9" pointTypes=";;3" names="36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59" />
+          <segment id="149849244" length="5" startTrkptIdx="222" segmentTime="37.84" speed="1.66" types="0,1,2" pointTypes=";;3;;" />
+        </osmand:route>
+        <osmand:types>
+          <type t="bicycle" v="yes" />
+          <type t="highway" v="footway" />
+          <type t="osmand_highway_integrity_brouting" v="2" />
+          <type t="osmand_ele_decline_1" v="1" />
+          <type t="highway" v="residential" />
+          <type t="lit" v="yes" />
+          <type t="route_bicycle" v="" />
+          <type t="network" v="rcn" />
+          <type t="osmand_highway_integrity_brouting" v="0" />
+          <type t="sidewalk" v="yes" />
+          <type t="highway" v="track" />
+          <type t="tracktype" v="grade3" />
+          <type t="osmand_highway_integrity_brouting" v="3" />
+          <type t="osmand_ele_decline_3" v="1" />
+          <type t="route_hiking_1" v="" />
+          <type t="route_hiking" v="" />
+          <type t="surface" v="grass" />
+          <type t="tracktype" v="grade4" />
+          <type t="osmand_highway_integrity_brouting" v="4" />
+          <type t="highway" v="unmatched" />
+          <type t="highway" v="unclassified" />
+          <type t="maxspeed" v="100" />
+          <type t="maxweight" v="6" />
+          <type t="route_hiking_2" v="" />
+          <type t="surface" v="asphalt" />
+          <type t="motor_vehicle" v="destination" />
+          <type t="tracktype" v="grade1" />
+          <type t="surface" v="gravel" />
+          <type t="tracktype" v="grade2" />
+          <type t="osmand_ele_decline_5" v="1" />
+          <type t="tracktype" v="grade5" />
+          <type t="osmand_highway_integrity_brouting" v="5" />
+          <type t="osmand_highway_integrity_brouting_low" v="yes" />
+          <type t="highway" v="service" />
+          <type t="name" v="" />
+          <type t="ref" v="" />
+          <type t="route_bicycle_2_from" v="Heilsbronn" />
+          <type t="route_bicycle_2_osmc_stub_name" v="." />
+          <type t="route_bicycle_2_network" v="lcn" />
+          <type t="route_bicycle_2_relation_id" v="19414804" />
+          <type t="route_bicycle_2_to" v="Heilsbronn" />
+          <type t="route_bicycle_2_name" v="Heilsbronner Karpfenradweg" />
+          <type t="route_bicycle_2" v="" />
+          <type t="route_bicycle_2_via" v="Bürglein;Markttriebendorf;Großhaslach;Petersaurach;Neuendettelsau;Haag;Aich" />
+          <type t="route_bicycle_1_relation_id" v="2370178" />
+          <type t="route_bicycle_1_osmc_waycolor" v="blue" />
+          <type t="route_bicycle_1_osmc_text" v="KRW" />
+          <type t="route_bicycle_2_osmc_text" v="HK" />
+          <type t="route_bicycle_1_network" v="rcn" />
+          <type t="route_bicycle_2_osmc_background" v="white_2" />
+          <type t="route_bicycle_1_osmc_textcolor" v="blue" />
+          <type t="route_bicycle_2_website" v="https://www.romantisches-franken.de/detail/id=61a63aea0ecf8268e0d0fb23" />
+          <type t="route_bicycle_1_distance" v="210" />
+          <type t="route_bicycle_1" v="" />
+          <type t="route_bicycle_1_ref" v="FKR" />
+          <type t="route_bicycle_2_osmc_textcolor" v="black" />
+          <type t="route_bicycle_1_osmc_stub_name" v="." />
+          <type t="route_bicycle_1_name" v="Fränkischer Karpfen-Radweg" />
+          <type t="route_bicycle_1_osmc_background" v="white_3" />
+          <type t="name" v="Altendettelsauer Straße" />
+          <type t="route_hiking_1_website" v="https://www.fraenkischer-albverein.de/wanderwege/weg-nr-009" />
+          <type t="route_hiking_1_to" v="Sindlbach" />
+          <type t="route_hiking_1_relation_id" v="139776" />
+          <type t="route_hiking_1_osmc_waycolor" v="red" />
+          <type t="route_hiking_1_osmc_foreground" v="red_dot" />
+          <type t="route_hiking_1_osmc_background" v="white" />
+          <type t="route_hiking_1_wikipedia" v="de:Rangau-Pfalz-Weg" />
+          <type t="route_hiking_1_network" v="rwn" />
+          <type t="route_hiking_1_name" v="Rangau-Pfalz-Weg" />
+          <type t="route_hiking_1_distance" v="103.8" />
+          <type t="route_hiking_1_from" v="Cadolzburg" />
+          <type t="route_hiking_1_osmc_stub_name" v="." />
+          <type t="route_hiking_1_symbol" v="Roter Punkt auf weißem Grund" />
+          <type t="route_hiking_1_via" v="Unterschlauersbach;Heilsbronn;Neuendettelsau;Abenberg;Pfaffenhofen;Allersberg;Pölling" />
+          <type t="route_hiking_1_operator" v="Fränkischer Albverein" />
+          <type t="route_hiking_1_description" v="[FAV 009] Cadolzburg – Sindlbach" />
+          <type t="route_hiking_2_symbol" v='Weißer Text "6" auf lila Grund' />
+          <type t="route_hiking_2_roundtrip" v="yes" />
+          <type t="route_hiking_2_osmc_waycolor" v="purple" />
+          <type t="route_hiking_2_osmc_textcolor" v="white" />
+          <type t="route_hiking_2_osmc_text" v="6" />
+          <type t="route_hiking_2_operator" v="Gemeinde Neuendettelsau" />
+          <type t="route_hiking_2_distance" v="11.5" />
+          <type t="route_bicycle_2_osmc_text" v="ERH" />
+          <type t="route_hiking_1_to" v="Neuendettelsau" />
+          <type t="route_hiking_1_roundtrip" v="yes" />
+          <type t="route_hiking_2_name" v="Neuendettelsauer Wanderweg Nr. 6" />
+          <type t="route_hiking_2_via" v="Geichsenhof;Aich;Petersaurach;Neuendettelsau" />
+          <type t="route_hiking_1_relation_id" v="12419016" />
+          <type t="route_hiking_1_osmc_waycolor" v="purple" />
+          <type t="route_hiking_2_network" v="lwn" />
+          <type t="route_hiking_1_osmc_background" v="purple" />
+          <type t="route_hiking_2_osmc_stub_name" v="." />
+          <type t="route_hiking_2_relation_id" v="12421828" />
+          <type t="route_hiking_2_from" v="Neuendettelsau" />
+          <type t="route_hiking_1_network" v="lwn" />
+          <type t="route_hiking_2_to" v="Neuendettelsau" />
+          <type t="route_hiking_2_osmc_background" v="purple" />
+          <type t="route_hiking_1_name" v="Neuendettelsauer Wanderweg Nr. 1" />
+          <type t="route_hiking_1_distance" v="8.4" />
+          <type t="route_bicycle_2_via" v="Lichtenau;Windsbach;Neuendettelsau;Großhabersdorf oder Roßtal;Ammerndorf;Cadolzburg;Langenzenn;Veitsbronn;Fürth" />
+          <type t="route_bicycle_2_network" v="rcn" />
+          <type t="route_hiking_1_osmc_text" v="1" />
+          <type t="route_bicycle_2_from" v="Ansbach" />
+          <type t="route_hiking_1_osmc_textcolor" v="white" />
+          <type t="route_bicycle_2_relation_id" v="19074353" />
+          <type t="route_bicycle_2_to" v="Nürnberg" />
+          <type t="route_hiking_1_from" v="Neuendettelsau" />
+          <type t="route_bicycle_2_name" v="ErlebnisRadweg Hohenzollern" />
+          <type t="route_bicycle_2_cycle_network" v="DE:BY:HZ" />
+          <type t="route_bicycle_2_website" v="https://www.erlebnisradweg-hohenzollern.de/" />
+          <type t="route_hiking_1_symbol" v='Weißer Text "1" auf lila Grund' />
+          <type t="route_hiking_1_via" v="Birkenhof;Mausenmühle;Mausendorf;Aich;Geichsenhof" />
+          <type t="route_hiking_1_operator" v="Gemeinde Neuendettelsau" />
+          <type t="route_bicycle_2_osmc_background" v="white_3" />
+          <type t="route_bicycle_2_description" v="Auf den Spuren der Hohenzollern in Franken" />
+          <type t="route_bicycle_3_osmc_textcolor" v="black" />
+          <type t="route_bicycle_3_osmc_stub_name" v="." />
+          <type t="route_bicycle_3_osmc_background" v="white_3" />
+          <type t="route_bicycle_3_network" v="lcn" />
+          <type t="route_bicycle_3_name" v="Kloster–Kirchen–Kartoffeln" />
+          <type t="route_bicycle_3" v="" />
+          <type t="route_bicycle_1_osmc_text" v="RG" />
+          <type t="route_bicycle_1_website" v="https://www.romantisches-franken.de/detail/id=61a63aef0ecf8268e0d0fb39" />
+          <type t="route_bicycle_3_relation_id" v="19422959" />
+          <type t="route_bicycle_1_via" v="Dietenhofen;Schwaighausen;Heilsbronn;Berholdsdorf;Windsbach" />
+          <type t="route_bicycle_1_to" v="Retzendorf" />
+          <type t="route_bicycle_1_relation_id" v="19431392" />
+          <type t="route_bicycle_1_osmc_textcolor" v="black" />
+          <type t="route_bicycle_1_osmc_background" v="white_2" />
+          <type t="route_bicycle_1_ref" v="RG" />
+          <type t="route_bicycle_1_name" v="Radweg für Genießer – Nordtour" />
+          <type t="route_bicycle_3_osmc_text" v="KKK" />
+          <type t="route_bicycle_1_from" v="Frickendorf" />
+          <type t="route_hiking_2_website" v="https://www.romantisches-franken.de/detail/id=61a63b260ecf8268e0d0fc2f" />
+          <type t="route_hiking_2_symbol" v='Weißer Text "2" auf lila Grund' />
+          <type t="route_hiking_2_relation_id" v="12420338" />
+          <type t="route_hiking_2_osmc_text" v="2" />
+          <type t="route_hiking_2_distance" v="8" />
+          <type t="route_hiking_2_name" v="Neuendettelsauer Wanderweg Nr. 2" />
+          <type t="route_hiking_2_via" v="Reuth;Jakobsruh;Steinmühle;Mausenmühle;Birkenhof" />
+          <type t="route_bicycle_1_name" v="ErlebnisRadweg Hohenzollern" />
+          <type t="route_bicycle_1_osmc_text" v="ERH" />
+          <type t="route_bicycle_1_website" v="https://www.erlebnisradweg-hohenzollern.de/" />
+          <type t="route_bicycle_1_via" v="Lichtenau;Windsbach;Neuendettelsau;Großhabersdorf oder Roßtal;Ammerndorf;Cadolzburg;Langenzenn;Veitsbronn;Fürth" />
+          <type t="route_bicycle_1_description" v="Auf den Spuren der Hohenzollern in Franken" />
+          <type t="route_bicycle_1_to" v="Nürnberg" />
+          <type t="route_bicycle_1_cycle_network" v="DE:BY:HZ" />
+          <type t="route_bicycle_1_relation_id" v="19074353" />
+          <type t="route_bicycle_1_from" v="Ansbach" />
+        </osmand:types>
+      </extensions>
+    </trkseg>
+  </trk>
+</gpx>
