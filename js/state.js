@@ -1,6 +1,6 @@
 export const EVENT_DATE = new Date("2026-07-25T08:00:00");
 export const ADMIN_KEY = "rvn_admin_logged_in";
-export const defaultSettings={adminPassword:"RVN2026!",whatsappText:"🐴 RVN Event Manager – Helferanmeldung O-Ritt 2026:",eventTitle:"Beach Please – wir reiten!",eventSubtitle:"Sommer, Sonne, Sattel",documentsPublic:false};
+export const defaultSettings={adminPassword:"RVN2026!",whatsappText:"🐴 RVN Event Manager – Helferanmeldung O-Ritt 2026:",eventTitle:"Beach Please – wir reiten!",eventSubtitle:"Sommer, Sonne, Sattel",routeLength:"17 km",participantGeneralInfo:"Bitte seid rechtzeitig vor eurer Startzeit an der Meldestelle. Die Reitkarte wird 30 Minuten vor dem Start freigeschaltet.",documentsPublic:false};
 export const defaultRoles=[
 {id:"aufbau",order:-2,name:"Aufbauteam",icon:"🔧",max:6,maxPoints:0,description:"Aufbau vor der Veranstaltung."},
 {id:"meldestelle",order:0,name:"Meldestelle",icon:"📋",max:4,maxPoints:0,description:"Anmeldung, Startzeiten, Paddocks und Rückfragen."},
