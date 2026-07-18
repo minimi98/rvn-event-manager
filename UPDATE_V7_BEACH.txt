@@ -1,0 +1,14 @@
+RVN Event Manager V7.0 – Beach Edition
+
+Enthalten:
+- Einheitliches Beach-Please-Design nach Plakat und Urkunde
+- RVN-Logo links in der Kopfzeile
+- Geschützter Helferbereich (Passwort: Helfer)
+- Telefon-Anmeldung für Stationen/Meldestelle/Springer bleibt erhalten
+- Standard-GPX-Links für kleine und große Runde
+- Auswahl kleine/große Runde und Streckenlänge pro Teilnehmer
+- QR-Code und GPX-/OsmAnd-Button im Teilnehmerbereich
+- Streckenverwaltung im Adminbereich
+
+Hinweis:
+Die vorhandene firebase-config.js wurde unverändert übernommen.

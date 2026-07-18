@@ -1,3 +1,16 @@
-RVN Event Manager V7.0
+RVN Event Manager V6.5 Professional
 
-Update: GPX-Strecken, QR-Codes, OsmAnd/Download, Teilnehmerbereich, Helfer-Passwort, Anfahrts- und Paddockplan, Streckenlängen.
+Neu:
+- Teilnehmerlogin über Startnummer + Teamname
+- Admin/Meldestelle können bestehende Teilnehmer vollständig bearbeiten
+- Stationen: Standort, Einsatzzeit, Ansprechpartner und Beschreibung
+- Dokumentencenter im Adminbereich
+- Schalter: öffentlich aktiviert/deaktiviert
+- bestehende V6-Funktionen bleiben erhalten
+
+Upload:
+Kompletten Inhalt ersetzen.
+Dann GitHub Desktop:
+Summary: Version 6.5 Professional
+Commit to main
+Push origin
