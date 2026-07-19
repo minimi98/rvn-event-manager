@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.4";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.4";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.4";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.5";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.5";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.5";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -108,11 +108,21 @@ function participantPage(){
   <section class="panel"><h2>🏅 Mein Rang</h2><div class="notice">Aktueller Rang: <strong>${rank>0?rank:"-"}</strong>. Punktzahlen bleiben bis zur Siegerehrung verborgen.</div></section>`;
 }
 
-function isRouteReleased(p){return Boolean(p.routeReleased)}
+function isRouteReleased(p){return Boolean(p.gpxReleased||p.routeReleased)}
 
-function statusOptions(current){const normalized={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[current]||current;return ["Gemeldet","Startvorbereitung","Startbereit","Gestartet","Im Ziel"].map(v=>`<option value="${v}" ${normalized===v?"selected":""}>${v}</option>`).join("")}" ${current===v?"selected":""}>${v}</option>`).join("")}
+function statusOptions(current){
+  const normalized={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[current]||current;
+  return ["Gemeldet","Startvorbereitung","Startbereit","Gestartet","Im Ziel"]
+    .map(v=>`<option value="${v}" ${normalized===v?"selected":""}>${v}</option>`)
+    .join("");
+}
 function routeOptions(current){return `<option value="">Bitte wählen</option><option value="7 km" ${current==="7 km"?"selected":""}>7 km – Kleine Runde</option><option value="17 km" ${current==="17 km"?"selected":""}>17 km – Große Runde</option>`}
-function teamStatus(p){const raw=p.status||"Gemeldet";const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[raw]||raw;const icon=status==="Startvorbereitung"?"🟡":status==="Startbereit"?"🟢":status==="Gestartet"?"🔵":status==="Im Ziel"?"🏁":"⚪";return `${icon} ${status}`} ${status}`}
+function teamStatus(p){
+  const raw=p.status||"Gemeldet";
+  const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[raw]||raw;
+  const icon=status==="Startvorbereitung"?"🟡":status==="Startbereit"?"🟢":status==="Gestartet"?"🔵":status==="Im Ziel"?"🏁":"⚪";
+  return `${icon} ${status}`;
+}
 
 function meldestellePage(){
   if(!canManageParticipants())return `<section class="panel"><h2>📋 Meldestelle</h2><div class="notice">Nur Admin oder eingetragene Helfer der Meldestelle.</div></section>`;
