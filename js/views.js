@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.2";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.2";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.2";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.3";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.3";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.3";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
