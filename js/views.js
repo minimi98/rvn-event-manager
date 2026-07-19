@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.8";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.8";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.8";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.9";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.9";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.9";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -44,15 +44,24 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
 </section>
 
-<section class="panel">
-  <div class="head"><div><h2>📍 Veranstaltungsort</h2><p class="sub">Reit- und Fahrverein Neuendettelsau</p></div></div>
-  <div class="address-card">
-    <strong>Altendettelsauer Straße 9</strong><br>
-    91564 Neuendettelsau
-    <div class="route-actions">
-      <a class="btn alt" href="https://www.google.com/maps/search/?api=1&query=Altendettelsauer+Stra%C3%9Fe+9%2C+91564+Neuendettelsau" target="_blank" rel="noopener">📍 Route öffnen</a>
+<section class="grid two">
+  <article class="panel">
+    <div class="head"><div><h2>📍 Veranstaltungsort</h2><p class="sub">Reit- und Fahrverein Neuendettelsau</p></div></div>
+    <div class="address-card">
+      <strong>Altendettelsauer Straße 9</strong><br>
+      91564 Neuendettelsau
+      <div class="route-actions">
+        <a class="btn alt" href="https://www.google.com/maps/search/?api=1&query=Altendettelsauer+Stra%C3%9Fe+9%2C+91564+Neuendettelsau" target="_blank" rel="noopener">📍 Route öffnen</a>
+      </div>
     </div>
-  </div>
+  </article>
+
+  <article class="panel paddock-warning">
+    <h2>⚠️ Paddockbau – wichtig</h2>
+    <p><strong>Das komplette Paddockmaterial muss von den Teilnehmern selbst mitgebracht werden.</strong></p>
+    <p>Benötigt werden insbesondere Zaunpfähle, Litze oder Weidezaunband, Torgriff sowie bei Bedarf ein eigenes Weidezaungerät mit Akku oder Batterie.</p>
+    <p>Maximale Größe: <strong>3,5 × 3,5 Meter</strong>. Rettungswege und Fahrgassen müssen jederzeit freigehalten werden.</p>
+  </article>
 </section>
 
 <section class="panel">
@@ -68,13 +77,6 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
     <div><span class="legend-color orange"></span><strong>Orange M:</strong> Meldestelle</div>
     <div><span class="legend-color blue"></span><strong>Blaue Pfeile:</strong> Fußweg zum Start</div>
   </div>
-</section>
-
-<section class="panel paddock-warning">
-  <h2>⚠️ Wichtige Informationen zu den Paddocks</h2>
-  <p><strong>Das komplette Paddockmaterial muss von den Teilnehmern selbst mitgebracht werden.</strong></p>
-  <p>Dazu gehören insbesondere Zaunpfähle, Litze oder Weidezaunband, Torgriff sowie bei Bedarf ein eigenes Weidezaungerät mit Akku oder Batterie.</p>
-  <p>Die maximale Größe beträgt <strong>3,5 × 3,5 Meter</strong>. Rettungswege und Fahrgassen müssen jederzeit freigehalten werden.</p>
 </section>
 
 <section class="panel">
