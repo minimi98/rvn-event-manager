@@ -16,3 +16,20 @@
 .paddock-warning h2{font-size:clamp(23px,4vw,34px)}
 .helper-gate{max-width:620px;margin:40px auto}
 @media(max-width:760px){.event-images,.legend-grid{grid-template-columns:1fr}.event-images img{max-height:none}.bottom{grid-template-columns:repeat(5,1fr)}}
+
+/* V10.10: feste Hauptrubriken und Adresse/Paddock direkt nebeneinander */
+.main-sections{grid-template-columns:repeat(3,1fr)}
+.secure-card{background:linear-gradient(180deg,#edf5ff,#fff)}
+.secure-card:before{background:#274c77}
+.location-paddock-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin:18px 0}
+.location-paddock-row>.panel{margin:0;height:100%}
+.paddock-next-to-address{display:flex;flex-direction:column;justify-content:flex-start}
+@media(max-width:850px){
+  .main-sections{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .location-paddock-row{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .main-sections{grid-template-columns:1fr}
+}

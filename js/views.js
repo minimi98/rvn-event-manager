@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.9";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.9";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.9";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.10";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.10";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.10";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -37,16 +37,18 @@ return homePage();
 function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Der digitale Event Manager für den Orientierungsritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>
 
 <div class="section-title"><div><h2>Alle wichtigen Informationen</h2><p>Professionell organisiert, übersichtlich und mobil verfügbar.</p></div></div>
-<section class="grid">
+<section class="grid main-sections">
   <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button class="arrow" onclick="go('oritt')">›</button></article>
   <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button class="arrow" onclick="go('teilnehmer')">›</button></article>
   <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
+  <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button class="arrow" onclick="go('helfer')">›</button></article>
+  <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button class="arrow" onclick="go('admin')">›</button></article>
 </section>
 
-<section class="grid two">
-  <article class="panel">
-    <div class="head"><div><h2>📍 Veranstaltungsort</h2><p class="sub">Reit- und Fahrverein Neuendettelsau</p></div></div>
+<section class="location-paddock-row">
+  <article class="panel location-panel">
+    <div class="head"><div><h2>📍 Anfahrtsadresse</h2><p class="sub">Reit- und Fahrverein Neuendettelsau</p></div></div>
     <div class="address-card">
       <strong>Altendettelsauer Straße 9</strong><br>
       91564 Neuendettelsau
@@ -56,8 +58,8 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
     </div>
   </article>
 
-  <article class="panel paddock-warning">
-    <h2>⚠️ Paddockbau – wichtig</h2>
+  <article class="panel paddock-warning paddock-next-to-address">
+    <div class="head"><div><h2>⚠️ Paddockbau – wichtig</h2><p class="sub">Bitte vor der Anreise beachten</p></div></div>
     <p><strong>Das komplette Paddockmaterial muss von den Teilnehmern selbst mitgebracht werden.</strong></p>
     <p>Benötigt werden insbesondere Zaunpfähle, Litze oder Weidezaunband, Torgriff sowie bei Bedarf ein eigenes Weidezaungerät mit Akku oder Batterie.</p>
     <p>Maximale Größe: <strong>3,5 × 3,5 Meter</strong>. Rettungswege und Fahrgassen müssen jederzeit freigehalten werden.</p>
@@ -78,17 +80,7 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
     <div><span class="legend-color blue"></span><strong>Blaue Pfeile:</strong> Fußweg zum Start</div>
   </div>
 </section>
-
-<section class="panel">
-  <details>
-    <summary><strong>🔒 Interner Bereich für Helfer und Organisation</strong></summary>
-    <div class="route-actions" style="margin-top:14px">
-      <button class="btn light" onclick="go('helfer')">Helferbereich</button>
-      <button class="btn light" onclick="go('zugang')">Stationszugang</button>
-      <button class="btn light" onclick="go('admin')">Admin</button>
-    </div>
-  </details>
-</section>`;
+`;
 }
 
 function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section>
