@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.5";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.5";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.5";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.6";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.6";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.6";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -391,7 +391,23 @@ async function accessLogin(e){e.preventDefault();const password=document.getElem
 function participantLogin(e){e.preventDefault();const s=String(document.getElementById("pLoginStart").value).trim(),t=String(document.getElementById("pLoginTeam").value).trim().toLowerCase();const p=state.participants.find(x=>String(x.startNumber||"").trim()===s&&String(x.horse||"").trim().toLowerCase()===t);if(!p)return toast("Nicht gefunden.");localStorage.setItem("rvn_participant_id",p.id);window.renderApp()}
 async function addParticipant(e){e.preventDefault();const route=document.getElementById("pRoute").value;await addDoc(collection(db,"participants"),{startNumber:document.getElementById("pStart").value.trim(),name:document.getElementById("pName").value.trim(),horse:document.getElementById("pHorse").value.trim(),startTime:document.getElementById("pTime").value,paddock:document.getElementById("pPaddock").value.trim(),route,routeType:route,status:"Gemeldet",routeReleased:false,gpxReleased:false,qrReleased:false,createdAt:serverTimestamp()});e.target.reset();toast("Teilnehmer hinzugefügt.")}
 async function saveScore(e){e.preventDefault();const p=e.currentTarget.dataset.participant,st=e.currentTarget.dataset.station;if(!canEditStation(st))return toast("Keine Berechtigung.");await setDoc(doc(db,"scores",scoreKey(p,st)),{participantId:p,stationId:st,points:Number(e.currentTarget.points.value||0),updatedAt:serverTimestamp()},{merge:true});toast("Punkte gespeichert.")}
-async function sendAlert(e){e.preventDefault();const priority=document.getElementById("alertPriority").value;const text=document.getElementById("alertText").value.trim();if((priority==="help"||priority==="emergency")&&!text)return toast("Bei Unterstützung oder Notfall ist eine Beschreibung erforderlich.");await addDoc(collection(db,"alerts"),{stationId:document.getElementById("alertStation").value,priority,text:text||(priority==="ok"?"Alles in Ordnung":""),status:"offen",createdAt:serverTimestamp()});e.target.reset();toast("Meldung gesendet.")});e.target.reset();toast("Meldung gesendet.")}
+async function sendAlert(e){
+  e.preventDefault();
+  const priority=document.getElementById("alertPriority").value;
+  const text=document.getElementById("alertText").value.trim();
+  if((priority==="help"||priority==="emergency")&&!text){
+    return toast("Bei Unterstützung oder Notfall ist eine Beschreibung erforderlich.");
+  }
+  await addDoc(collection(db,"alerts"),{
+    stationId:document.getElementById("alertStation").value,
+    priority,
+    text:text||(priority==="ok"?"Alles in Ordnung":""),
+    status:"offen",
+    createdAt:serverTimestamp()
+  });
+  e.target.reset();
+  toast("Meldung gesendet.");
+}
 function rankSearch(e){e.preventDefault();const n=String(document.getElementById("rankName").value).toLowerCase().trim(),h=String(document.getElementById("rankHorse").value).toLowerCase().trim(),rank=rankedParticipants(),p=rank.find(x=>(!n||String(x.name||"").toLowerCase().includes(n))&&(!h||String(x.horse||"").toLowerCase().includes(h))),r=document.getElementById("rankResult");r.innerHTML=p?`<div class="notice"><strong>${esc(p.name)}</strong>: aktueller Rang <strong>${rank.findIndex(x=>x.id===p.id)+1}</strong>.</div>`:`<div class="notice">Nicht gefunden.</div>`}
 
 window.saveParticipantMeta=async id=>{if(!canManageParticipants())return toast("Keine Berechtigung.");const route=document.getElementById("route-"+id).value;await setDoc(doc(db,"participants",id),{startNumber:document.getElementById("start-"+id).value,name:document.getElementById("name-"+id).value,horse:document.getElementById("horse-"+id).value,startTime:document.getElementById("time-"+id).value,paddock:document.getElementById("paddock-"+id).value,route,routeType:route,status:document.getElementById("status-"+id).value,routeMapUrl:document.getElementById("map-"+id).value,updatedAt:serverTimestamp()},{merge:true});toast("Gespeichert.")}
