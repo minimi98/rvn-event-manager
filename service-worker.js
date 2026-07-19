@@ -1,1 +1,54 @@
-const CACHE="rvn-v9-beach-1";const ASSETS=["./","./index.html","./css/style.css","./js/app.js","./js/views.js","./js/state.js","./js/utils.js","./js/firebase.js","./firebase-config.js","./assets/logo.png","./assets/logo.jpg","./assets/beach-poster.png","./strecken/strecken_kleine_runde.gpx","./strecken/strecken_grosse_runde.gpx"];self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match("./index.html"))))});
+const CACHE = "rvn-v10-1";
+const CORE = [
+  "./",
+  "./index.html",
+  "./css/style.css?v=10.1",
+  "./js/app.js?v=10.1",
+  "./js/views.js?v=10.1",
+  "./js/state.js?v=10.1",
+  "./js/utils.js?v=10.1",
+  "./js/firebase.js?v=10.1",
+  "./firebase-config.js?v=10.1",
+  "./assets/logo.png",
+  "./assets/logo.jpg",
+  "./assets/beach-poster.png",
+  "./strecken/strecken_kleine_runde.gpx",
+  "./strecken/strecken_grosse_runde.gpx"
+];
+
+self.addEventListener("install", event => {
+  self.skipWaiting();
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", event => {
+  const request = event.request;
+  if (request.method !== "GET") return;
+
+  const url = new URL(request.url);
+  if (!["http:", "https:"].includes(url.protocol)) return;
+  if (url.origin !== self.location.origin) return;
+
+  event.respondWith(
+    fetch(request).then(response => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(request, copy));
+      }
+      return response;
+    }).catch(async () => {
+      const cached = await caches.match(request);
+      if (cached) return cached;
+      if (request.mode === "navigate") return caches.match("./index.html");
+      return Response.error();
+    })
+  );
+});
