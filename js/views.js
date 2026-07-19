@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.6";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.6";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.6";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.7";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.7";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.7";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -14,7 +14,8 @@ const helperGateOpen=()=>state.isAdmin||sessionStorage.getItem("rvn_helper_gate"
 const assignedHelper=()=>state.helpers.find(h=>cleanPhone(h.phone)===cleanPhone(localStorage.getItem("rvn_helper_phone")||""))||null;
 
 export function shell(content){
-return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" aria-label="Startseite" onclick="go('home')">☰</button><div class="brand-copy"><h1>RVN Event Manager</h1><p>O-Ritt 2026 · Beach Please – wir reiten!</p></div></div><img class="logo" src="assets/logo.png" onerror="this.src='assets/logo.jpg'" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Startseite")}${nav("oritt","🐴","O-Ritt")}${nav("teilnehmer","🏇","Teilnehmer")}${nav("ergebnisse","🏆","Ergebnisse")}</nav></div>`}
+return `<div class="shell"><header class="topbar"><div class="brand"><button class="menu" aria-label="Startseite" onclick="go('home')">☰</button><div class="brand-copy"><h1>RVN Event Manager</h1><p>O-Ritt 2026 · Beach Please – wir reiten!</p></div></div><img class="logo" src="assets/logo.png" onerror="this.src='assets/logo.jpg'" alt="RVN Logo"></header><main class="main">${content}</main><nav class="bottom">${nav("home","🏠","Startseite")}${nav("oritt","🐴","O-Ritt")}${nav("teilnehmer","🏇","Teilnehmer")}${nav("ergebnisse","🏆","Ergebnisse")}</nav></div>`;
+}
 const nav=(id,i,l)=>`<button class="nav ${state.page===id?"active":""}" onclick="go('${id}')"><span>${i}</span>${l}</button>`;
 
 function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;return `<div class="countdown"><div class="countbox"><strong>${d}</strong><span>Tage</span></div><div class="countbox"><strong>${h}</strong><span>Std</span></div><div class="countbox"><strong>${m}</strong><span>Min</span></div><div class="countbox"><strong>${s}</strong><span>Sek</span></div></div>`}
@@ -33,41 +34,133 @@ if(state.page==="admin")return adminPage();
 return homePage();
 }
 
-function homePage(){
-const s=state.settings||{};
-const maps=s.mapsUrl||"https://www.google.com/maps/search/?api=1&query=Reit-+und+Fahrverein+Neuendettelsau";
-const link=(label,url,icon)=>url?`<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">${icon} ${label}</a>`:`<button class="btn light" disabled>${icon} ${label} folgt</button>`;
-return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Herzlich willkommen beim O-Ritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>
-<section class="panel poster-strip"><img src="assets/beach-poster.png" alt="Offizielles Veranstaltungsplakat"><div><div class="kicker">O-Ritt 2026</div><h2>Willkommen!</h2><p>${esc(s.welcomeText||"Auf dieser Seite findest du alle öffentlichen Informationen zur Veranstaltung, zur Anreise und zum Ablauf.")}</p></div></section>
-<section class="panel"><h2>📌 Wichtige Informationen</h2><div class="cards"><div class="info"><h3>📍 Adresse</h3><p>${esc(s.address||"Reit- und Fahrverein Neuendettelsau e.V.")}</p><a class="btn light" href="${esc(maps)}" target="_blank" rel="noopener">Google Maps öffnen</a></div><div class="info"><h3>🐴 Paddock</h3><p>${esc(s.paddockInfo||"Informationen zum Paddock folgen.")}</p></div><div class="info"><h3>🚗 Parken</h3><p>${esc(s.parkingInfo||"Informationen zu den Parkflächen folgen.")}</p></div></div></section>
-<section class="panel"><h2>🗺️ Schnellzugriff</h2><div class="route-actions">${link("Ausschreibung",s.ausschreibungUrl,"📄")}${link("Zeitplan",s.zeitplanUrl,"🕒")}${link("Anmeldung",s.anmeldungUrl,"✍️")}${link("Anreise & Lageplan",s.lageplanUrl||"assets/lageplan.png","📍")}${link("Wichtige Hinweise",s.hinweiseUrl,"⚠️")}${link("Kontakt",s.kontaktUrl,"☎️")}</div></section>
-<section class="panel"><h2>Seitenübersicht</h2><div class="cards"><div class="info"><h3>🐴 O-Ritt</h3><p>Öffentliche Veranstaltungsinformationen.</p><button class="btn light" onclick="go('oritt')">Öffnen</button></div><div class="info"><h3>🏇 Teilnehmer</h3><p>Persönlicher Zugang für angemeldete Teams.</p><button class="btn light" onclick="go('teilnehmer')">Öffnen</button></div><div class="info"><h3>🏆 Ergebnisse</h3><p>Öffentlich einsehbare Ergebnisse.</p><button class="btn light" onclick="go('ergebnisse')">Öffnen</button></div></div></section>
-<section class="panel"><details><summary>Interner Zugang</summary><div class="route-actions" style="margin-top:12px"><button class="btn light" onclick="go('helfer')">Helferbereich</button><button class="btn light" onclick="go('admin')">Admin</button></div></details></section>`}
+function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Der digitale Event Manager für den Orientierungsritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>
 
-function orittPage(){
-const s=state.settings||{};
-return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(s.eventTitle||"Beach Please – wir reiten!")}</h2><p>${esc(s.eventSubtitle||"Sommer, Sonne, Sattel")}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section>
-<section class="panel"><h2>🐴 Der O-Ritt</h2><p>${esc(s.publicEventInfo||"Freut euch auf einen abwechslungsreichen Orientierungsritt mit Aufgabenstationen und gemeinsamer Siegerehrung.")}</p></section>
-<section class="cards"><div class="info"><h3>🌊 Kleine Runde</h3><p>ca. 7 km</p></div><div class="info"><h3>🌴 Große Runde</h3><p>ca. 17 km</p></div><div class="info"><h3>🏆 Siegerehrung</h3><p>${esc(s.awardsInfo||"Weitere Informationen folgen.")}</p></div></section>
-<section class="panel"><h2>Hinweis</h2><div class="notice">Strecken, GPX-Dateien, QR-Codes, Stationen und Helfereinteilungen sind nicht öffentlich sichtbar.</div></section>`}
+<div class="section-title"><div><h2>Alle wichtigen Informationen</h2><p>Professionell organisiert, übersichtlich und mobil verfügbar.</p></div></div>
+<section class="grid">
+  <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button class="arrow" onclick="go('oritt')">›</button></article>
+  <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button class="arrow" onclick="go('teilnehmer')">›</button></article>
+  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+  <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
+</section>
+
+<section class="panel">
+  <div class="head"><div><h2>📍 Veranstaltungsort</h2><p class="sub">Reit- und Fahrverein Neuendettelsau</p></div></div>
+  <div class="address-card">
+    <strong>Altendettelsauer Straße 9</strong><br>
+    91564 Neuendettelsau
+    <div class="route-actions">
+      <a class="btn alt" href="https://www.google.com/maps/search/?api=1&query=Altendettelsauer+Stra%C3%9Fe+9%2C+91564+Neuendettelsau" target="_blank" rel="noopener">📍 Route öffnen</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="head"><div><h2>🗺️ Lageplan & Veranstaltungsplakat</h2><p class="sub">Zum Vergrößern einfach auf ein Bild tippen.</p></div></div>
+  <div class="event-images">
+    <a href="assets/beach-poster.png" target="_blank" rel="noopener"><img src="assets/beach-poster.png" alt="Offizielles Beach Please Veranstaltungsplakat"></a>
+    <a href="assets/lageplan.png" target="_blank" rel="noopener"><img src="assets/lageplan.png" alt="Lageplan des Veranstaltungsgeländes"></a>
+  </div>
+  <div class="legend-grid">
+    <div><span class="legend-color yellow"></span><strong>Gelb:</strong> Teilnehmer-Paddocks, maximal 3,5 × 3,5 m</div>
+    <div><span class="legend-color red"></span><strong>Rot:</strong> Hängerparkplatz; grüne Streifen markieren Stellplätze</div>
+    <div><span class="legend-color parking"></span><strong>PKW:</strong> Besucher- und PKW-Parkplätze</div>
+    <div><span class="legend-color orange"></span><strong>Orange M:</strong> Meldestelle</div>
+    <div><span class="legend-color blue"></span><strong>Blaue Pfeile:</strong> Fußweg zum Start</div>
+  </div>
+</section>
+
+<section class="panel paddock-warning">
+  <h2>⚠️ Wichtige Informationen zu den Paddocks</h2>
+  <p><strong>Das komplette Paddockmaterial muss von den Teilnehmern selbst mitgebracht werden.</strong></p>
+  <p>Dazu gehören insbesondere Zaunpfähle, Litze oder Weidezaunband, Torgriff sowie bei Bedarf ein eigenes Weidezaungerät mit Akku oder Batterie.</p>
+  <p>Die maximale Größe beträgt <strong>3,5 × 3,5 Meter</strong>. Rettungswege und Fahrgassen müssen jederzeit freigehalten werden.</p>
+</section>
+
+<section class="panel">
+  <details>
+    <summary><strong>🔒 Interner Bereich für Helfer und Organisation</strong></summary>
+    <div class="route-actions" style="margin-top:14px">
+      <button class="btn light" onclick="go('helfer')">Helferbereich</button>
+      <button class="btn light" onclick="go('zugang')">Stationszugang</button>
+      <button class="btn light" onclick="go('admin')">Admin</button>
+    </div>
+  </details>
+</section>`;
+}
+
+function orittPage(){return `<section class="hero"><div><div class="kicker">Orientierungsritt 2026</div><h2>${esc(state.settings.eventTitle)}</h2><p>${esc(state.settings.eventSubtitle)}</p><div class="chip">📅 25. Juli 2026 · Start ab 08:00 Uhr</div>${countdown()}</div></section>
+<section class="grid">
+  <article class="card"><div class="icon">🌊</div><h3>Kleine Runde</h3><p>Etwa 7 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
+  <article class="card"><div class="icon">🌴</div><h3>Große Runde</h3><p>Etwa 17 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
+  <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Startbereitschaft, Startzeit und persönliche Streckenfreigabe.</p></article>
+  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Nach der Auswertung öffentlich abrufbar.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+</section>
+<section class="panel poster-strip"><img src="assets/beach-poster.png" alt="Beach Please O-Ritt Plakat"><div><div class="kicker">Sommer · Sonne · Sattel</div><h2>Orientierungsritt 2026</h2><p>${esc(state.settings.participantGeneralInfo||"Bitte seid rechtzeitig vor eurer Startzeit an der Meldestelle.")}</p></div></section>
+<section class="panel"><div class="notice">Stationen, Helferzuweisungen, GPX-Dateien und QR-Codes sind nicht öffentlich sichtbar.</div></section>`;
+}
 
 
 function routeCard(name,length,url){const absolute=new URL(url,location.href).href;const qr="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(absolute);return `<article class="route-card"><div class="route-layout"><div><h3>🐴 ${name}</h3><p>${length} · GPX-Datei für Navigations-Apps</p><div class="route-actions"><a class="btn" href="${url}" download>GPX herunterladen</a><a class="btn light" href="${url}" target="_blank" rel="noopener">Öffnen</a></div></div><img class="qr" src="${qr}" alt="QR-Code ${name}" loading="lazy"></div></article>`}
 
 function helperPage(){
-if(!helperGateOpen()) return `<section class="panel"><h2>🔒 Geschützter Helferbereich</h2><div class="notice">Helfer-, Stations- und Einsatzdaten sind nur mit Helferpasswort sichtbar.</div><form id="helperGateForm" class="form"><label class="full">Helferpasswort<input id="helperGatePassword" type="password" autocomplete="current-password"></label><button class="btn full">Helferbereich öffnen</button></form></section>`;
-const helper=assignedHelper();
-if(helper && helper.role?.startsWith("station-")) return stationPage();
-if(helper?.role==="meldestelle") return meldestellePage();
-if(helper?.role==="springer-kfz") return alertsPage();
-return `<section class="panel"><div class="head"><div><h2>🙋 Helferbereich</h2><p class="sub">Übersicht, Anmeldung und persönlicher Zugang.</p></div><button class="btn light" onclick="closeHelperGate()">Bereich schließen</button></div>
-<div class="cards"><div class="info"><h3>📞 Persönlicher Zugang</h3><p>Mit deiner bei der Helferanmeldung hinterlegten Telefonnummer öffnest du deinen Einsatzbereich.</p><form id="helperPhoneForm" class="form"><label class="full">Telefonnummer<input id="helperAccessPhone" inputmode="tel" autocomplete="tel"></label><button class="btn full">Meinen Bereich öffnen</button></form></div>
-<div class="info"><h3>🕒 Tagesablauf</h3><p>${esc(state.settings.helperSchedule||"Der Tagesablauf wird hier veröffentlicht.")}</p></div>
-<div class="info"><h3>🍽️ Verpflegung</h3><p>${esc(state.settings.cateringInfo||"Informationen zur Helferverpflegung folgen.")}</p></div>
-<div class="info"><h3>🚗 Helferparken</h3><p>${esc(state.settings.helperParkingInfo||"Informationen zum Helferparken folgen.")}</p></div>
-<div class="info"><h3>🚨 Notfall</h3><p>${esc(state.settings.emergencyInfo||"Im Notfall Meldestelle oder Springer verständigen.")}</p></div></div></section>
-<section class="panel"><h2>📍 Stationen und Aufgaben</h2><div class="cards">${state.roles.map(r=>`<div class="info"><h3>${r.icon} ${esc(r.name)}</h3><p>${esc(r.description||"Beschreibung folgt.")}</p>${r.location?`<p><strong>Standort:</strong> ${esc(r.location)}</p>`:""}${r.dutyTime?`<p><strong>Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}${r.contact?`<p><strong>Kontakt:</strong> ${esc(r.contact)}</p>`:""}<p><strong>Helfer:</strong><br>${peopleFor(r.id).length?peopleFor(r.id).map(h=>esc(h.name)).join("<br>"):"noch nicht besetzt"}</p></div>`).join("")}</div></section>
-<section class="panel"><h2>📝 Helferanmeldung</h2><form id="helperSignupForm" class="form"><label>Name<input id="helperName" required></label><label>Telefonnummer<input id="helperPhone" required></label><label>Bereich<select id="helperRole">${state.roles.map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}</select></label><label>Zeitraum<select id="helperTime"><option>ganztags</option><option>vormittags</option><option>nachmittags</option><option>abends</option><option>nach Absprache</option></select></label><label class="full">Bemerkung<textarea id="helperNote"></textarea></label><button class="btn full">Verbindlich eintragen</button></form></section>${state.isAdmin?adminHelperManagement():""}` }
+  if(!helperGateOpen()) return `<section class="panel"><h2>🔒 Geschützter Helferbereich</h2><div class="notice">Stations- und Helferdaten sind nicht öffentlich sichtbar.</div><form id="helperGateForm" class="form"><label class="full">Helferpasswort<input id="helperGatePassword" type="password" autocomplete="current-password" placeholder="Passwort"></label><button class="btn full">Helferbereich öffnen</button></form></section>`;
+  const helper=assignedHelper();
+  if(helper && helper.role?.startsWith("station-")) return stationPage();
+  if(helper?.role==="meldestelle") return meldestellePage();
+  if(helper?.role==="springer-kfz") return alertsPage();
+  return `<section class="panel">
+    <div class="head">
+      <div>
+        <h2>👥 Stations- und Helferübersicht</h2>
+        <p class="sub">Alle Stationen, Aufgaben und eingetragenen Helfer auf einen Blick.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      ${state.roles.map(r=>{
+        const count=peopleFor(r.id).length;
+        const free=Math.max(0,Number(r.max||0)-count);
+        return `<div class="info">
+          <h3>${r.icon} ${esc(r.name)}</h3>
+          <p>${esc(r.description||"Beschreibung folgt.")}</p>
+          ${r.location?`<p><strong>📍 Standort:</strong> ${esc(r.location)}</p>`:""}
+          ${r.dutyTime?`<p><strong>🕒 Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}
+          ${r.contact?`<p><strong>👤 Ansprechpartner:</strong> ${esc(r.contact)}</p>`:""}
+          <p><strong>${count} / ${r.max}</strong> eingetragen · ${free===0?"voll":free+" frei"}</p>${peopleFor(r.id).length?`<p><strong>Helfer:</strong><br>${peopleFor(r.id).map(h=>esc(h.name)).join("<br>")}</p>`:`<p class="sub">Noch keine Helfer eingetragen.</p>`}
+          <button class="btn ${free===0?"light":"alt"}" ${free===0?"disabled":""} onclick="selectHelperRole('${r.id}')">${free===0?"Voll":"Diesen Bereich wählen"}</button>
+        </div>`;
+      }).join("")}
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>📝 Helferanmeldung</h2>
+    <div class="notice">Die Telefonnummer wird später zugleich für den Zugang zu deiner Station, der Meldestelle oder dem Springerbereich verwendet.</div>
+    <form id="helperSignupForm" class="form">
+      <label>Name<input id="helperName" required placeholder="Vor- und Nachname"></label>
+      <label>Telefonnummer<input id="helperPhone" required placeholder="Telefonnummer"></label>
+      <label>Bereich
+        <select id="helperRole">
+          ${state.roles.map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}
+        </select>
+      </label>
+      <label>Zeitraum
+        <select id="helperTime">
+          <option>ganztags</option>
+          <option>vormittags</option>
+          <option>nachmittags</option>
+          <option>abends</option>
+          <option>nach Absprache</option>
+        </select>
+      </label>
+      <label class="full">Bemerkung<textarea id="helperNote" placeholder="z. B. mit Auto, erst ab 12 Uhr"></textarea></label>
+      <button class="btn full" type="submit">Verbindlich eintragen</button>
+    </form>
+  </section>
+
+  ${state.isAdmin?adminHelperManagement():""}`;
+}
 
 function adminHelperManagement(){
   return `<section class="panel">
@@ -99,27 +192,25 @@ function participantPage(){
     return `<section class="panel"><h2>🏇 Teilnehmerbereich</h2><div class="notice">Anmeldung mit Startnummer und Teamname.</div><form id="participantLoginForm" class="form"><label>Startnummer<input id="pLoginStart"></label><label>Teamname<input id="pLoginTeam"></label><button class="btn full">Öffnen</button></form></section>`;
   }
   const rank=rankedParticipants().findIndex(x=>x.id===p.id)+1;
+  const route=p.routeType||p.route||"";
   const released=Boolean(p.gpxReleased||p.routeReleased);
-  const participantRoute=p.routeType||p.route;const routeLabel=participantRoute==="7 km"?"7 km – Kleine Runde":participantRoute==="17 km"?"17 km – Große Runde":(participantRoute||"Noch nicht festgelegt");
-  const routeUrl=p.routeGpxUrl||(participantRoute==="7 km"?"strecken/strecken_kleine_runde.gpx":participantRoute==="17 km"?"strecken/strecken_grosse_runde.gpx":"");
+  const routeLabel=route==="7 km"?"7 km – Kleine Runde":route==="17 km"?"17 km – Große Runde":"Noch nicht festgelegt";
+  const routeUrl=p.routeGpxUrl||(route==="7 km"?"strecken/strecken_kleine_runde.gpx":route==="17 km"?"strecken/strecken_grosse_runde.gpx":"");
   return `<section class="panel"><div class="head"><div><h2>🏇 Teilnehmerbereich</h2><p class="sub">${esc(p.name)} · Team ${esc(p.horse||"-")}</p></div><button class="btn light" onclick="participantLogout()">Abmelden</button></div></section>
-  <section class="panel"><h2>📋 Meine Daten</h2><div class="cards"><div class="info"><h3>Startnummer</h3><p>${esc(p.startNumber||"-")}</p></div><div class="info"><h3>Startzeit</h3><p>${esc(p.startTime||"-")}</p></div><div class="info"><h3>Strecke</h3><p>${esc(routeLabel)}</p></div><div class="info"><h3>Status</h3><p>${esc(p.status||"Gemeldet")}</p></div></div></section>
-  <section class="panel"><h2>🧭 Meine GPX-Strecke</h2>${released&&routeUrl?routeCard(routeLabel,"",routeUrl):`<div class="notice"><strong>Die Strecke wurde noch nicht freigegeben.</strong><br>Bitte melde dich vor dem Start an der Meldestelle.</div>`}</section>
+  <section class="panel"><h2>📋 Meine Daten</h2><div class="cards"><div class="info"><h3>Startnummer</h3><p>${esc(p.startNumber||"-")}</p></div><div class="info"><h3>Startzeit</h3><p>${esc(p.startTime||"-")}</p></div><div class="info"><h3>Paddock</h3><p>${esc(p.paddock||"-")}</p></div><div class="info"><h3>Status</h3><p>${teamStatus(p)}</p></div></div></section>
+  <section class="panel"><h2>🧭 Meine Strecke</h2>${released&&routeUrl?routeCard(routeLabel,"",routeUrl):`<div class="notice"><strong>Die Strecke wurde noch nicht freigegeben.</strong><br>Bitte melde dich vor dem Start an der Meldestelle.</div>`}</section>
   <section class="panel"><h2>🏅 Mein Rang</h2><div class="notice">Aktueller Rang: <strong>${rank>0?rank:"-"}</strong>. Punktzahlen bleiben bis zur Siegerehrung verborgen.</div></section>`;
 }
 
-function isRouteReleased(p){return Boolean(p.gpxReleased||p.routeReleased)}
+function isRouteReleased(p){return Boolean(p.gpxReleased||p.routeReleased);}
 
 function statusOptions(current){
-  const normalized={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[current]||current;
-  return ["Gemeldet","Startvorbereitung","Startbereit","Gestartet","Im Ziel"]
-    .map(v=>`<option value="${v}" ${normalized===v?"selected":""}>${v}</option>`)
-    .join("");
+  const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[current]||current||"Gemeldet";
+  return ["Gemeldet","Startvorbereitung","Startbereit","Gestartet","Im Ziel"].map(v=>`<option value="${v}" ${status===v?"selected":""}>${v}</option>`).join("");
 }
 function routeOptions(current){return `<option value="">Bitte wählen</option><option value="7 km" ${current==="7 km"?"selected":""}>7 km – Kleine Runde</option><option value="17 km" ${current==="17 km"?"selected":""}>17 km – Große Runde</option>`}
 function teamStatus(p){
-  const raw=p.status||"Gemeldet";
-  const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[raw]||raw;
+  const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[p.status]||p.status||"Gemeldet";
   const icon=status==="Startvorbereitung"?"🟡":status==="Startbereit"?"🟢":status==="Gestartet"?"🔵":status==="Im Ziel"?"🏁":"⚪";
   return `${icon} ${status}`;
 }
@@ -127,25 +218,35 @@ function teamStatus(p){
 function meldestellePage(){
   if(!canManageParticipants())return `<section class="panel"><h2>📋 Meldestelle</h2><div class="notice">Nur Admin oder eingetragene Helfer der Meldestelle.</div></section>`;
   const sorted=[...state.participants].sort((a,b)=>String(a.startTime||"99:99").localeCompare(String(b.startTime||"99:99")));
-  return `<section class="panel"><div class="head"><div><h2>📋 Meldestelle</h2><p class="sub">Strecke festlegen, Startbereitschaft bestätigen und Teamstatus verfolgen.</p></div><button class="btn alt" onclick="exportParticipants()">CSV</button></div>${participantForm()}${sorted.map(p=>`<div class="entry"><div style="width:100%"><div class="head"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div>${p.routeReleased?`<span class="badge info">GPX freigegeben</span>`:""}</div><div class="form"><label>Startnummer<input id="start-${p.id}" value="${esc(p.startNumber||"")}"></label><label>Teilnehmer<input id="name-${p.id}" value="${esc(p.name||"")}"></label><label>Teamname<input id="horse-${p.id}" value="${esc(p.horse||"")}"></label><label>Startzeit<input type="time" id="time-${p.id}" value="${esc(p.startTime||"")}"></label><label>Paddock<input id="paddock-${p.id}" value="${esc(p.paddock||"")}"></label><label>Strecke<select id="route-${p.id}">${routeOptions(p.route||"")}</select></label><label>Status<select id="status-${p.id}">${statusOptions(p.status||"Gemeldet")}</select></label><label class="full">Optionaler Kartenlink<input id="map-${p.id}" value="${esc(p.routeMapUrl||"")}"></label></div><button class="btn light" onclick="saveParticipantMeta('${p.id}')">Teilnehmer speichern</button><button class="btn alt" onclick="confirmStartReady('${p.id}')" ${!p.route?'disabled title="Zuerst Strecke wählen"':""}>🟢 Startbereitschaft bestätigen</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Gestartet')">🔵 Gestartet</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Im Ziel')">🏁 Im Ziel</button><button class="btn danger" onclick="deleteParticipant('${p.id}')">Löschen</button>${p.routeReleasedAt?`<p class="sub">Freigabe gespeichert.</p>`:""}</div></div>`).join("")}</section>`;
+  return `<section class="panel"><div class="head"><div><h2>📋 Meldestelle</h2><p class="sub">Teilnehmer verwalten, Strecke festlegen und Startbereitschaft bestätigen.</p></div><button class="btn alt" onclick="exportParticipants()">CSV</button></div>${participantForm()}${sorted.map(p=>{
+    const route=p.routeType||p.route||"";
+    const released=Boolean(p.gpxReleased||p.routeReleased);
+    return `<div class="entry"><div style="width:100%"><div class="head"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div>${released?`<span class="badge info">GPX & QR freigegeben</span>`:""}</div><div class="form"><label>Startnummer<input id="start-${p.id}" value="${esc(p.startNumber||"")}"></label><label>Teilnehmer<input id="name-${p.id}" value="${esc(p.name||"")}"></label><label>Teamname<input id="horse-${p.id}" value="${esc(p.horse||"")}"></label><label>Startzeit<input type="time" id="time-${p.id}" value="${esc(p.startTime||"")}"></label><label>Paddock<input id="paddock-${p.id}" value="${esc(p.paddock||"")}"></label><label>Strecke<select id="route-${p.id}">${routeOptions(route)}</select></label><label>Status<select id="status-${p.id}">${statusOptions(p.status)}</select></label><label class="full">Optionaler Kartenlink<input id="map-${p.id}" value="${esc(p.routeMapUrl||"")}"></label></div><button class="btn light" onclick="saveParticipantMeta('${p.id}')">Teilnehmer speichern</button><button class="btn alt" onclick="confirmStartReady('${p.id}')" ${!route?'disabled title="Zuerst Strecke wählen"':""}>🟢 Startbereitschaft bestätigen</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Gestartet')">🔵 Gestartet</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Im Ziel')">🏁 Im Ziel</button><button class="btn danger" onclick="deleteParticipant('${p.id}')">Löschen</button>${p.releasedAt||p.routeReleasedAt?`<p class="sub">Freigabe gespeichert.</p>`:""}</div></div>`;
+  }).join("")}</section>`;
 }
 
 function participantForm(){return `<form id="participantForm" class="form"><label>Startnummer<input id="pStart"></label><label>Teilnehmer<input id="pName"></label><label>Teamname<input id="pHorse"></label><label>Startzeit<input id="pTime" type="time"></label><label>Paddock<input id="pPaddock"></label><label>Strecke<select id="pRoute">${routeOptions("")}</select></label><button class="btn full">Teilnehmer hinzufügen</button></form>`}
 
 function stationPage(){
-const id=stationAccess();
-if(!id||!id.startsWith("station-"))return `<section class="panel"><h2>🐴 Stationsmodus</h2><div class="notice">Bitte zuerst im Helferbereich mit deiner Telefonnummer anmelden.</div></section>`;
-const st=roleById(id);
-return `<section class="panel"><div class="head"><div><h2>${st.icon} ${esc(st.name)}</h2><p class="sub">${esc(st.description||"")}</p></div><button class="btn light" onclick="closeHelperGate()">Abmelden</button></div>
-<div class="cards"><div class="info"><h3>📍 Standort</h3><p>${esc(st.location||"-")}</p></div><div class="info"><h3>🕒 Einsatzzeit</h3><p>${esc(st.dutyTime||"-")}</p></div><div class="info"><h3>☎️ Meldestelle</h3><p>${esc(state.settings.registrationContact||"Kontakt folgt.")}</p></div></div>
-<label>Teilnehmer suchen<input id="stationSearch" oninput="filterStationParticipants(this.value)" placeholder="Startnummer, Name oder Team"></label>
-<div class="entries" id="stationParticipantList">${state.participants.map(p=>`<form class="entry score-form station-participant" data-search="${esc(`${p.startNumber||""} ${p.name||""} ${p.horse||""}`.toLowerCase())}" data-participant="${p.id}" data-station="${id}"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div><div><input name="points" type="number" min="0" max="${st.maxPoints||999}" step="0.5" value="${scoreFor(p.id,id)?.points??""}" placeholder="Punkte"><button class="btn alt">Speichern</button></div></form>`).join("")}</div></section>${alertForm(id)}` }
+  const helper=assignedHelper();
+  const id=helper?.role||stationAccess();
+  if(!id||!id.startsWith("station-"))return `<section class="panel"><h2>🐴 Eigene Station</h2><div class="notice">Bitte zuerst im Helferbereich mit deiner hinterlegten Telefonnummer anmelden.</div></section>`;
+  const st=roleById(id);
+  return `<section class="panel"><div class="head"><div><h2>${st?.icon||"🐴"} ${esc(st?.name||id)}</h2><p class="sub">Angemeldet als ${esc(helper?.name||"Helfer")}</p></div><button class="btn light" onclick="helperLogout()">Abmelden</button></div>
+  <div class="cards"><div class="info"><h3>📍 Standort</h3><p>${esc(st?.location||"-")}</p></div><div class="info"><h3>🕒 Einsatzzeit</h3><p>${esc(st?.dutyTime||"-")}</p></div><div class="info"><h3>☎️ Kontakt</h3><p>${esc(st?.contact||"Meldestelle")}</p></div></div>
+  <label>Teilnehmer suchen<input id="stationSearch" oninput="filterStationParticipants(this.value)" placeholder="Startnummer, Name oder Team"></label>
+  <div class="entries">${state.participants.map(p=>`<form class="entry score-form station-participant" data-search="${esc(`${p.startNumber||""} ${p.name||""} ${p.horse||""}`.toLowerCase())}" data-participant="${p.id}" data-station="${id}"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div><div><input name="points" type="number" min="0" max="${st?.maxPoints||999}" step="0.5" value="${scoreFor(p.id,id)?.points??""}" placeholder="Punkte"><button class="btn alt">Speichern</button></div></form>`).join("")}</div></section>${alertForm(id)}`;
+}
 
-function alertForm(stationId){return `<section class="panel"><h2>🚨 Status / Vorfall melden</h2><form id="alertForm" class="form"><input type="hidden" id="alertStation" value="${stationId}"><label class="full">Status<select id="alertPriority"><option value="ok">🟢 Alles in Ordnung</option><option value="help">🟠 Unterstützung benötigt</option><option value="emergency">🔴 Notfall</option></select></label><label class="full">Beschreibung bei 🟠 oder 🔴<textarea id="alertText" placeholder="Was ist passiert und was wird benötigt?"></textarea></label><button class="btn danger full">Meldung senden</button></form></section>`}
+function alertForm(stationId){return `<section class="panel"><h2>🚨 Status / Vorfall melden</h2><form id="alertForm" class="form"><input type="hidden" id="alertStation" value="${stationId}"><label class="full">Status<select id="alertPriority"><option value="ok">🟢 Alles in Ordnung</option><option value="help">🟠 Unterstützung benötigt</option><option value="emergency">🔴 Notfall</option></select></label><label class="full">Beschreibung bei Orange oder Rot<textarea id="alertText" placeholder="Was ist passiert und was wird benötigt?"></textarea></label><button class="btn danger full">Meldung senden</button></form></section>`;
+}
 
 function alertsPage(){if(!(state.isAdmin||isMeldestelle()||isSpringer()))return `<section class="panel"><h2>🚙 Meldungen</h2><div class="notice">Nur Admin, Meldestelle oder Springer.</div></section>`;return `<section class="panel"><h2>🚨 Stationsmeldungen</h2>${state.alerts.length?state.alerts.map(a=>`<div class="alert ${esc(a.priority||"info")}"><span class="badge ${esc(a.priority||"info")}">${a.priority==="emergency"?"Notfall":a.priority==="help"?"Hilfe":"Info"}</span><h3>${esc(roleById(a.stationId)?.name||a.stationId)}</h3><p>${esc(a.text)}</p><small>Status: ${esc(a.status||"offen")} ${a.assignedTo?`· übernommen von ${esc(a.assignedTo)}`:""}</small><div><button class="btn light" onclick="updateAlert('${a.id}','übernommen')">Übernommen</button><button class="btn light" onclick="updateAlert('${a.id}','unterwegs')">Unterwegs</button><button class="btn alt" onclick="updateAlert('${a.id}','erledigt')">Erledigt</button></div></div>`).join(""):`<p class="sub">Keine Meldungen.</p>`}</section>`}
 
-function resultsPage(){if(state.isAdmin||isMeldestelle()||stationAccess().startsWith("station-")){const rank=rankedParticipants();return `<section class="panel"><h2>🏆 Vollständige Ergebnisansicht</h2>${rank.map((p,i)=>`<div class="entry"><div><strong>${i+1}. ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")}</small></div><strong>${totalFor(p.id)} Punkte</strong></div>`).join("")}</section>`}return `<section class="panel"><h2>🏅 Eigenen Rang suchen</h2><div class="notice">Punktzahlen und vollständige Rangliste bleiben bis zur Siegerehrung verborgen.</div><form id="rankForm" class="form"><label>Gruppenname<input id="rankName"></label><label>Pferdename<input id="rankHorse"></label><button class="btn full">Rang suchen</button></form><div id="rankResult"></div></section>`}
+function resultsPage(){
+  const rank=rankedParticipants();
+  return `<section class="panel"><div class="head"><div><h2>🏆 Ergebnisse</h2><p class="sub">Öffentliche Ergebnisliste des O-Ritts 2026.</p></div></div>${rank.length?rank.map((p,i)=>`<div class="entry"><div><strong>${i+1}. ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")}</small></div><strong>${totalFor(p.id)} Punkte</strong></div>`).join(""):`<div class="notice">Die Ergebnisse werden nach der Auswertung veröffentlicht.</div>`}</section>`;
+}
 
 
 
@@ -389,19 +490,32 @@ window.deleteHelper=async id=>{
 
 async function accessLogin(e){e.preventDefault();const password=document.getElementById("accessPassword").value,role=document.getElementById("accessRole").value,phone=document.getElementById("accessPhone").value;if(password!=="Helfer")return toast("Falsches Helferpasswort.");if(!helperCanAccess(role,phone))return toast("Keine passende Helferanmeldung gefunden.");localStorage.setItem("rvn_station_access",role);toast("Zugang freigeschaltet.");window.go(role==="meldestelle"?"meldestelle":role==="springer-kfz"?"springer":"station")}
 function participantLogin(e){e.preventDefault();const s=String(document.getElementById("pLoginStart").value).trim(),t=String(document.getElementById("pLoginTeam").value).trim().toLowerCase();const p=state.participants.find(x=>String(x.startNumber||"").trim()===s&&String(x.horse||"").trim().toLowerCase()===t);if(!p)return toast("Nicht gefunden.");localStorage.setItem("rvn_participant_id",p.id);window.renderApp()}
-async function addParticipant(e){e.preventDefault();const route=document.getElementById("pRoute").value;await addDoc(collection(db,"participants"),{startNumber:document.getElementById("pStart").value.trim(),name:document.getElementById("pName").value.trim(),horse:document.getElementById("pHorse").value.trim(),startTime:document.getElementById("pTime").value,paddock:document.getElementById("pPaddock").value.trim(),route,routeType:route,status:"Gemeldet",routeReleased:false,gpxReleased:false,qrReleased:false,createdAt:serverTimestamp()});e.target.reset();toast("Teilnehmer hinzugefügt.")}
+async function addParticipant(e){
+  e.preventDefault();
+  const route=document.getElementById("pRoute").value;
+  await addDoc(collection(db,"participants"),{
+    startNumber:document.getElementById("pStart").value.trim(),
+    name:document.getElementById("pName").value.trim(),
+    horse:document.getElementById("pHorse").value.trim(),
+    startTime:document.getElementById("pTime").value,
+    paddock:document.getElementById("pPaddock").value.trim(),
+    route,routeType:route,status:"Gemeldet",
+    routeReleased:false,gpxReleased:false,qrReleased:false,
+    createdAt:serverTimestamp()
+  });
+  e.target.reset();
+  toast("Teilnehmer hinzugefügt.");
+}
 async function saveScore(e){e.preventDefault();const p=e.currentTarget.dataset.participant,st=e.currentTarget.dataset.station;if(!canEditStation(st))return toast("Keine Berechtigung.");await setDoc(doc(db,"scores",scoreKey(p,st)),{participantId:p,stationId:st,points:Number(e.currentTarget.points.value||0),updatedAt:serverTimestamp()},{merge:true});toast("Punkte gespeichert.")}
-async function sendAlert(e){
+async async function sendAlert(e){
   e.preventDefault();
   const priority=document.getElementById("alertPriority").value;
-  const text=document.getElementById("alertText").value.trim();
-  if((priority==="help"||priority==="emergency")&&!text){
-    return toast("Bei Unterstützung oder Notfall ist eine Beschreibung erforderlich.");
-  }
+  const message=document.getElementById("alertText").value.trim();
+  if((priority==="help"||priority==="emergency")&&!message)return toast("Bei Unterstützung oder Notfall ist eine Beschreibung erforderlich.");
   await addDoc(collection(db,"alerts"),{
     stationId:document.getElementById("alertStation").value,
     priority,
-    text:text||(priority==="ok"?"Alles in Ordnung":""),
+    text:message||(priority==="ok"?"Alles in Ordnung":""),
     status:"offen",
     createdAt:serverTimestamp()
   });
@@ -410,8 +524,35 @@ async function sendAlert(e){
 }
 function rankSearch(e){e.preventDefault();const n=String(document.getElementById("rankName").value).toLowerCase().trim(),h=String(document.getElementById("rankHorse").value).toLowerCase().trim(),rank=rankedParticipants(),p=rank.find(x=>(!n||String(x.name||"").toLowerCase().includes(n))&&(!h||String(x.horse||"").toLowerCase().includes(h))),r=document.getElementById("rankResult");r.innerHTML=p?`<div class="notice"><strong>${esc(p.name)}</strong>: aktueller Rang <strong>${rank.findIndex(x=>x.id===p.id)+1}</strong>.</div>`:`<div class="notice">Nicht gefunden.</div>`}
 
-window.saveParticipantMeta=async id=>{if(!canManageParticipants())return toast("Keine Berechtigung.");const route=document.getElementById("route-"+id).value;await setDoc(doc(db,"participants",id),{startNumber:document.getElementById("start-"+id).value,name:document.getElementById("name-"+id).value,horse:document.getElementById("horse-"+id).value,startTime:document.getElementById("time-"+id).value,paddock:document.getElementById("paddock-"+id).value,route,routeType:route,status:document.getElementById("status-"+id).value,routeMapUrl:document.getElementById("map-"+id).value,updatedAt:serverTimestamp()},{merge:true});toast("Gespeichert.")}
-window.confirmStartReady=async id=>{if(!canManageParticipants())return toast("Keine Berechtigung.");const select=document.getElementById("route-"+id);const existing=state.participants.find(p=>p.id===id);const route=select?select.value:existing?.route;if(!route)return toast("Bitte zuerst 7 km oder 17 km auswählen.");const routeGpxUrl=route==="7 km"?"strecken/strecken_kleine_runde.gpx":"strecken/strecken_grosse_runde.gpx";await setDoc(doc(db,"participants",id),{route,routeType:route,routeGpxUrl,routeReleased:true,gpxReleased:true,qrReleased:true,routeReleasedAt:serverTimestamp(),releasedAt:serverTimestamp(),status:"Startbereit",updatedAt:serverTimestamp()},{merge:true});toast("Startbereitschaft bestätigt – GPX wurde freigegeben.")}
+window.saveParticipantMeta=async id=>{
+  if(!canManageParticipants())return toast("Keine Berechtigung.");
+  const route=document.getElementById("route-"+id).value;
+  await setDoc(doc(db,"participants",id),{
+    startNumber:document.getElementById("start-"+id).value,
+    name:document.getElementById("name-"+id).value,
+    horse:document.getElementById("horse-"+id).value,
+    startTime:document.getElementById("time-"+id).value,
+    paddock:document.getElementById("paddock-"+id).value,
+    route,routeType:route,
+    status:document.getElementById("status-"+id).value,
+    routeMapUrl:document.getElementById("map-"+id).value,
+    updatedAt:serverTimestamp()
+  },{merge:true});
+  toast("Gespeichert.");
+}
+window.confirmStartReady=async id=>{
+  if(!canManageParticipants())return toast("Keine Berechtigung.");
+  const route=document.getElementById("route-"+id)?.value||(state.participants.find(p=>p.id===id)?.routeType||state.participants.find(p=>p.id===id)?.route);
+  if(!route)return toast("Bitte zuerst 7 km oder 17 km auswählen.");
+  const routeGpxUrl=route==="7 km"?"strecken/strecken_kleine_runde.gpx":"strecken/strecken_grosse_runde.gpx";
+  await setDoc(doc(db,"participants",id),{
+    route,routeType:route,routeGpxUrl,
+    routeReleased:true,gpxReleased:true,qrReleased:true,
+    status:"Startbereit",releasedAt:serverTimestamp(),routeReleasedAt:serverTimestamp(),
+    updatedAt:serverTimestamp()
+  },{merge:true});
+  toast("Startbereitschaft bestätigt – GPX und QR wurden freigegeben.");
+}
 window.setParticipantStatus=async(id,status)=>{if(!canManageParticipants())return toast("Keine Berechtigung.");await setDoc(doc(db,"participants",id),{status,updatedAt:serverTimestamp()},{merge:true});toast("Status aktualisiert.")}
 window.deleteParticipant=async id=>{if(canManageParticipants()&&confirm("Teilnehmer löschen?"))await deleteDoc(doc(db,"participants",id))}
 window.updateAlert=async(id,status)=>{if(!(state.isAdmin||isMeldestelle()||isSpringer()))return toast("Keine Berechtigung.");await setDoc(doc(db,"alerts",id),{status,assignedTo:roleById(stationAccess())?.name||"Admin",updatedAt:serverTimestamp()},{merge:true});toast("Meldung aktualisiert.")}
@@ -420,4 +561,4 @@ window.participantLogout=()=>{localStorage.removeItem("rvn_participant_id");wind
 window.adminLogout=()=>{state.isAdmin=false;localStorage.removeItem(ADMIN_KEY);window.renderApp()}
 window.exportParticipants=()=>{const rows=[["Startnr","Name","Team","Startzeit","Paddock","Strecke","Status","GPX freigegeben"]];state.participants.forEach(p=>rows.push([p.startNumber||"",p.name||"",p.horse||"",p.startTime||"",p.paddock||"",p.route||"",p.status||"",p.routeReleased?"ja":"nein"]));downloadCSV(rows,"RVN_Teilnehmer.csv")}
 
-window.filterStationParticipants=q=>{const value=String(q||"").toLowerCase().trim();document.querySelectorAll(".station-participant").forEach(el=>el.style.display=!value||String(el.dataset.search||"").includes(value)?"":"none")};
+window.filterStationParticipants=q=>{const value=String(q||"").trim().toLowerCase();document.querySelectorAll(".station-participant").forEach(el=>{el.style.display=!value||String(el.dataset.search||"").includes(value)?"":"none";});};
