@@ -27,4 +27,4 @@ onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.
 init();
 
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(console.warn));}
-setInterval(()=>{if(state.page==="oritt")renderApp()},1000);
+setInterval(()=>{if(state.page==="oritt"||state.page==="home")renderApp()},1000);
