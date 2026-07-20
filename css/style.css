@@ -53,3 +53,21 @@
   .schedule-row{grid-template-columns:82px 72px minmax(110px,1fr)}
   .schedule-row>div{padding:11px 9px}
 }
+
+/* V10.12: OsmAnd-Hinweise und persönlicher Helferzugang im bestehenden Design */
+.osmand-banner{display:flex;justify-content:space-between;align-items:center;gap:14px;max-width:650px;margin-top:14px;padding:13px 15px;border:1px solid #bfe8ed;border-radius:18px;background:rgba(239,251,253,.96);box-shadow:0 8px 20px rgba(6,42,95,.10)}
+.osmand-copy{display:grid;gap:3px;color:var(--navy)}
+.osmand-copy>span{font-size:13px;color:#506078}
+.osmand-store-buttons{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.store-button{display:flex;align-items:center;gap:8px;min-width:145px;padding:7px 11px;border-radius:10px;background:#111;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.28);box-shadow:0 5px 12px rgba(6,42,95,.16);line-height:1}
+.store-button:hover{filter:brightness(1.15)}
+.store-button span{display:grid;gap:2px;color:#fff}
+.store-button small{font-size:8px;letter-spacing:.5px;color:#fff}
+.store-button strong{font-size:15px;color:#fff;white-space:nowrap}
+.store-button .store-icon{display:block;font-size:22px;line-height:1}
+.osmand-hint{display:flex;justify-content:space-between;align-items:center;gap:14px;background:#fff8e9;border:1px solid #eee0c5;color:var(--navy);border-radius:18px;padding:14px;margin:12px 0}
+.helper-welcome .cards{grid-template-columns:repeat(4,1fr)}
+.helper-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.station-status{font-size:18px;font-weight:900;color:var(--navy)}
+@media(max-width:850px){.helper-welcome .cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.osmand-banner,.osmand-hint{align-items:stretch;flex-direction:column}.osmand-store-buttons{display:grid;grid-template-columns:1fr}.store-button{justify-content:center;width:100%}.helper-welcome .cards{grid-template-columns:1fr}.helper-actions{display:grid}.helper-actions .btn{width:100%;text-align:center}}
