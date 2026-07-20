@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.10";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.10";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.10";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.11";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.11";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.11";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -23,6 +23,7 @@ function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(d
 export function pageView(){
 if(state.page==="home")return homePage();
 if(state.page==="oritt")return orittPage();
+if(state.page==="zeitplan")return publicSchedulePage();
 if(state.page==="helfer")return helperPage();
 if(state.page==="teilnehmer")return participantPage();
 if(state.page==="zugang")return accessPage();
@@ -42,6 +43,7 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
   <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button class="arrow" onclick="go('teilnehmer')">›</button></article>
   <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
+  <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button class="arrow" onclick="go('zeitplan')">›</button></article>
   <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button class="arrow" onclick="go('helfer')">›</button></article>
   <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button class="arrow" onclick="go('admin')">›</button></article>
 </section>
@@ -207,6 +209,42 @@ function teamStatus(p){
   const status={"gemeldet":"Gemeldet","gestartet":"Gestartet","im Ziel":"Im Ziel"}[p.status]||p.status||"Gemeldet";
   const icon=status==="Startvorbereitung"?"🟡":status==="Startbereit"?"🟢":status==="Gestartet"?"🔵":status==="Im Ziel"?"🏁":"⚪";
   return `${icon} ${status}`;
+}
+
+function publicSchedulePage(){
+  const sorted=[...state.participants]
+    .filter(p=>String(p.startTime||"").trim())
+    .sort((a,b)=>{
+      const timeCompare=String(a.startTime||"99:99").localeCompare(String(b.startTime||"99:99"));
+      if(timeCompare!==0)return timeCompare;
+      return String(a.startNumber||"").localeCompare(String(b.startNumber||""),undefined,{numeric:true});
+    });
+
+  return `<section class="panel public-schedule">
+    <div class="head">
+      <div>
+        <h2>📋 Meldestelle – Zeiteinteilung</h2>
+        <p class="sub">Öffentliche Übersicht der eingeteilten Startzeiten.</p>
+      </div>
+    </div>
+    <div class="notice">Hier wird ausschließlich die Zeiteinteilung angezeigt. Strecke, GPX, QR-Code, Paddock und interne Statusinformationen bleiben geschützt.</div>
+    ${sorted.length?`
+      <div class="schedule-table" role="table" aria-label="Öffentliche Zeiteinteilung">
+        <div class="schedule-row schedule-head" role="row">
+          <div role="columnheader">Startzeit</div>
+          <div role="columnheader">Startnummer</div>
+          <div role="columnheader">Teilnehmer</div>
+          <div role="columnheader">Team</div>
+        </div>
+        ${sorted.map(p=>`<div class="schedule-row" role="row">
+          <div class="schedule-time" role="cell">${esc(p.startTime||"-")} Uhr</div>
+          <div role="cell">${esc(p.startNumber||"-")}</div>
+          <div role="cell">${esc(p.name||"-")}</div>
+          <div role="cell">${esc(p.horse||"-")}</div>
+        </div>`).join("")}
+      </div>
+    `:`<div class="notice">Die Zeiteinteilung wird veröffentlicht, sobald Startzeiten eingetragen sind.</div>`}
+  </section>`;
 }
 
 function meldestellePage(){

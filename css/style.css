@@ -33,3 +33,23 @@
 @media(max-width:560px){
   .main-sections{grid-template-columns:1fr}
 }
+
+/* V10.11: Öffentliche Zeiteinteilung der Meldestelle */
+.public-schedule{overflow:hidden}
+.schedule-table{margin-top:18px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.schedule-row{display:grid;grid-template-columns:140px 120px minmax(180px,1fr) minmax(180px,1fr);gap:0;border-bottom:1px solid var(--line)}
+.schedule-row:last-child{border-bottom:0}
+.schedule-row>div{padding:14px 16px;display:flex;align-items:center}
+.schedule-row>div+div{border-left:1px solid var(--line)}
+.schedule-head{background:linear-gradient(180deg,#e4fbfb,#fff);font-weight:800;color:var(--navy)}
+.schedule-time{font-weight:800;color:var(--navy)}
+@media(max-width:760px){
+  .schedule-row{grid-template-columns:92px 82px minmax(130px,1fr)}
+  .schedule-row>div:nth-child(4){grid-column:3;display:block;padding-top:0;border-left:1px solid var(--line);font-size:13px;color:#5a6877}
+  .schedule-head>div:nth-child(4){display:none}
+}
+@media(max-width:520px){
+  .schedule-table{border-radius:14px}
+  .schedule-row{grid-template-columns:82px 72px minmax(110px,1fr)}
+  .schedule-row>div{padding:11px 9px}
+}
