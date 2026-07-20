@@ -51,7 +51,7 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
 <section class="grid main-sections">
   <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button class="arrow" onclick="go('oritt')">›</button></article>
   <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button class="arrow" onclick="go('teilnehmer')">›</button></article>
-  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+  <article class="card"><div class="icon">🏆</div><h3>Meine Punkte</h3><p>Teilnehmer sehen nach Anmeldung ausschließlich ihre eigene Gesamtpunktzahl.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
   <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button class="arrow" onclick="go('zeitplan')">›</button></article>
   <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button class="arrow" onclick="go('helfer')">›</button></article>
@@ -100,7 +100,7 @@ function orittPage(){return `<section class="hero"><div><div class="kicker">Orie
   <article class="card"><div class="icon">🌊</div><h3>Kleine Runde</h3><p>Etwa 7 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
   <article class="card"><div class="icon">🌴</div><h3>Große Runde</h3><p>Etwa 17 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
   <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Startbereitschaft, Startzeit und persönliche Streckenfreigabe.</p></article>
-  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Nach der Auswertung öffentlich abrufbar.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+  <article class="card"><div class="icon">🏆</div><h3>Meine Punkte</h3><p>Nur die eigene Gesamtpunktzahl ist nach persönlicher Anmeldung sichtbar.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
 </section>
 <section class="panel poster-strip"><img src="assets/beach-poster.png" alt="Beach Please O-Ritt Plakat"><div><div class="kicker">Sommer · Sonne · Sattel</div><h2>Orientierungsritt 2026</h2><p>${esc(state.settings.participantGeneralInfo||"Bitte seid rechtzeitig vor eurer Startzeit an der Meldestelle.")}</p></div></section>
 <section class="panel"><div class="notice">Stationen, Helferzuweisungen, GPX-Dateien und QR-Codes sind nicht öffentlich sichtbar.</div></section>`;
@@ -155,7 +155,7 @@ function participantPage(){
   if(!p){
     return `<section class="panel"><h2>🏇 Teilnehmerbereich</h2><div class="notice">Anmeldung mit Startnummer und Teamname.</div><form id="participantLoginForm" class="form"><label>Startnummer<input id="pLoginStart"></label><label>Teamname<input id="pLoginTeam"></label><button class="btn full">Öffnen</button></form></section>`;
   }
-  const rank=rankedParticipants().findIndex(x=>x.id===p.id)+1;
+  const total=totalFor(p.id);
   const route=p.routeType||p.route||"";
   const released=Boolean(p.gpxReleased||p.routeReleased);
   const routeLabel=route==="7 km"?"7 km – Kleine Runde":route==="17 km"?"17 km – Große Runde":"Noch nicht festgelegt";
@@ -163,7 +163,7 @@ function participantPage(){
   return `<section class="panel"><div class="head"><div><h2>🏇 Teilnehmerbereich</h2><p class="sub">${esc(p.name)} · Team ${esc(p.horse||"-")}</p></div><button class="btn light" onclick="participantLogout()">Abmelden</button></div></section>
   <section class="panel"><h2>📋 Meine Daten</h2><div class="cards"><div class="info"><h3>Startnummer</h3><p>${esc(p.startNumber||"-")}</p></div><div class="info"><h3>Startzeit</h3><p>${esc(p.startTime||"-")}</p></div><div class="info"><h3>Paddock</h3><p>${esc(p.paddock||"-")}</p></div><div class="info"><h3>Status</h3><p>${teamStatus(p)}</p></div></div></section>
   <section class="panel"><h2>🧭 Meine Strecke</h2>${released&&routeUrl?routeCard(routeLabel,"",routeUrl):`<div class="notice"><strong>Die Strecke wurde noch nicht freigegeben.</strong><br>Bitte melde dich vor dem Start an der Meldestelle.</div>`}</section>
-  <section class="panel"><h2>🏅 Mein Rang</h2><div class="notice">Aktueller Rang: <strong>${rank>0?rank:"-"}</strong>. Punktzahlen bleiben bis zur Siegerehrung verborgen.</div></section>`;
+  <section class="panel"><h2>🏆 Meine Gesamtpunktzahl</h2><div class="notice"><strong>${total} Punkte</strong><br>Es werden keine Punkte einzelner Stationen, keine bereits gelösten Aufgaben und keine Ergebnisse anderer Teilnehmer angezeigt.</div></section>`;
 }
 
 function isRouteReleased(p){return Boolean(p.gpxReleased||p.routeReleased);}
@@ -245,8 +245,15 @@ function alertForm(stationId){return `<section class="panel"><h2>🚨 Status / V
 function alertsPage(){if(!(state.isAdmin||isMeldestelle()||isSpringer()))return `<section class="panel"><h2>🚙 Meldungen</h2><div class="notice">Nur Admin, Meldestelle oder Springer.</div></section>`;return `<section class="panel"><h2>🚨 Stationsmeldungen</h2>${state.alerts.length?state.alerts.map(a=>`<div class="alert ${esc(a.priority||"info")}"><span class="badge ${esc(a.priority||"info")}">${a.priority==="emergency"?"Notfall":a.priority==="help"?"Hilfe":"Info"}</span><h3>${esc(roleById(a.stationId)?.name||a.stationId)}</h3><p>${esc(a.text)}</p><small>Status: ${esc(a.status||"offen")} ${a.assignedTo?`· übernommen von ${esc(a.assignedTo)}`:""}</small><div><button class="btn light" onclick="updateAlert('${a.id}','übernommen')">Übernommen</button><button class="btn light" onclick="updateAlert('${a.id}','unterwegs')">Unterwegs</button><button class="btn alt" onclick="updateAlert('${a.id}','erledigt')">Erledigt</button></div></div>`).join(""):`<p class="sub">Keine Meldungen.</p>`}</section>`}
 
 function resultsPage(){
-  const rank=rankedParticipants();
-  return `<section class="panel"><div class="head"><div><h2>🏆 Ergebnisse</h2><p class="sub">Öffentliche Ergebnisliste des O-Ritts 2026.</p></div></div>${rank.length?rank.map((p,i)=>`<div class="entry"><div><strong>${i+1}. ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")}</small></div><strong>${totalFor(p.id)} Punkte</strong></div>`).join(""):`<div class="notice">Die Ergebnisse werden nach der Auswertung veröffentlicht.</div>`}</section>`;
+  if(state.isAdmin){
+    const rank=rankedParticipants();
+    return `<section class="panel"><div class="head"><div><h2>🏆 Ergebnisse</h2><p class="sub">Vollständige Ergebnisübersicht für den Admin.</p></div></div>${rank.length?rank.map((p,i)=>`<div class="entry"><div><strong>${i+1}. ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")}</small></div><strong>${totalFor(p.id)} Punkte</strong></div>`).join(""):`<div class="notice">Noch keine Ergebnisse vorhanden.</div>`}</section>`;
+  }
+  const p=currentParticipant();
+  if(!p){
+    return `<section class="panel"><h2>🏆 Meine Gesamtpunktzahl</h2><div class="notice">Die Ergebnisliste ist nicht öffentlich. Bitte melde dich mit Startnummer und Teamname an, um ausschließlich deine eigene Gesamtpunktzahl zu sehen.</div><form id="participantLoginForm" class="form"><label>Startnummer<input id="pLoginStart"></label><label>Teamname<input id="pLoginTeam"></label><button class="btn full">Eigene Punktzahl öffnen</button></form></section>`;
+  }
+  return `<section class="panel"><div class="head"><div><h2>🏆 Meine Gesamtpunktzahl</h2><p class="sub">${esc(p.name)} · Team ${esc(p.horse||"-")}</p></div><button class="btn light" onclick="participantLogout()">Abmelden</button></div><div class="notice"><strong>${totalFor(p.id)} Punkte</strong><br>Du siehst weder Stationspunkte oder gelöste Aufgaben noch Ergebnisse anderer Teilnehmer.</div></section>`;
 }
 
 

@@ -11,3 +11,9 @@ Neu:
 - Stationsstatus als 🟢 Alles in Ordnung, 🟠 Unterstützung benötigt oder 🔴 Notfall.
 - Helfer sehen ausschließlich ihren eigenen Einsatzbereich.
 - Admin-Funktionen und bestehendes Design bleiben unverändert.
+
+Datenschutz-Ergänzung Ergebnisanzeige:
+- Teilnehmer sehen nach persönlicher Anmeldung ausschließlich ihre eigene Gesamtpunktzahl.
+- Keine Anzeige von Punkten je Station, gelösten Aufgaben, Rang oder Ergebnissen anderer Teilnehmer.
+- Stationshelfer sehen an ihrer eigenen Station die dort erfassten Teilnehmerpunkte bzw. Aufgabenstände.
+- Admin behält die vollständige Ergebnisübersicht und alle bisherigen Funktionen.
