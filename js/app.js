@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12";
-import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12";
-import {shell,pageView,attachForms} from "./views.js?v=10.12";
-import {toast} from "./utils.js?v=10.12";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.1";
+import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12.1";
+import {shell,pageView,attachForms} from "./views.js?v=10.12.1";
+import {toast} from "./utils.js?v=10.12.1";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -26,5 +26,5 @@ onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.
 }
 init();
 
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12.1",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
 setInterval(()=>{if(state.page==="oritt"||state.page==="home")renderApp()},1000);
