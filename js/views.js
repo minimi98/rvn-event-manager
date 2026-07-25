@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.1";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.1";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.1";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.2";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.2";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.2";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -11,7 +11,15 @@ const canManageParticipants=()=>state.isAdmin||isMeldestelle();
 const canEditStation=id=>state.isAdmin||stationAccess()===id;
 const currentParticipant=()=>state.participants.find(p=>p.id===participantAccess())||null;
 const helperGateOpen=()=>state.isAdmin||sessionStorage.getItem("rvn_helper_gate")==="yes";
-const assignedHelper=()=>state.helpers.find(h=>cleanPhone(h.phone)===cleanPhone(localStorage.getItem("rvn_helper_phone")||""))||null;
+const assignedHelper=()=>{
+  const helperId=localStorage.getItem("rvn_helper_id")||"";
+  if(helperId){
+    const byId=state.helpers.find(h=>h.id===helperId);
+    if(byId)return byId;
+  }
+  const phone=cleanPhone(localStorage.getItem("rvn_helper_phone")||"");
+  return phone?state.helpers.find(h=>cleanPhone(h.phone)===phone)||null:null;
+};
 
 function normalizeRoute(value){
   const route=String(value||"").trim().toLowerCase().replace(/ß/g,"ss");
@@ -120,62 +128,27 @@ function orittPage(){return `<section class="hero"><div><div class="kicker">Orie
 
 function routeCard(name,length,url){const absolute=new URL(url,location.href).href;const qr="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(absolute);return `<article class="route-card"><div class="route-layout"><div><h3>🐴 ${name}</h3><p>${length} · GPX-Datei für Navigations-Apps</p><div class="route-actions"><a class="btn" href="${url}" download>GPX herunterladen</a><a class="btn light" href="${url}" target="_blank" rel="noopener">Öffnen</a></div></div><img class="qr" src="${qr}" alt="QR-Code ${name}" loading="lazy"></div></article>`}
 
+function helperAccessPanel(){
+  return `<section class="panel"><h2>📱 Persönlicher Helferzugang</h2><div class="notice">Nach dem Helferpasswort gibst du hier deine bei der Anmeldung hinterlegte Telefonnummer ein. Anschließend wirst du automatisch zu deiner eigenen Station beziehungsweise deinem Einsatzbereich weitergeleitet.</div><form id="helperPhoneForm" class="form"><label class="full">Telefonnummer<input id="helperAccessPhone" inputmode="tel" autocomplete="tel" required placeholder="Hinterlegte Telefonnummer"></label><button class="btn full">Zu meinem Einsatzbereich</button></form>${stationAccess()?`<div class="notice">Aktuell freigeschaltet: <strong>${esc(roleById(stationAccess())?.name||stationAccess())}</strong><br><button class="btn light" onclick="helperLogout()">Abmelden</button></div>`:""}<button class="btn light" onclick="closeHelperGate()">Helferbereich schließen</button></section>`;
+}
+
 function helperPage(){
   if(!helperGateOpen()) return `<section class="panel"><h2>🔒 Geschützter Helferbereich</h2><div class="notice">Stations- und Helferdaten sind nicht öffentlich sichtbar.</div><form id="helperGateForm" class="form"><label class="full">Helferpasswort<input id="helperGatePassword" type="password" autocomplete="current-password" placeholder="Passwort"></label><button class="btn full">Helferbereich öffnen</button></form></section>`;
   const helper=assignedHelper();
   if(helper && helper.role?.startsWith("station-")) return stationPage();
   if(helper?.role==="meldestelle") return meldestellePage();
   if(helper?.role==="springer-kfz") return alertsPage();
-  return `<section class="panel">
-    <div class="head">
-      <div>
-        <h2>👥 Stations- und Helferübersicht</h2>
-        <p class="sub">Alle Stationen, Aufgaben und eingetragenen Helfer auf einen Blick.</p>
-      </div>
-    </div>
-
+  return `${helperAccessPanel()}<section class="panel">
+    <div class="head"><div><h2>👥 Stations- und Helferübersicht</h2><p class="sub">Alle Stationen, Aufgaben und eingetragenen Helfer auf einen Blick.</p></div></div>
     <div class="cards">
       ${state.roles.map(r=>{
         const count=peopleFor(r.id).length;
         const free=Math.max(0,Number(r.max||0)-count);
-        return `<div class="info">
-          <h3>${r.icon} ${esc(r.name)}</h3>
-          <p>${esc(r.description||"Beschreibung folgt.")}</p>
-          ${r.location?`<p><strong>📍 Standort:</strong> ${esc(r.location)}</p>`:""}
-          ${r.dutyTime?`<p><strong>🕒 Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}
-          ${r.contact?`<p><strong>👤 Ansprechpartner:</strong> ${esc(r.contact)}</p>`:""}
-          <p><strong>${count} / ${r.max}</strong> eingetragen · ${free===0?"voll":free+" frei"}</p>${peopleFor(r.id).length?`<p><strong>Helfer:</strong><br>${peopleFor(r.id).map(h=>esc(h.name)).join("<br>")}</p>`:`<p class="sub">Noch keine Helfer eingetragen.</p>`}
-          <button class="btn ${free===0?"light":"alt"}" ${free===0?"disabled":""} onclick="selectHelperRole('${r.id}')">${free===0?"Voll":"Diesen Bereich wählen"}</button>
-        </div>`;
+        return `<div class="info"><h3>${r.icon} ${esc(r.name)}</h3><p>${esc(r.description||"Beschreibung folgt.")}</p>${r.location?`<p><strong>📍 Standort:</strong> ${esc(r.location)}</p>`:""}${r.dutyTime?`<p><strong>🕒 Einsatzzeit:</strong> ${esc(r.dutyTime)}</p>`:""}${r.contact?`<p><strong>👤 Ansprechpartner:</strong> ${esc(r.contact)}</p>`:""}<p><strong>${count} / ${r.max}</strong> eingetragen · ${free===0?"voll":free+" frei"}</p>${peopleFor(r.id).length?`<p><strong>Helfer:</strong><br>${peopleFor(r.id).map(h=>esc(h.name)).join("<br>")}</p>`:`<p class="sub">Noch keine Helfer eingetragen.</p>`}<button class="btn ${free===0?"light":"alt"}" ${free===0?"disabled":""} onclick="selectHelperRole('${r.id}')">${free===0?"Voll":"Diesen Bereich wählen"}</button></div>`;
       }).join("")}
     </div>
   </section>
-
-  <section class="panel">
-    <h2>📝 Helferanmeldung</h2>
-    <div class="notice">Die Telefonnummer wird später zugleich für den Zugang zu deiner Station, der Meldestelle oder dem Springerbereich verwendet.</div>
-    <form id="helperSignupForm" class="form">
-      <label>Name<input id="helperName" required placeholder="Vor- und Nachname"></label>
-      <label>Telefonnummer<input id="helperPhone" required placeholder="Telefonnummer"></label>
-      <label>Bereich
-        <select id="helperRole">
-          ${state.roles.map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}
-        </select>
-      </label>
-      <label>Zeitraum
-        <select id="helperTime">
-          <option>ganztags</option>
-          <option>vormittags</option>
-          <option>nachmittags</option>
-          <option>abends</option>
-          <option>nach Absprache</option>
-        </select>
-      </label>
-      <label class="full">Bemerkung<textarea id="helperNote" placeholder="z. B. mit Auto, erst ab 12 Uhr"></textarea></label>
-      <button class="btn full" type="submit">Verbindlich eintragen</button>
-    </form>
-  </section>
-
+  <section class="panel"><h2>📝 Helferanmeldung</h2><div class="notice">Die Telefonnummer wird später zugleich für den Zugang zu deiner Station, der Meldestelle oder dem Springerbereich verwendet.</div><form id="helperSignupForm" class="form"><label>Name<input id="helperName" required placeholder="Vor- und Nachname"></label><label>Telefonnummer<input id="helperPhone" required placeholder="Telefonnummer"></label><label>Bereich<select id="helperRole">${state.roles.map(r=>`<option value="${r.id}">${r.icon} ${esc(r.name)}</option>`).join("")}</select></label><label>Zeitraum<select id="helperTime"><option>ganztags</option><option>vormittags</option><option>nachmittags</option><option>abends</option><option>nach Absprache</option></select></label><label class="full">Bemerkung<textarea id="helperNote" placeholder="z. B. mit Auto, erst ab 12 Uhr"></textarea></label><button class="btn full" type="submit">Verbindlich eintragen</button></form></section>
   ${state.isAdmin?adminHelperManagement():""}`;
 }
 
@@ -196,7 +169,7 @@ function adminHelperManagement(){
           <button class="btn danger" onclick="deleteHelper('${h.id}')">Löschen</button>
         </div>
       </div>`).join(""):`<p class="sub">Noch keine Helfer eingetragen.</p>
-  <section class="panel"><h2>📱 Persönlicher Helferzugang</h2><div class="notice">Mit der bei der Anmeldung hinterlegten Telefonnummer öffnest du ausschließlich deinen eigenen Bereich.</div><form id="helperPhoneForm" class="form"><label class="full">Telefonnummer<input id="helperAccessPhone" inputmode="tel" autocomplete="tel"></label><button class="btn full">Eigenen Bereich öffnen</button></form><button class="btn light" onclick="closeHelperGate()">Helferbereich schließen</button></section>`}
+`}
 
   </section>`;
 }
@@ -285,7 +258,7 @@ function stationPage(){
   if(!id||!id.startsWith("station-"))return `<section class="panel"><h2>🐴 Eigene Station</h2><div class="notice">Bitte zuerst im Helferbereich mit deiner hinterlegten Telefonnummer anmelden.</div></section>`;
   const st=roleById(id);
   return `<section class="panel"><div class="head"><div><h2>${st?.icon||"🐴"} ${esc(st?.name||id)}</h2><p class="sub">Angemeldet als ${esc(helper?.name||"Helfer")}</p></div><button class="btn light" onclick="helperLogout()">Abmelden</button></div>
-  <div class="cards"><div class="info"><h3>📍 Standort</h3><p>${esc(st?.location||"-")}</p></div><div class="info"><h3>🕒 Einsatzzeit</h3><p>${esc(st?.dutyTime||"-")}</p></div><div class="info"><h3>☎️ Kontakt</h3><p>${esc(st?.contact||"Meldestelle")}</p></div></div>
+  <div class="cards"><div class="info"><h3>📍 Standort</h3><p>${esc(st?.location||"-")}</p>${st?.location?`<button class="btn alt" onclick="openStationNavigation('${id}')">🧭 Navigation zu meiner Station</button>`:""}</div><div class="info"><h3>🕒 Einsatzzeit</h3><p>${esc(st?.dutyTime||"-")}</p></div><div class="info"><h3>☎️ Kontakt</h3><p>${esc(st?.contact||"Meldestelle")}</p></div></div>
   <label>Teilnehmer suchen<input id="stationSearch" oninput="filterStationParticipants(this.value)" placeholder="Startnummer, Name oder Team"></label>
   <div class="entries">${state.participants.map(p=>`<form class="entry score-form station-participant" data-search="${esc(`${p.startNumber||""} ${p.name||""} ${p.horse||""}`.toLowerCase())}" data-participant="${p.id}" data-station="${id}"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div><div><input name="points" type="number" min="0" max="${st?.maxPoints||999}" step="0.5" value="${scoreFor(p.id,id)?.points??""}" placeholder="Punkte"><button class="btn alt">Speichern</button></div></form>`).join("")}</div></section>${alertForm(id)}`;
 }
@@ -462,8 +435,25 @@ window.saveStationInfo=async id=>{
 
 
 function helperGateLogin(e){e.preventDefault();if(document.getElementById("helperGatePassword").value!=="Helfer")return toast("Falsches Helferpasswort.");sessionStorage.setItem("rvn_helper_gate","yes");window.renderApp()}
-function helperPhoneLogin(e){e.preventDefault();const phone=document.getElementById("helperAccessPhone").value;const helper=state.helpers.find(h=>cleanPhone(h.phone)===cleanPhone(phone));if(!helper)return toast("Keine passende Helferanmeldung gefunden.");localStorage.setItem("rvn_helper_phone",phone);localStorage.setItem("rvn_station_access",helper.role||"");window.renderApp()}
-window.closeHelperGate=()=>{sessionStorage.removeItem("rvn_helper_gate");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");window.renderApp()};
+function helperPhoneLogin(e){
+  e.preventDefault();
+  const phone=document.getElementById("helperAccessPhone").value;
+  const cleaned=cleanPhone(phone);
+  const matches=state.helpers.filter(h=>cleanPhone(h.phone)===cleaned);
+  if(!cleaned)return toast("Bitte die hinterlegte Telefonnummer eingeben.");
+  if(!matches.length)return toast("Keine passende Helferanmeldung gefunden.");
+  if(matches.length>1)return toast("Diese Telefonnummer ist mehrfach hinterlegt. Bitte die Meldestelle um eine eindeutige Zuordnung.");
+  const helper=matches[0];
+  const role=helper.role||"";
+  if(!roleById(role))return toast("Dein Einsatzbereich ist noch nicht gültig zugeordnet. Bitte an die Meldestelle wenden.");
+  if(!(role==="meldestelle"||role==="springer-kfz"||role.startsWith("station-")))return toast("Für deinen Bereich ist kein Helferzugang vorgesehen.");
+  localStorage.setItem("rvn_helper_id",helper.id);
+  localStorage.setItem("rvn_helper_phone",phone);
+  localStorage.setItem("rvn_station_access",role);
+  toast("Willkommen "+(helper.name||"im Helferbereich")+"!");
+  window.go(role==="meldestelle"?"meldestelle":role==="springer-kfz"?"springer":"station");
+}
+window.closeHelperGate=()=>{sessionStorage.removeItem("rvn_helper_gate");localStorage.removeItem("rvn_helper_id");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");state.page="helfer";window.renderApp()};
 
 async function submitHelperSignup(e){
   e.preventDefault();
@@ -545,7 +535,7 @@ window.deleteHelper=async id=>{
   }
 };
 
-async function accessLogin(e){e.preventDefault();const password=document.getElementById("accessPassword").value,role=document.getElementById("accessRole").value,phone=document.getElementById("accessPhone").value;if(password!=="Helfer")return toast("Falsches Helferpasswort.");if(!helperCanAccess(role,phone))return toast("Keine passende Helferanmeldung gefunden.");localStorage.setItem("rvn_station_access",role);toast("Zugang freigeschaltet.");window.go(role==="meldestelle"?"meldestelle":role==="springer-kfz"?"springer":"station")}
+async function accessLogin(e){e.preventDefault();const password=document.getElementById("accessPassword").value,role=document.getElementById("accessRole").value,phone=document.getElementById("accessPhone").value;if(password!=="Helfer")return toast("Falsches Helferpasswort.");const helper=state.helpers.find(h=>h.role===role&&cleanPhone(h.phone)===cleanPhone(phone));if(!helper)return toast("Keine passende Helferanmeldung gefunden.");localStorage.setItem("rvn_helper_id",helper.id);localStorage.setItem("rvn_helper_phone",phone);localStorage.setItem("rvn_station_access",role);sessionStorage.setItem("rvn_helper_gate","yes");toast("Zugang freigeschaltet.");window.go(role==="meldestelle"?"meldestelle":role==="springer-kfz"?"springer":"station")}
 function participantLogin(e){e.preventDefault();const s=String(document.getElementById("pLoginStart").value).trim(),t=String(document.getElementById("pLoginTeam").value).trim().toLowerCase();const p=state.participants.find(x=>String(x.startNumber||"").trim()===s&&String(x.horse||"").trim().toLowerCase()===t);if(!p)return toast("Nicht gefunden.");localStorage.setItem("rvn_participant_id",p.id);window.renderApp()}
 async function addParticipant(e){
   e.preventDefault();
@@ -621,9 +611,17 @@ window.confirmStartReady=async id=>{
 window.setParticipantStatus=async(id,status)=>{if(!canManageParticipants())return toast("Keine Berechtigung.");await setDoc(doc(db,"participants",id),{status,updatedAt:serverTimestamp()},{merge:true});toast("Status aktualisiert.")}
 window.deleteParticipant=async id=>{if(canManageParticipants()&&confirm("Teilnehmer löschen?"))await deleteDoc(doc(db,"participants",id))}
 window.updateAlert=async(id,status)=>{if(!(state.isAdmin||isMeldestelle()||isSpringer()))return toast("Keine Berechtigung.");await setDoc(doc(db,"alerts",id),{status,assignedTo:roleById(stationAccess())?.name||"Admin",updatedAt:serverTimestamp()},{merge:true});toast("Meldung aktualisiert.")}
-window.helperLogout=()=>{localStorage.removeItem("rvn_station_access");window.renderApp()}
+window.helperLogout=()=>{localStorage.removeItem("rvn_helper_id");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");state.page="helfer";window.renderApp()}
 window.participantLogout=()=>{localStorage.removeItem("rvn_participant_id");window.renderApp()}
 window.adminLogout=()=>{state.isAdmin=false;localStorage.removeItem(ADMIN_KEY);window.renderApp()}
 window.exportParticipants=()=>{const rows=[["Startnr","Name","Team","Startzeit","Paddock","Strecke","Status","GPX freigegeben"]];state.participants.forEach(p=>rows.push([p.startNumber||"",p.name||"",p.horse||"",p.startTime||"",p.paddock||"",p.route||"",p.status||"",p.routeReleased?"ja":"nein"]));downloadCSV(rows,"RVN_Teilnehmer.csv")}
 
+
+window.openStationNavigation=id=>{
+  const station=roleById(id);
+  if(!station||!station.location)return toast("Für diese Station ist noch kein Standort hinterlegt.");
+  const location=String(station.location).trim();
+  const url=/^https?:\/\//i.test(location)?location:`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+  window.open(url,"_blank","noopener");
+};
 window.filterStationParticipants=q=>{const value=String(q||"").trim().toLowerCase();document.querySelectorAll(".station-participant").forEach(el=>{el.style.display=!value||String(el.dataset.search||"").includes(value)?"":"none";});};
