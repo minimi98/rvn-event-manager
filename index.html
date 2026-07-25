@@ -13,10 +13,30 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="css/style.css?v=10.12.5">
+  <script>
+  (function(){
+    const VERSION="10.12.6";
+    const KEY="rvn_app_version";
+    if(localStorage.getItem(KEY)!==VERSION){
+      localStorage.setItem(KEY,VERSION);
+      Promise.all([
+        ("caches" in window)?caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))):Promise.resolve(),
+        ("serviceWorker" in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve()
+      ]).finally(()=>{
+        if(!sessionStorage.getItem("rvn_version_reload_"+VERSION)){
+          sessionStorage.setItem("rvn_version_reload_"+VERSION,"1");
+          const u=new URL(location.href);
+          u.searchParams.set("v",VERSION);
+          location.replace(u.toString());
+        }
+      });
+    }
+  })();
+  </script>
+  <link rel="stylesheet" href="css/style.css?v=10.12.6">
 </head>
 <body>
   <div id="app"></div>
-  <script type="module" src="js/app.js?v=10.12.5"></script>
+  <script type="module" src="js/app.js?v=10.12.6"></script>
 </body>
 </html>

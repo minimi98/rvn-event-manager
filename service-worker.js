@@ -1,14 +1,14 @@
-const CACHE = "rvn-v10-12-5";
+const CACHE = "rvn-v10-12-6";
 const CORE = [
   "./",
   "./index.html",
-  "./css/style.css?v=10.12.5",
-  "./js/app.js?v=10.12.5",
-  "./js/views.js?v=10.12.5",
-  "./js/state.js?v=10.12.5",
-  "./js/utils.js?v=10.12.5",
-  "./js/firebase.js?v=10.12.5",
-  "./firebase-config.js?v=10.12.5",
+  "./css/style.css?v=10.12.6",
+  "./js/app.js?v=10.12.6",
+  "./js/views.js?v=10.12.6",
+  "./js/state.js?v=10.12.6",
+  "./js/utils.js?v=10.12.6",
+  "./js/firebase.js?v=10.12.6",
+  "./firebase-config.js?v=10.12.6",
   "./assets/logo.png",
   "./assets/logo.jpg",
   "./assets/beach-poster.png",
