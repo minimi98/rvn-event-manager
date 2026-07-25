@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.2";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.2";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.2";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.3";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.3";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.3";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -60,13 +60,13 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
 
 <div class="section-title"><div><h2>Alle wichtigen Informationen</h2><p>Professionell organisiert, übersichtlich und mobil verfügbar.</p></div></div>
 <section class="grid main-sections">
-  <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button class="arrow" onclick="go('oritt')">›</button></article>
-  <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button class="arrow" onclick="go('teilnehmer')">›</button></article>
-  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+  <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button type="button" class="arrow" onclick="go('oritt')">›</button></article>
+  <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button type="button" class="arrow" onclick="go('teilnehmer')">›</button></article>
+  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button type="button" class="arrow" onclick="go('ergebnisse')">›</button></article>
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
-  <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button class="arrow" onclick="go('zeitplan')">›</button></article>
-  <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button class="arrow" onclick="go('helfer')">›</button></article>
-  <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button class="arrow" onclick="go('admin')">›</button></article>
+  <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button type="button" class="arrow" onclick="go('zeitplan')">›</button></article>
+  <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button type="button" class="arrow" aria-label="Helferbereich öffnen" onclick="event.preventDefault();event.stopPropagation();openHelperArea()">›</button></article>
+  <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button type="button" class="arrow" onclick="go('admin')">›</button></article>
 </section>
 
 <section class="location-paddock-row">
@@ -119,7 +119,7 @@ function orittPage(){return `<section class="hero"><div><div class="kicker">Orie
   <article class="card"><div class="icon">🌊</div><h3>Kleine Runde</h3><p>Etwa 7 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
   <article class="card"><div class="icon">🌴</div><h3>Große Runde</h3><p>Etwa 17 km – die genaue Strecke wird erst an der Meldestelle freigegeben.</p></article>
   <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Startbereitschaft, Startzeit und persönliche Streckenfreigabe.</p></article>
-  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Nach der Auswertung öffentlich abrufbar.</p><button class="arrow" onclick="go('ergebnisse')">›</button></article>
+  <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Nach der Auswertung öffentlich abrufbar.</p><button type="button" class="arrow" onclick="go('ergebnisse')">›</button></article>
 </section>
 <section class="panel poster-strip"><img src="assets/beach-poster.png" alt="Beach Please O-Ritt Plakat"><div><div class="kicker">Sommer · Sonne · Sattel</div><h2>Orientierungsritt 2026</h2><p>${esc(state.settings.participantGeneralInfo||"Bitte seid rechtzeitig vor eurer Startzeit an der Meldestelle.")}</p></div></section>
 <section class="panel"><div class="notice">Stationen, Helferzuweisungen, GPX-Dateien und QR-Codes sind nicht öffentlich sichtbar.</div></section>`;
@@ -129,11 +129,11 @@ function orittPage(){return `<section class="hero"><div><div class="kicker">Orie
 function routeCard(name,length,url){const absolute=new URL(url,location.href).href;const qr="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(absolute);return `<article class="route-card"><div class="route-layout"><div><h3>🐴 ${name}</h3><p>${length} · GPX-Datei für Navigations-Apps</p><div class="route-actions"><a class="btn" href="${url}" download>GPX herunterladen</a><a class="btn light" href="${url}" target="_blank" rel="noopener">Öffnen</a></div></div><img class="qr" src="${qr}" alt="QR-Code ${name}" loading="lazy"></div></article>`}
 
 function helperAccessPanel(){
-  return `<section class="panel"><h2>📱 Persönlicher Helferzugang</h2><div class="notice">Nach dem Helferpasswort gibst du hier deine bei der Anmeldung hinterlegte Telefonnummer ein. Anschließend wirst du automatisch zu deiner eigenen Station beziehungsweise deinem Einsatzbereich weitergeleitet.</div><form id="helperPhoneForm" class="form"><label class="full">Telefonnummer<input id="helperAccessPhone" inputmode="tel" autocomplete="tel" required placeholder="Hinterlegte Telefonnummer"></label><button class="btn full">Zu meinem Einsatzbereich</button></form>${stationAccess()?`<div class="notice">Aktuell freigeschaltet: <strong>${esc(roleById(stationAccess())?.name||stationAccess())}</strong><br><button class="btn light" onclick="helperLogout()">Abmelden</button></div>`:""}<button class="btn light" onclick="closeHelperGate()">Helferbereich schließen</button></section>`;
+  return `<section class="panel"><h2>📱 Persönlicher Helferzugang</h2><div class="notice">Nach dem Helferpasswort gibst du hier deine bei der Anmeldung hinterlegte Telefonnummer ein. Anschließend wirst du automatisch zu deiner eigenen Station beziehungsweise deinem Einsatzbereich weitergeleitet.</div><form id="helperPhoneForm" class="form"><label class="full">Telefonnummer<input id="helperAccessPhone" inputmode="tel" autocomplete="tel" required placeholder="Hinterlegte Telefonnummer"></label><button type="submit" class="btn full">Zu meinem Einsatzbereich</button></form>${stationAccess()?`<div class="notice">Aktuell freigeschaltet: <strong>${esc(roleById(stationAccess())?.name||stationAccess())}</strong><br><button class="btn light" onclick="helperLogout()">Abmelden</button></div>`:""}<button class="btn light" onclick="closeHelperGate()">Helferbereich schließen</button></section>`;
 }
 
 function helperPage(){
-  if(!helperGateOpen()) return `<section class="panel"><h2>🔒 Geschützter Helferbereich</h2><div class="notice">Stations- und Helferdaten sind nicht öffentlich sichtbar.</div><form id="helperGateForm" class="form"><label class="full">Helferpasswort<input id="helperGatePassword" type="password" autocomplete="current-password" placeholder="Passwort"></label><button class="btn full">Helferbereich öffnen</button></form></section>`;
+  if(!helperGateOpen()) return `<section class="panel"><h2>🔒 Geschützter Helferbereich</h2><div class="notice">Stations- und Helferdaten sind nicht öffentlich sichtbar.</div><form id="helperGateForm" class="form"><label class="full">Helferpasswort<input id="helperGatePassword" type="password" autocomplete="current-password" placeholder="Passwort"></label><button type="submit" class="btn full">Helferbereich öffnen</button></form></section>`;
   const helper=assignedHelper();
   if(helper && helper.role?.startsWith("station-")) return stationPage();
   if(helper?.role==="meldestelle") return meldestellePage();

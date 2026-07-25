@@ -1,12 +1,20 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.2";
-import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12.2";
-import {shell,pageView,attachForms} from "./views.js?v=10.12.2";
-import {toast} from "./utils.js?v=10.12.2";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.3";
+import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12.3";
+import {shell,pageView,attachForms} from "./views.js?v=10.12.3";
+import {toast} from "./utils.js?v=10.12.3";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
 window.renderApp=renderApp;
 window.go=id=>{state.page=id;renderApp();scrollTo({top:0,behavior:"smooth"})};
+// Separater Einstieg in den Helferbereich. Eine eventuell noch gespeicherte
+// Teilnehmeranmeldung darf die Helfernavigation nicht beeinflussen.
+window.openHelperArea=()=>{
+  localStorage.removeItem("rvn_participant_id");
+  state.page="helfer";
+  renderApp();
+  scrollTo({top:0,behavior:"smooth"});
+};
 
 async function ensureDefaults(){
 const s=await getDoc(doc(db,"settings","main"));if(!s.exists())await setDoc(doc(db,"settings","main"),defaultSettings);
@@ -26,5 +34,5 @@ onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.
 }
 init();
 
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12.2",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12.3",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
 setInterval(()=>{if(state.page==="oritt"||state.page==="home")renderApp()},1000);
