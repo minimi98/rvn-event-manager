@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.4";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.4";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.4";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.5";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.5";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.5";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -10,7 +10,8 @@ const isSpringer=()=>stationAccess()==="springer-kfz";
 const canManageParticipants=()=>state.isAdmin||isMeldestelle();
 const canEditStation=id=>state.isAdmin||stationAccess()===id;
 const currentParticipant=()=>state.participants.find(p=>p.id===participantAccess())||null;
-const helperGateOpen=()=>state.isAdmin||sessionStorage.getItem("rvn_helper_gate")==="yes";
+const helperGateOpen=()=>sessionStorage.getItem("rvn_helper_gate")==="yes";
+const helperSessionActive=()=>Boolean(localStorage.getItem("rvn_helper_id")||localStorage.getItem("rvn_station_access"));
 const assignedHelper=()=>{
   const helperId=localStorage.getItem("rvn_helper_id")||"";
   if(helperId){
@@ -243,7 +244,7 @@ function publicSchedulePage(){
 function meldestellePage(){
   if(!canManageParticipants())return `<section class="panel"><h2>📋 Meldestelle</h2><div class="notice">Nur Admin oder eingetragene Helfer der Meldestelle.</div></section>`;
   const sorted=[...state.participants].sort((a,b)=>String(a.startTime||"99:99").localeCompare(String(b.startTime||"99:99")));
-  return `<section class="panel"><div class="head"><div><h2>📋 Meldestelle</h2><p class="sub">Teilnehmer verwalten, Strecke festlegen und Startbereitschaft bestätigen.</p></div><div><button class="btn alt" onclick="exportParticipants()">CSV</button>${!state.isAdmin&&stationAccess()?`<button class="btn light" onclick="helperLogout()">Abmelden</button>`:""}</div></div>${participantForm()}${sorted.map(p=>{
+  return `<section class="panel"><div class="head"><div><h2>📋 Meldestelle</h2><p class="sub">Teilnehmer verwalten, Strecke festlegen und Startbereitschaft bestätigen.</p></div><div><button class="btn alt" onclick="exportParticipants()">CSV</button>${helperSessionActive()?`<button class="btn light" onclick="helperLogout()">Abmelden</button>`:""}</div></div>${participantForm()}${sorted.map(p=>{
     const route=p.routeType||p.route||"";
     const released=Boolean(p.gpxReleased||p.routeReleased);
     return `<div class="entry"><div style="width:100%"><div class="head"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div>${released?`<span class="badge info">GPX & QR freigegeben</span>`:""}</div><div class="form"><label>Startnummer<input id="start-${p.id}" value="${esc(p.startNumber||"")}"></label><label>Teilnehmer<input id="name-${p.id}" value="${esc(p.name||"")}"></label><label>Teamname<input id="horse-${p.id}" value="${esc(p.horse||"")}"></label><label>Startzeit<input type="time" id="time-${p.id}" value="${esc(p.startTime||"")}"></label><label>Paddock<input id="paddock-${p.id}" value="${esc(p.paddock||"")}"></label><label>Strecke<select id="route-${p.id}">${routeOptions(route)}</select></label><label>Status<select id="status-${p.id}">${statusOptions(p.status)}</select></label><label class="full">Optionaler Kartenlink<input id="map-${p.id}" value="${esc(p.routeMapUrl||"")}"></label></div><button class="btn light" onclick="saveParticipantMeta('${p.id}')">Teilnehmer speichern</button><button class="btn alt" onclick="confirmStartReady('${p.id}')" ${!route?'disabled title="Zuerst Strecke wählen"':""}>🟢 Startbereitschaft bestätigen</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Gestartet')">🔵 Gestartet</button><button class="btn light" onclick="setParticipantStatus('${p.id}','Im Ziel')">🏁 Im Ziel</button><button class="btn danger" onclick="deleteParticipant('${p.id}')">Löschen</button>${p.releasedAt||p.routeReleasedAt?`<p class="sub">Freigabe gespeichert.</p>`:""}</div></div>`;
@@ -266,7 +267,7 @@ function stationPage(){
 function alertForm(stationId){return `<section class="panel"><h2>🚨 Status / Vorfall melden</h2><form id="alertForm" class="form"><input type="hidden" id="alertStation" value="${stationId}"><label class="full">Status<select id="alertPriority"><option value="ok">🟢 Alles in Ordnung</option><option value="help">🟠 Unterstützung benötigt</option><option value="emergency">🔴 Notfall</option></select></label><label class="full">Beschreibung bei Orange oder Rot<textarea id="alertText" placeholder="Was ist passiert und was wird benötigt?"></textarea></label><button class="btn danger full">Meldung senden</button></form></section>`;
 }
 
-function alertsPage(){if(!(state.isAdmin||isMeldestelle()||isSpringer()))return `<section class="panel"><h2>🚙 Meldungen</h2><div class="notice">Nur Admin, Meldestelle oder Springer.</div></section>`;return `<section class="panel"><div class="head"><h2>🚨 Stationsmeldungen</h2>${!state.isAdmin&&stationAccess()?`<button class="btn light" onclick="helperLogout()">Abmelden</button>`:""}</div>${state.alerts.length?state.alerts.map(a=>`<div class="alert ${esc(a.priority||"info")}"><span class="badge ${esc(a.priority||"info")}">${a.priority==="emergency"?"Notfall":a.priority==="help"?"Hilfe":"Info"}</span><h3>${esc(roleById(a.stationId)?.name||a.stationId)}</h3><p>${esc(a.text)}</p><small>Status: ${esc(a.status||"offen")} ${a.assignedTo?`· übernommen von ${esc(a.assignedTo)}`:""}</small><div><button class="btn light" onclick="updateAlert('${a.id}','übernommen')">Übernommen</button><button class="btn light" onclick="updateAlert('${a.id}','unterwegs')">Unterwegs</button><button class="btn alt" onclick="updateAlert('${a.id}','erledigt')">Erledigt</button></div></div>`).join(""):`<p class="sub">Keine Meldungen.</p>`}</section>`}
+function alertsPage(){if(!(state.isAdmin||isMeldestelle()||isSpringer()))return `<section class="panel"><h2>🚙 Meldungen</h2><div class="notice">Nur Admin, Meldestelle oder Springer.</div></section>`;return `<section class="panel"><div class="head"><h2>🚨 Stationsmeldungen</h2>${helperSessionActive()?`<button class="btn light" onclick="helperLogout()">Abmelden</button>`:""}</div>${state.alerts.length?state.alerts.map(a=>`<div class="alert ${esc(a.priority||"info")}"><span class="badge ${esc(a.priority||"info")}">${a.priority==="emergency"?"Notfall":a.priority==="help"?"Hilfe":"Info"}</span><h3>${esc(roleById(a.stationId)?.name||a.stationId)}</h3><p>${esc(a.text)}</p><small>Status: ${esc(a.status||"offen")} ${a.assignedTo?`· übernommen von ${esc(a.assignedTo)}`:""}</small><div><button class="btn light" onclick="updateAlert('${a.id}','übernommen')">Übernommen</button><button class="btn light" onclick="updateAlert('${a.id}','unterwegs')">Unterwegs</button><button class="btn alt" onclick="updateAlert('${a.id}','erledigt')">Erledigt</button></div></div>`).join(""):`<p class="sub">Keine Meldungen.</p>`}</section>`}
 
 function resultsPage(){
   if(state.isAdmin){
@@ -434,7 +435,7 @@ window.saveStationInfo=async id=>{
 };
 
 
-function helperGateLogin(e){e.preventDefault();if(document.getElementById("helperGatePassword").value!=="Helfer")return toast("Falsches Helferpasswort.");sessionStorage.setItem("rvn_helper_gate","yes");window.renderApp()}
+function helperGateLogin(e){e.preventDefault();if(document.getElementById("helperGatePassword").value!=="Helfer")return toast("Falsches Helferpasswort.");localStorage.removeItem("rvn_helper_id");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");sessionStorage.setItem("rvn_helper_gate","yes");state.page="helfer";window.renderApp()}
 function helperPhoneLogin(e){
   e.preventDefault();
   const phone=document.getElementById("helperAccessPhone").value;
@@ -444,7 +445,7 @@ function helperPhoneLogin(e){
   if(!matches.length)return toast("Keine passende Helferanmeldung gefunden.");
   if(matches.length>1)return toast("Diese Telefonnummer ist mehrfach hinterlegt. Bitte die Meldestelle um eine eindeutige Zuordnung.");
   const helper=matches[0];
-  const role=helper.role||"";
+  const role=String(helper.role||"").trim().toLowerCase();
   if(!roleById(role))return toast("Dein Einsatzbereich ist noch nicht gültig zugeordnet. Bitte an die Meldestelle wenden.");
   if(!(role==="meldestelle"||role==="springer-kfz"||role.startsWith("station-")))return toast("Für deinen Bereich ist kein Helferzugang vorgesehen.");
   localStorage.setItem("rvn_helper_id",helper.id);

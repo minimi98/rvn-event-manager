@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.4";
-import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12.4";
-import {shell,pageView,attachForms} from "./views.js?v=10.12.4";
-import {toast} from "./utils.js?v=10.12.4";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.5";
+import {state,defaultSettings,defaultRoles,sortRoles} from "./state.js?v=10.12.5";
+import {shell,pageView,attachForms} from "./views.js?v=10.12.5";
+import {toast} from "./utils.js?v=10.12.5";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -10,7 +10,16 @@ window.go=id=>{state.page=id;renderApp();scrollTo({top:0,behavior:"smooth"})};
 // Separater Einstieg in den Helferbereich. Eine eventuell noch gespeicherte
 // Teilnehmeranmeldung darf die Helfernavigation nicht beeinflussen.
 window.openHelperArea=()=>{
+  // Helferbereich immer als frische, eindeutige Anmeldung öffnen.
+  // Alte Teilnehmer-, Admin- oder Helfersitzungen dürfen die Weiterleitung
+  // zur eigenen Station nicht beeinflussen.
   localStorage.removeItem("rvn_participant_id");
+  localStorage.removeItem("rvn_helper_id");
+  localStorage.removeItem("rvn_helper_phone");
+  localStorage.removeItem("rvn_station_access");
+  sessionStorage.removeItem("rvn_helper_gate");
+  localStorage.removeItem(ADMIN_KEY);
+  state.isAdmin=false;
   state.page="helfer";
   renderApp();
   scrollTo({top:0,behavior:"smooth"});
@@ -34,5 +43,5 @@ onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.
 }
 init();
 
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12.4",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js?v=10.12.5",{updateViaCache:"none"}).then(r=>r.update()).catch(console.warn));}
 setInterval(()=>{if(state.page==="oritt"||state.page==="home")renderApp()},1000);
