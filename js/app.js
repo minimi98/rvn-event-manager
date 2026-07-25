@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.8";
-import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.12.8";
-import {shell,pageView,attachForms} from "./views.js?v=10.12.8";
-import {toast} from "./utils.js?v=10.12.8";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.9";
+import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.12.9";
+import {shell,pageView,attachForms} from "./views.js?v=10.12.9";
+import {toast} from "./utils.js?v=10.12.9";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -67,7 +67,7 @@ if("serviceWorker" in navigator){
   });
   window.addEventListener("load",async()=>{
     try{
-      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.12.8",{updateViaCache:"none"});
+      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.12.9",{updateViaCache:"none"});
       await reg.update();
     }catch(e){console.warn(e)}
   });
