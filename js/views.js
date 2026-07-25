@@ -66,7 +66,7 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
   <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button type="button" class="arrow" onclick="go('ergebnisse')">›</button></article>
   <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
   <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button type="button" class="arrow" onclick="go('zeitplan')">›</button></article>
-  <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button type="button" class="arrow" aria-label="Helferbereich öffnen" onclick="event.preventDefault();event.stopPropagation();openHelperArea()">›</button></article>
+  <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button type="button" class="arrow" aria-label="Helferbereich öffnen" onclick="openHelperArea()">›</button></article>
   <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button type="button" class="arrow" onclick="go('admin')">›</button></article>
 </section>
 
