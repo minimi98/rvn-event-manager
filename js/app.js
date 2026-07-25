@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.7";
-import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.12.7";
-import {shell,pageView,attachForms} from "./views.js?v=10.12.7";
-import {toast} from "./utils.js?v=10.12.7";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.8";
+import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.12.8";
+import {shell,pageView,attachForms} from "./views.js?v=10.12.8";
+import {toast} from "./utils.js?v=10.12.8";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -9,10 +9,7 @@ window.renderApp=renderApp;
 window.go=id=>{state.page=id;renderApp();scrollTo({top:0,behavior:"smooth"})};
 // Separater Einstieg in den Helferbereich. Eine eventuell noch gespeicherte
 // Teilnehmeranmeldung darf die Helfernavigation nicht beeinflussen.
-window.openHelperArea=()=>{
-  // Helferbereich immer als frische, eindeutige Anmeldung öffnen.
-  // Alte Teilnehmer-, Admin- oder Helfersitzungen dürfen die Weiterleitung
-  // zur eigenen Station nicht beeinflussen.
+function openHelperArea(){
   localStorage.removeItem("rvn_participant_id");
   localStorage.removeItem("rvn_helper_id");
   localStorage.removeItem("rvn_helper_phone");
@@ -22,8 +19,25 @@ window.openHelperArea=()=>{
   state.isAdmin=false;
   state.page="helfer";
   renderApp();
-  scrollTo({top:0,behavior:"smooth"});
-};
+  try{history.replaceState(null,"",location.pathname+location.search+"#helfer")}catch(e){}
+  window.scrollTo(0,0);
+}
+window.openHelperArea=openHelperArea;
+
+// Mobile-sicher: nicht nur Inline-onclick verwenden. Der delegierte Listener
+// funktioniert auch in Safari, Chrome, PWA-/Startbildschirm-Modus und bei
+// dynamisch neu gerenderten Elementen.
+document.addEventListener("click",event=>{
+  const trigger=event.target.closest?.("[data-open-helper]");
+  if(!trigger)return;
+  event.preventDefault();
+  event.stopPropagation();
+  openHelperArea();
+},{capture:true});
+
+window.addEventListener("hashchange",()=>{
+  if(location.hash==="#helfer"&&state.page!=="helfer")openHelperArea();
+});
 
 async function ensureDefaults(){
 const s=await getDoc(doc(db,"settings","main"));if(!s.exists())await setDoc(doc(db,"settings","main"),defaultSettings);
@@ -42,6 +56,7 @@ onSnapshot(query(collection(db,"alerts"),orderBy("createdAt","desc")),s=>{state.
 }catch(e){console.error(e);toast("Fehler beim Laden.");renderApp()}
 }
 init();
+if(location.hash==="#helfer")openHelperArea();
 
 if("serviceWorker" in navigator){
   let reloading=false;
@@ -52,7 +67,7 @@ if("serviceWorker" in navigator){
   });
   window.addEventListener("load",async()=>{
     try{
-      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.12.7",{updateViaCache:"none"});
+      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.12.8",{updateViaCache:"none"});
       await reg.update();
     }catch(e){console.warn(e)}
   });
