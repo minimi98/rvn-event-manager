@@ -1,7 +1,7 @@
 {
   "name": "RVN Event Manager – Beach Please",
   "short_name": "RVN Event",
-  "start_url": "./?v=10.12.6",
+  "start_url": "./?v=10.12.10",
   "display": "standalone",
   "background_color": "#fffaf0",
   "theme_color": "#062a5f",
