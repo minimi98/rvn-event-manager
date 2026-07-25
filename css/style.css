@@ -53,8 +53,3 @@
   .schedule-row{grid-template-columns:82px 72px minmax(110px,1fr)}
   .schedule-row>div{padding:11px 9px}
 }
-
-/* V10.12.8: mobiler Helferzugang mit großer, sicher antippbarer Fläche */
-.helper-card{touch-action:manipulation}
-.helper-open-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:48px;justify-self:stretch;margin-top:8px;-webkit-tap-highlight-color:transparent}
-@media(max-width:560px){.helper-open-btn{width:100%;min-height:54px;font-size:16px}.helper-card{min-height:auto}}
