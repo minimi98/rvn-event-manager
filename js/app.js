@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.12.10";
-import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.12.10";
-import {shell,pageView,attachForms} from "./views.js?v=10.12.10";
-import {toast} from "./utils.js?v=10.12.10";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.13.0";
+import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.13.0";
+import {shell,pageView,attachForms} from "./views.js?v=10.13.0";
+import {toast} from "./utils.js?v=10.13.0";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -26,8 +26,24 @@ window.openHelperArea=()=>{
 };
 
 async function ensureDefaults(){
-const s=await getDoc(doc(db,"settings","main"));if(!s.exists())await setDoc(doc(db,"settings","main"),defaultSettings);
+const s=await getDoc(doc(db,"settings","main"));
+if(!s.exists()){
+  await setDoc(doc(db,"settings","main"),defaultSettings);
+}else{
+  const data=s.data()||{};
+  const patch={};
+  if(!("eventStatus" in data))patch.eventStatus="archived";
+  if(!("eventDate" in data))patch.eventDate="2026-07-25";
+  if(!("maxPointsPerStation" in data))patch.maxPointsPerStation=200;
+  if(Object.keys(patch).length)await setDoc(doc(db,"settings","main"),patch,{merge:true});
+}
 const seeded=await getDoc(doc(db,"meta","rolesSeededV6"));if(!seeded.exists()){for(const r of defaultRoles)await setDoc(doc(db,"roles",r.id),{...r,createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"meta","rolesSeededV6"),{done:true,createdAt:serverTimestamp()})}
+const migrated=await getDoc(doc(db,"meta","archiveAndPoints200V1"));
+if(!migrated.exists()){
+  for(const r of defaultRoles.filter(x=>x.id.startsWith("station-")))await setDoc(doc(db,"roles",r.id),{maxPoints:200,updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,"settings","main"),{eventStatus:"archived",maxPointsPerStation:200,archivedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,"meta","archiveAndPoints200V1"),{done:true,createdAt:serverTimestamp()});
+}
 }
 
 function init(){
@@ -52,7 +68,7 @@ if("serviceWorker" in navigator){
   });
   window.addEventListener("load",async()=>{
     try{
-      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.12.10",{updateViaCache:"none"});
+      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.13.0",{updateViaCache:"none"});
       await reg.update();
     }catch(e){console.warn(e)}
   });

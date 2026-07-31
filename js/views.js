@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.12.10";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.12.10";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,serverTimestamp} from "./firebase.js?v=10.12.10";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.13.0";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.13.0";
+import {db,collection,addDoc,deleteDoc,doc,setDoc,getDocs,serverTimestamp} from "./firebase.js?v=10.13.0";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -12,6 +12,7 @@ const canEditStation=id=>state.isAdmin||stationAccess()===id;
 const currentParticipant=()=>state.participants.find(p=>p.id===participantAccess())||null;
 const helperGateOpen=()=>sessionStorage.getItem("rvn_helper_gate")==="yes";
 const helperSessionActive=()=>Boolean(localStorage.getItem("rvn_helper_id")||localStorage.getItem("rvn_station_access"));
+const eventArchived=()=>state.settings.eventStatus==="archived";
 const assignedHelper=()=>{
   const helperId=localStorage.getItem("rvn_helper_id")||"";
   if(helperId){
@@ -43,6 +44,7 @@ const nav=(id,i,l)=>`<button class="nav ${state.page===id?"active":""}" onclick=
 function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;return `<div class="countdown"><div class="countbox"><strong>${d}</strong><span>Tage</span></div><div class="countbox"><strong>${h}</strong><span>Std</span></div><div class="countbox"><strong>${m}</strong><span>Min</span></div><div class="countbox"><strong>${s}</strong><span>Sek</span></div></div>`}
 
 export function pageView(){
+if(eventArchived()&&!state.isAdmin&&["helfer","zugang","meldestelle","station","springer"].includes(state.page))return archivedAccessPage();
 if(state.page==="home")return homePage();
 if(state.page==="oritt")return orittPage();
 if(state.page==="zeitplan")return publicSchedulePage();
@@ -57,7 +59,10 @@ if(state.page==="admin")return adminPage();
 return homePage();
 }
 
-function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Der digitale Event Manager für den Orientierungsritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>
+
+function archivedAccessPage(){return `<section class="panel"><h2>📦 Veranstaltung archiviert</h2><div class="notice">Die Veranstaltung ist beendet. Aufgabenbereiche, Stationen, Meldestelle und Helferzugänge sind derzeit deaktiviert. Der Admin kann die Veranstaltung mit wenigen Klicks wieder aktivieren.</div><button class="btn" onclick="go('home')">Zur Startseite</button><button class="btn alt" onclick="go('admin')">Zum Adminbereich</button></section>`;}
+
+function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Der digitale Event Manager für den Orientierungsritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>${eventArchived()?`<section class="panel"><div class="notice"><strong>📦 Veranstaltung archiviert</strong><br>Die Veranstaltung ist beendet. Stationen und Aufgabenbereiche sind deaktiviert; die Ergebnisse und Daten bleiben erhalten.</div></section>`:""}
 
 <div class="section-title"><div><h2>Alle wichtigen Informationen</h2><p>Professionell organisiert, übersichtlich und mobil verfügbar.</p></div></div>
 <section class="grid main-sections">
@@ -261,7 +266,7 @@ function stationPage(){
   return `<section class="panel"><div class="head"><div><h2>${st?.icon||"🐴"} ${esc(st?.name||id)}</h2><p class="sub">Angemeldet als ${esc(helper?.name||"Helfer")}</p></div><button class="btn light" onclick="helperLogout()">Abmelden</button></div>
   <div class="cards"><div class="info"><h3>📍 Standort</h3><p>${esc(st?.location||"-")}</p>${st?.location?`<button class="btn alt" onclick="openStationNavigation('${id}')">🧭 Navigation zu meiner Station</button>`:""}</div><div class="info"><h3>🕒 Einsatzzeit</h3><p>${esc(st?.dutyTime||"-")}</p></div><div class="info"><h3>☎️ Kontakt</h3><p>${esc(st?.contact||"Meldestelle")}</p></div></div>
   <label>Teilnehmer suchen<input id="stationSearch" oninput="filterStationParticipants(this.value)" placeholder="Startnummer, Name oder Team"></label>
-  <div class="entries">${state.participants.map(p=>`<form class="entry score-form station-participant" data-search="${esc(`${p.startNumber||""} ${p.name||""} ${p.horse||""}`.toLowerCase())}" data-participant="${p.id}" data-station="${id}"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div><div><input name="points" type="number" min="0" max="200" step="0.5" value="${scoreFor(p.id,id)?.points??""}" placeholder="Punkte"><button class="btn alt">Speichern</button></div></form>`).join("")}</div></section>${alertForm(id)}`;
+  <div class="entries">${state.participants.map(p=>`<form class="entry score-form station-participant" data-search="${esc(`${p.startNumber||""} ${p.name||""} ${p.horse||""}`.toLowerCase())}" data-participant="${p.id}" data-station="${id}"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name)}</strong><br><small>Team: ${esc(p.horse||"-")} · ${teamStatus(p)}</small></div><div><input name="points" type="number" min="0" max="${Number(st?.maxPoints||state.settings.maxPointsPerStation||200)}" step="0.5" value="${scoreFor(p.id,id)?.points??""}" placeholder="Punkte"><button class="btn alt">Speichern</button></div></form>`).join("")}</div></section>${alertForm(id)}`;
 }
 
 function alertForm(stationId){return `<section class="panel"><h2>🚨 Status / Vorfall melden</h2><form id="alertForm" class="form"><input type="hidden" id="alertStation" value="${stationId}"><label class="full">Status<select id="alertPriority"><option value="ok">🟢 Alles in Ordnung</option><option value="help">🟠 Unterstützung benötigt</option><option value="emergency">🔴 Notfall</option></select></label><label class="full">Beschreibung bei Orange oder Rot<textarea id="alertText" placeholder="Was ist passiert und was wird benötigt?"></textarea></label><button class="btn danger full">Meldung senden</button></form></section>`;
@@ -339,8 +344,33 @@ function adminHelperOverview(){
   </section>`;
 }
 
+function adminScoreManagement(){
+  const stations=scoringStations();
+  return `<section class="panel"><div class="head"><div><h2>✍️ Punkte manuell verwalten</h2><p class="sub">Der Admin kann für jeden Teilnehmer an jeder Station 0 bis ${Number(state.settings.maxPointsPerStation||200)} Punkte eintragen oder korrigieren.</p></div></div>
+  ${state.participants.length&&stations.length?`<div class="schedule-table" role="table"><div class="schedule-row schedule-head"><div>Teilnehmer</div><div>Station</div><div>Punkte</div><div>Aktion</div></div>${state.participants.flatMap(p=>stations.map(st=>`<div class="schedule-row"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name||"")}</strong><br><small>${esc(p.horse||"")}</small></div><div>${esc(st.name)}</div><div><input id="admin-score-${p.id}-${st.id}" type="number" min="0" max="${Number(st.maxPoints||state.settings.maxPointsPerStation||200)}" step="0.5" value="${scoreFor(p.id,st.id)?.points??""}"></div><div><button class="btn alt" type="button" onclick="saveAdminScore('${p.id}','${st.id}')">Speichern</button></div></div>`)).join("")}</div>`:`<div class="notice">Noch keine Teilnehmer oder Stationen vorhanden.</div>`}</section>`;
+}
+
 function adminExtras(){
   return `<section class="panel">
+    <div class="head"><div><h2>📦 Veranstaltungsstatus</h2><p class="sub">Aktueller Status: <strong>${eventArchived()?"archiviert":"aktiv"}</strong></p></div><span class="badge ${eventArchived()?"info":"ok"}">${eventArchived()?"ARCHIV":"AKTIV"}</span></div>
+    <div class="notice">Im Archivmodus sind Helferzugänge, Stationen, Meldestelle und Meldungen gesperrt. Der Admin behält vollständigen Zugriff.</div>
+    ${eventArchived()?`<button class="btn alt" type="button" onclick="setEventStatus('active')">▶ Veranstaltung wieder aktivieren</button>`:`<button class="btn danger" type="button" onclick="setEventStatus('archived')">📦 Veranstaltung archivieren</button>`}
+  </section>
+  <section class="panel">
+    <h2>🆕 Nächste Veranstaltung vorbereiten</h2>
+    <form id="newEventForm" class="form">
+      <label>Veranstaltungsname<input id="newEventTitle" value="${esc(state.settings.eventTitle||"")}"></label>
+      <label>Datum<input id="newEventDate" type="date" value="${esc(state.settings.eventDate||"")}"></label>
+      <label>Maximale Punkte je Station<input id="newMaxPoints" type="number" min="1" max="200" value="${Number(state.settings.maxPointsPerStation||200)}"></label>
+      <label class="full"><input id="resetParticipants" type="checkbox"> Teilnehmer zurücksetzen</label>
+      <label class="full"><input id="resetScores" type="checkbox" checked> Punkte zurücksetzen</label>
+      <label class="full"><input id="resetAlerts" type="checkbox" checked> Meldungen zurücksetzen</label>
+      <label class="full"><input id="resetHelpers" type="checkbox"> Helferzuordnungen zurücksetzen</label>
+      <button class="btn full">Als aktive Veranstaltung vorbereiten</button>
+    </form>
+    <p class="sub">Stationen, Aufgaben und deren Beschreibungen bleiben als Vorlage erhalten.</p>
+  </section>
+  <section class="panel">
     <h2>⚙️ Veranstaltung & Teilnehmerinfos</h2>
     <form id="eventInfoForm" class="form">
       <label>Streckenlänge<input id="routeLength" value="${esc(state.settings.routeLength||"17 km")}"></label>
@@ -382,7 +412,7 @@ function adminExtras(){
   </section>`;
 }
 
-function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 Admin</h2><form id="adminForm" class="form"><label>Passwort<input id="adminPassword" type="password"></label><button class="btn full">Einloggen</button></form></section>`;return `<section class="panel"><div class="head"><h2>👑 Admin Dashboard</h2><button class="btn light" onclick="adminLogout()">Abmelden</button></div><div class="stats"><div class="stat"><strong>${state.participants.length}</strong><span>Teilnehmer</span></div><div class="stat"><strong>${state.helpers.length}</strong><span>Helfer</span></div><div class="stat"><strong>${state.alerts.filter(a=>a.status!=="erledigt").length}</strong><span>offene Meldungen</span></div><div class="stat"><strong>${scoringStations().length}</strong><span>Stationen</span></div></div><button class="btn" onclick="go('meldestelle')">Meldestelle</button><button class="btn" onclick="go('springer')">Meldungen</button><button class="btn" onclick="go('ergebnisse')">Ergebnisse</button></section>${adminHelperOverview()}${adminExtras()}`}
+function adminPage(){if(!state.isAdmin)return `<section class="panel"><h2>🔒 Admin</h2><form id="adminForm" class="form"><label>Passwort<input id="adminPassword" type="password"></label><button class="btn full">Einloggen</button></form></section>`;return `<section class="panel"><div class="head"><h2>👑 Admin Dashboard</h2><button class="btn light" onclick="adminLogout()">Abmelden</button></div><div class="stats"><div class="stat"><strong>${state.participants.length}</strong><span>Teilnehmer</span></div><div class="stat"><strong>${state.helpers.length}</strong><span>Helfer</span></div><div class="stat"><strong>${state.alerts.filter(a=>a.status!=="erledigt").length}</strong><span>offene Meldungen</span></div><div class="stat"><strong>${scoringStations().length}</strong><span>Stationen</span></div></div><button class="btn" onclick="go('meldestelle')">Meldestelle</button><button class="btn" onclick="go('springer')">Meldungen</button><button class="btn" onclick="go('ergebnisse')">Ergebnisse</button></section>${adminHelperOverview()}${adminExtras()}${adminScoreManagement()}`}
 
 export function attachForms(render){
 const hg=document.getElementById("helperGateForm");if(hg)hg.addEventListener("submit",helperGateLogin);
@@ -394,6 +424,7 @@ const pf=document.getElementById("participantForm");if(pf)pf.addEventListener("s
 const af=document.getElementById("alertForm");if(af)af.addEventListener("submit",sendAlert);
 const ei=document.getElementById("eventInfoForm");if(ei)ei.addEventListener("submit",saveEventInfo);
 const dt=document.getElementById("documentsToggleForm");if(dt)dt.addEventListener("submit",saveDocumentsToggle);
+const ne=document.getElementById("newEventForm");if(ne)ne.addEventListener("submit",prepareNewEvent);
 const adm=document.getElementById("adminForm");if(adm)adm.addEventListener("submit",e=>{e.preventDefault();if(document.getElementById("adminPassword").value===state.settings.adminPassword){state.isAdmin=true;localStorage.setItem(ADMIN_KEY,"yes");render()}else toast("Falsches Passwort.")});
 const rf=document.getElementById("rankForm");if(rf)rf.addEventListener("submit",rankSearch);
 document.querySelectorAll(".score-form").forEach(f=>f.addEventListener("submit",saveScore));
@@ -434,6 +465,48 @@ window.saveStationInfo=async id=>{
   toast("Station gespeichert.");
 };
 
+
+
+window.setEventStatus=async status=>{
+  if(!state.isAdmin)return toast("Keine Berechtigung.");
+  const text=status==="archived"?"Veranstaltung wirklich archivieren? Helfer- und Stationszugänge werden deaktiviert.":"Veranstaltung wieder aktivieren?";
+  if(!confirm(text))return;
+  await setDoc(doc(db,"settings","main"),{eventStatus:status,updatedAt:serverTimestamp(),...(status==="archived"?{archivedAt:serverTimestamp()}:{activatedAt:serverTimestamp()})},{merge:true});
+  toast(status==="archived"?"Veranstaltung archiviert.":"Veranstaltung aktiviert.");
+};
+
+async function clearCollection(name){
+  const snapshot=await getDocs(collection(db,name));
+  await Promise.all(snapshot.docs.map(d=>deleteDoc(doc(db,name,d.id))));
+}
+
+async function prepareNewEvent(e){
+  e.preventDefault();
+  if(!state.isAdmin)return toast("Keine Berechtigung.");
+  const title=document.getElementById("newEventTitle").value.trim();
+  const date=document.getElementById("newEventDate").value;
+  const maxPoints=Math.min(200,Math.max(1,Number(document.getElementById("newMaxPoints").value||200)));
+  const selected=["resetParticipants","resetScores","resetAlerts","resetHelpers"].filter(id=>document.getElementById(id)?.checked);
+  if(!confirm(`Neue aktive Veranstaltung vorbereiten? ${selected.length?"Ausgewählte alte Daten werden endgültig gelöscht.":"Alte Teilnehmer- und Ergebnisdaten bleiben erhalten."}`))return;
+  if(document.getElementById("resetParticipants").checked)await clearCollection("participants");
+  if(document.getElementById("resetScores").checked)await clearCollection("scores");
+  if(document.getElementById("resetAlerts").checked)await clearCollection("alerts");
+  if(document.getElementById("resetHelpers").checked)await clearCollection("helpers");
+  await Promise.all(scoringStations().map(st=>setDoc(doc(db,"roles",st.id),{maxPoints,updatedAt:serverTimestamp()},{merge:true})));
+  await setDoc(doc(db,"settings","main"),{eventTitle:title||"Neue Veranstaltung",eventDate:date,maxPointsPerStation:maxPoints,eventStatus:"active",activatedAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
+  toast("Neue Veranstaltung ist vorbereitet und aktiv.");
+}
+
+window.saveAdminScore=async(participantId,stationId)=>{
+  if(!state.isAdmin)return toast("Keine Berechtigung.");
+  const input=document.getElementById(`admin-score-${participantId}-${stationId}`);
+  const station=roleById(stationId);
+  const max=Number(station?.maxPoints||state.settings.maxPointsPerStation||200);
+  const points=Number(input?.value||0);
+  if(!Number.isFinite(points)||points<0||points>max)return toast(`Bitte 0 bis ${max} Punkte eingeben.`);
+  await setDoc(doc(db,"scores",scoreKey(participantId,stationId)),{participantId,stationId,points,changedBy:"admin",changeType:"manual-correction",updatedAt:serverTimestamp()},{merge:true});
+  toast("Punkte gespeichert.");
+};
 
 function helperGateLogin(e){e.preventDefault();if(document.getElementById("helperGatePassword").value!=="Helfer")return toast("Falsches Helferpasswort.");localStorage.removeItem("rvn_helper_id");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");sessionStorage.setItem("rvn_helper_gate","yes");state.page="helfer";window.renderApp()}
 function helperPhoneLogin(e){
@@ -554,7 +627,7 @@ async function addParticipant(e){
   e.target.reset();
   toast("Teilnehmer hinzugefügt.");
 }
-async function saveScore(e){e.preventDefault();const p=e.currentTarget.dataset.participant,st=e.currentTarget.dataset.station;if(!canEditStation(st))return toast("Keine Berechtigung.");await setDoc(doc(db,"scores",scoreKey(p,st)),{participantId:p,stationId:st,points:Number(e.currentTarget.points.value||0),updatedAt:serverTimestamp()},{merge:true});toast("Punkte gespeichert.")}
+async function saveScore(e){e.preventDefault();const p=e.currentTarget.dataset.participant,st=e.currentTarget.dataset.station;if(eventArchived()&&!state.isAdmin)return toast("Die Veranstaltung ist archiviert.");if(!canEditStation(st))return toast("Keine Berechtigung.");const station=roleById(st);const max=Number(station?.maxPoints||state.settings.maxPointsPerStation||200);const points=Number(e.currentTarget.points.value||0);if(points<0||points>max)return toast(`Bitte 0 bis ${max} Punkte eingeben.`);await setDoc(doc(db,"scores",scoreKey(p,st)),{participantId:p,stationId:st,points,updatedAt:serverTimestamp()},{merge:true});toast("Punkte gespeichert.")}
 async function sendAlert(e){
   e.preventDefault();
   const priority=document.getElementById("alertPriority").value;
