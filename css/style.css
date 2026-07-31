@@ -53,3 +53,12 @@
   .schedule-row{grid-template-columns:82px 72px minmax(110px,1fr)}
   .schedule-row>div{padding:11px 9px}
 }
+
+
+/* V11: Medienverwaltung und neutraler Archivmodus */
+.neutral-hero{min-height:280px}
+.media-admin{margin-top:14px}
+.media-preview{margin:10px 0;padding:10px;border:1px solid #ddd;border-radius:10px;background:#fff}
+.media-preview a{font-weight:700;word-break:break-all}
+.arrow.disabled{opacity:.45;cursor:not-allowed}
+input[type="file"]{width:100%;padding:10px;background:#fff;border:1px solid #ccc;border-radius:10px}

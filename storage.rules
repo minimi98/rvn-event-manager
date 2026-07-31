@@ -1,0 +1,19 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Übergangslösung ohne Firebase Authentication.
+    // Nur Event-Medien, nur erlaubte Dateitypen, maximal 10 MB, zeitlich begrenzt.
+    match /events/{eventId}/media/{fileName} {
+      allow read: if true;
+      allow create, update: if request.time < timestamp.date(2027, 12, 31)
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp)|application/pdf');
+      allow delete: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

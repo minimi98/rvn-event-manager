@@ -1,7 +1,7 @@
-import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=10.13.0";
-import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=10.13.0";
-import {shell,pageView,attachForms} from "./views.js?v=10.13.0";
-import {toast} from "./utils.js?v=10.13.0";
+import {db,collection,doc,setDoc,getDoc,serverTimestamp,onSnapshot,query,orderBy} from "./firebase.js?v=11.0.0";
+import {state,defaultSettings,defaultRoles,sortRoles,ADMIN_KEY} from "./state.js?v=11.0.0";
+import {shell,pageView,attachForms} from "./views.js?v=11.0.0";
+import {toast} from "./utils.js?v=11.0.0";
 
 const appEl=document.getElementById("app");
 function renderApp(){appEl.innerHTML=shell(pageView());attachForms(renderApp)}
@@ -35,6 +35,7 @@ if(!s.exists()){
   if(!("eventStatus" in data))patch.eventStatus="archived";
   if(!("eventDate" in data))patch.eventDate="2026-07-25";
   if(!("maxPointsPerStation" in data))patch.maxPointsPerStation=200;
+  for(const key of ["mediaPosterUrl","mediaPosterPath","mediaPaddockUrl","mediaPaddockPath","mediaInvitationUrl","mediaInvitationPath"])if(!(key in data))patch[key]="";
   if(Object.keys(patch).length)await setDoc(doc(db,"settings","main"),patch,{merge:true});
 }
 const seeded=await getDoc(doc(db,"meta","rolesSeededV6"));if(!seeded.exists()){for(const r of defaultRoles)await setDoc(doc(db,"roles",r.id),{...r,createdAt:serverTimestamp()},{merge:true});await setDoc(doc(db,"meta","rolesSeededV6"),{done:true,createdAt:serverTimestamp()})}
@@ -68,7 +69,7 @@ if("serviceWorker" in navigator){
   });
   window.addEventListener("load",async()=>{
     try{
-      const reg=await navigator.serviceWorker.register("./service-worker.js?v=10.13.0",{updateViaCache:"none"});
+      const reg=await navigator.serviceWorker.register("./service-worker.js?v=11.0.0",{updateViaCache:"none"});
       await reg.update();
     }catch(e){console.warn(e)}
   });

@@ -1,6 +1,6 @@
-import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=10.13.0";
-import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=10.13.0";
-import {db,collection,addDoc,deleteDoc,doc,setDoc,getDocs,serverTimestamp} from "./firebase.js?v=10.13.0";
+import {state,EVENT_DATE,ADMIN_KEY,roleById,peopleFor,scoringStations,scoreKey,scoreFor,totalFor,rankedParticipants} from "./state.js?v=11.0.0";
+import {esc,cleanPhone,toast,downloadCSV} from "./utils.js?v=11.0.0";
+import {db,storage,collection,addDoc,deleteDoc,doc,setDoc,getDocs,serverTimestamp,ref,uploadBytes,getDownloadURL,deleteObject} from "./firebase.js?v=11.0.0";
 
 const stationAccess=()=>localStorage.getItem("rvn_station_access")||"";
 const participantAccess=()=>localStorage.getItem("rvn_participant_id")||"";
@@ -44,7 +44,7 @@ const nav=(id,i,l)=>`<button class="nav ${state.page===id?"active":""}" onclick=
 function countdown(){const diff=Math.max(0,EVENT_DATE-new Date()),d=Math.floor(diff/86400000),h=Math.floor(diff/3600000)%24,m=Math.floor(diff/60000)%60,s=Math.floor(diff/1000)%60;return `<div class="countdown"><div class="countbox"><strong>${d}</strong><span>Tage</span></div><div class="countbox"><strong>${h}</strong><span>Std</span></div><div class="countbox"><strong>${m}</strong><span>Min</span></div><div class="countbox"><strong>${s}</strong><span>Sek</span></div></div>`}
 
 export function pageView(){
-if(eventArchived()&&!state.isAdmin&&["helfer","zugang","meldestelle","station","springer"].includes(state.page))return archivedAccessPage();
+if(eventArchived()&&!state.isAdmin&&["oritt","zeitplan","helfer","zugang","meldestelle","station","springer","teilnehmer","ergebnisse"].includes(state.page))return archivedAccessPage();
 if(state.page==="home")return homePage();
 if(state.page==="oritt")return orittPage();
 if(state.page==="zeitplan")return publicSchedulePage();
@@ -62,14 +62,14 @@ return homePage();
 
 function archivedAccessPage(){return `<section class="panel"><h2>📦 Veranstaltung archiviert</h2><div class="notice">Die Veranstaltung ist beendet. Aufgabenbereiche, Stationen, Meldestelle und Helferzugänge sind derzeit deaktiviert. Der Admin kann die Veranstaltung mit wenigen Klicks wieder aktivieren.</div><button class="btn" onclick="go('home')">Zur Startseite</button><button class="btn alt" onclick="go('admin')">Zum Adminbereich</button></section>`;}
 
-function homePage(){return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>Beach Please –<br>wir reiten!</h2><p>Der digitale Event Manager für den Orientierungsritt 2026.</p><div class="chip">📅 25. Juli 2026 · Neuendettelsau</div>${countdown()}</div></section>${eventArchived()?`<section class="panel"><div class="notice"><strong>📦 Veranstaltung archiviert</strong><br>Die Veranstaltung ist beendet. Stationen und Aufgabenbereiche sind deaktiviert; die Ergebnisse und Daten bleiben erhalten.</div></section>`:""}
+function homePage(){if(eventArchived())return `<section class="hero neutral-hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>RVN Event Manager</h2><p>Das neutrale Grundgerüst für die nächste Veranstaltung ist vorbereitet.</p><div class="chip">📦 Aktuell keine aktive Veranstaltung</div></div></section><section class="panel"><div class="notice"><strong>Vergangene Veranstaltung archiviert</strong><br>Veranstaltungsspezifische Inhalte, Stationen und Zugänge sind öffentlich ausgeblendet. Der Admin kann eine neue Veranstaltung vorbereiten oder die archivierte Veranstaltung wieder aktivieren.</div></section><section class="grid main-sections"><article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Neue Veranstaltung anlegen, Inhalte hochladen und Funktionen aktivieren.</p><button type="button" class="arrow" onclick="go('admin')">›</button></article></section>`;return `<section class="hero"><div><div class="kicker">Reit- und Fahrverein Neuendettelsau e.V.</div><h2>${esc(state.settings.eventTitle||"Neue Veranstaltung")}</h2><p>${esc(state.settings.eventSubtitle||"")}</p><div class="chip">📅 ${esc(state.settings.eventDate||"")}</div>${countdown()}</div></section>
 
 <div class="section-title"><div><h2>Alle wichtigen Informationen</h2><p>Professionell organisiert, übersichtlich und mobil verfügbar.</p></div></div>
 <section class="grid main-sections">
   <article class="card"><div class="icon">🐴</div><h3>O-Ritt 2026</h3><p>Ablauf, Zeitplan und Veranstaltungsinformationen.</p><button type="button" class="arrow" onclick="go('oritt')">›</button></article>
   <article class="card"><div class="icon">🏇</div><h3>Teilnehmer</h3><p>Startdaten, Status und freigegebene GPX-Strecke.</p><button type="button" class="arrow" onclick="go('teilnehmer')">›</button></article>
   <article class="card"><div class="icon">🏆</div><h3>Ergebnisse</h3><p>Öffentliche Ergebnisansicht und Platzierungen.</p><button type="button" class="arrow" onclick="go('ergebnisse')">›</button></article>
-  <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p><a class="arrow" href="assets/lageplan.png" target="_blank" rel="noopener">›</a></article>
+  <article class="card"><div class="icon">🗺️</div><h3>Anreise & Lageplan</h3><p>Adresse, Parkflächen, Paddocks und Geländeübersicht.</p>${state.settings.mediaPaddockUrl?`<a class="arrow" href="${esc(state.settings.mediaPaddockUrl)}" target="_blank" rel="noopener">›</a>`:`<span class="arrow disabled">–</span>`}</article>
   <article class="card"><div class="icon">📋</div><h3>Meldestelle</h3><p>Öffentliche Zeiteinteilung der angemeldeten Teilnehmer.</p><button type="button" class="arrow" onclick="go('zeitplan')">›</button></article>
   <article class="card secure-card"><div class="icon">🔒</div><h3>Helferbereich</h3><p>Geschützter Zugang zu Einsatzplan, Stationen und Helferinformationen.</p><button type="button" class="arrow" aria-label="Helferbereich öffnen" onclick="openHelperArea()">›</button></article>
   <article class="card secure-card"><div class="icon">🛡️</div><h3>Adminbereich</h3><p>Geschützter Zugang zur Verwaltung des Event Managers.</p><button type="button" class="arrow" onclick="go('admin')">›</button></article>
@@ -106,8 +106,9 @@ function homePage(){return `<section class="hero"><div><div class="kicker">Reit-
 <section class="panel">
   <div class="head"><div><h2>🗺️ Lageplan & Veranstaltungsplakat</h2><p class="sub">Zum Vergrößern einfach auf ein Bild tippen.</p></div></div>
   <div class="event-images">
-    <a href="assets/beach-poster.png" target="_blank" rel="noopener"><img src="assets/beach-poster.png" alt="Offizielles Beach Please Veranstaltungsplakat"></a>
-    <a href="assets/lageplan.png" target="_blank" rel="noopener"><img src="assets/lageplan.png" alt="Lageplan des Veranstaltungsgeländes"></a>
+    ${state.settings.mediaInvitationUrl?`<a href="${esc(state.settings.mediaInvitationUrl)}" target="_blank" rel="noopener"><img src="${esc(state.settings.mediaInvitationUrl)}" alt="Einladungsplakat"></a>`:""}
+    ${state.settings.mediaPaddockUrl?`<a href="${esc(state.settings.mediaPaddockUrl)}" target="_blank" rel="noopener"><img src="${esc(state.settings.mediaPaddockUrl)}" alt="Paddock- oder Lageplan"></a>`:""}
+    ${state.settings.mediaPosterUrl?`<a href="${esc(state.settings.mediaPosterUrl)}" target="_blank" rel="noopener"><img src="${esc(state.settings.mediaPosterUrl)}" alt="Veranstaltungsinformation"></a>`:""}
   </div>
   <div class="legend-grid">
     <div><span class="legend-color yellow"></span><strong>Gelb:</strong> Teilnehmer-Paddocks, maximal 3,5 × 3,5 m</div>
@@ -350,6 +351,11 @@ function adminScoreManagement(){
   ${state.participants.length&&stations.length?`<div class="schedule-table" role="table"><div class="schedule-row schedule-head"><div>Teilnehmer</div><div>Station</div><div>Punkte</div><div>Aktion</div></div>${state.participants.flatMap(p=>stations.map(st=>`<div class="schedule-row"><div><strong>${esc(p.startNumber||"-")} · ${esc(p.name||"")}</strong><br><small>${esc(p.horse||"")}</small></div><div>${esc(st.name)}</div><div><input id="admin-score-${p.id}-${st.id}" type="number" min="0" max="${Number(st.maxPoints||state.settings.maxPointsPerStation||200)}" step="0.5" value="${scoreFor(p.id,st.id)?.points??""}"></div><div><button class="btn alt" type="button" onclick="saveAdminScore('${p.id}','${st.id}')">Speichern</button></div></div>`)).join("")}</div>`:`<div class="notice">Noch keine Teilnehmer oder Stationen vorhanden.</div>`}</section>`;
 }
 
+
+function mediaUploadCard(slot,label,url){
+  return `<div class="entry media-admin"><div style="width:100%"><strong>${esc(label)}</strong>${url?`<div class="media-preview"><a href="${esc(url)}" target="_blank" rel="noopener">Aktuelle Datei öffnen</a></div>`:`<p class="sub">Noch keine Datei hinterlegt.</p>`}<div class="form"><label class="full">Datei auswählen<input id="media-${slot}" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label></div><button class="btn alt" type="button" onclick="uploadEventMedia('${slot}')">Hochladen & verwenden</button>${url?`<button class="btn danger" type="button" onclick="removeEventMedia('${slot}')">Verknüpfung entfernen</button>`:""}<p id="media-status-${slot}" class="sub"></p></div></div>`;
+}
+
 function adminExtras(){
   return `<section class="panel">
     <div class="head"><div><h2>📦 Veranstaltungsstatus</h2><p class="sub">Aktueller Status: <strong>${eventArchived()?"archiviert":"aktiv"}</strong></p></div><span class="badge ${eventArchived()?"info":"ok"}">${eventArchived()?"ARCHIV":"AKTIV"}</span></div>
@@ -366,6 +372,7 @@ function adminExtras(){
       <label class="full"><input id="resetScores" type="checkbox" checked> Punkte zurücksetzen</label>
       <label class="full"><input id="resetAlerts" type="checkbox" checked> Meldungen zurücksetzen</label>
       <label class="full"><input id="resetHelpers" type="checkbox"> Helferzuordnungen zurücksetzen</label>
+      <label class="full"><input id="resetMedia" type="checkbox" checked> Startseitenbilder und Dokumentverknüpfungen zurücksetzen</label>
       <button class="btn full">Als aktive Veranstaltung vorbereiten</button>
     </form>
     <p class="sub">Stationen, Aufgaben und deren Beschreibungen bleiben als Vorlage erhalten.</p>
@@ -377,6 +384,13 @@ function adminExtras(){
       <label class="full">Allgemeine Informationen für Teilnehmer<textarea id="participantGeneralInfo">${esc(state.settings.participantGeneralInfo||"")}</textarea></label>
       <button class="btn full">Speichern</button>
     </form>
+  </section>
+  <section class="panel">
+    <h2>🗂️ Dateispeicher & Medien</h2>
+    <div class="notice">Bilder und PDFs werden direkt in Firebase Storage gespeichert. Erlaubt: JPG, PNG, WEBP und PDF bis 10 MB.</div>
+    ${mediaUploadCard("invitation","Einladungsplakat",state.settings.mediaInvitationUrl)}
+    ${mediaUploadCard("paddock","Paddock- oder Lageplan",state.settings.mediaPaddockUrl)}
+    ${mediaUploadCard("poster","Weitere Infoanzeige",state.settings.mediaPosterUrl)}
   </section>
   <section class="panel">
     <h2>📄 Dokumentencenter</h2>
@@ -486,14 +500,15 @@ async function prepareNewEvent(e){
   const title=document.getElementById("newEventTitle").value.trim();
   const date=document.getElementById("newEventDate").value;
   const maxPoints=Math.min(200,Math.max(1,Number(document.getElementById("newMaxPoints").value||200)));
-  const selected=["resetParticipants","resetScores","resetAlerts","resetHelpers"].filter(id=>document.getElementById(id)?.checked);
+  const selected=["resetParticipants","resetScores","resetAlerts","resetHelpers","resetMedia"].filter(id=>document.getElementById(id)?.checked);
   if(!confirm(`Neue aktive Veranstaltung vorbereiten? ${selected.length?"Ausgewählte alte Daten werden endgültig gelöscht.":"Alte Teilnehmer- und Ergebnisdaten bleiben erhalten."}`))return;
   if(document.getElementById("resetParticipants").checked)await clearCollection("participants");
   if(document.getElementById("resetScores").checked)await clearCollection("scores");
   if(document.getElementById("resetAlerts").checked)await clearCollection("alerts");
   if(document.getElementById("resetHelpers").checked)await clearCollection("helpers");
+  const mediaReset=document.getElementById("resetMedia").checked?{mediaPosterUrl:"",mediaPosterPath:"",mediaPaddockUrl:"",mediaPaddockPath:"",mediaInvitationUrl:"",mediaInvitationPath:""}:{};
   await Promise.all(scoringStations().map(st=>setDoc(doc(db,"roles",st.id),{maxPoints,updatedAt:serverTimestamp()},{merge:true})));
-  await setDoc(doc(db,"settings","main"),{eventTitle:title||"Neue Veranstaltung",eventDate:date,maxPointsPerStation:maxPoints,eventStatus:"active",activatedAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,"settings","main"),{eventTitle:title||"Neue Veranstaltung",eventDate:date,maxPointsPerStation:maxPoints,eventStatus:"active",...mediaReset,activatedAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
   toast("Neue Veranstaltung ist vorbereitet und aktiv.");
 }
 
@@ -506,6 +521,42 @@ window.saveAdminScore=async(participantId,stationId)=>{
   if(!Number.isFinite(points)||points<0||points>max)return toast(`Bitte 0 bis ${max} Punkte eingeben.`);
   await setDoc(doc(db,"scores",scoreKey(participantId,stationId)),{participantId,stationId,points,changedBy:"admin",changeType:"manual-correction",updatedAt:serverTimestamp()},{merge:true});
   toast("Punkte gespeichert.");
+};
+
+window.uploadEventMedia=async slot=>{
+  if(!state.isAdmin)return toast("Keine Berechtigung.");
+  const input=document.getElementById(`media-${slot}`);
+  const status=document.getElementById(`media-status-${slot}`);
+  const file=input?.files?.[0];
+  if(!file)return toast("Bitte zuerst eine Datei auswählen.");
+  const allowed=["image/jpeg","image/png","image/webp","application/pdf"];
+  if(!allowed.includes(file.type))return toast("Erlaubt sind JPG, PNG, WEBP und PDF.");
+  if(file.size>10*1024*1024)return toast("Die Datei darf höchstens 10 MB groß sein.");
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const eventKey=String(state.settings.eventDate||"event").replace(/[^0-9A-Za-z_-]/g,"_");
+  const path=`events/${eventKey}/media/${slot}-${Date.now()}-${safeName}`;
+  try{
+    if(status)status.textContent="Upload läuft …";
+    const storageRef=ref(storage,path);
+    await uploadBytes(storageRef,file,{contentType:file.type,customMetadata:{slot,eventTitle:String(state.settings.eventTitle||"")}});
+    const url=await getDownloadURL(storageRef);
+    const key=slot==="invitation"?"Invitation":slot==="paddock"?"Paddock":"Poster";
+    await setDoc(doc(db,"settings","main"),{[`media${key}Url`]:url,[`media${key}Path`]:path,updatedAt:serverTimestamp()},{merge:true});
+    if(status)status.textContent="Datei wurde gespeichert.";
+    toast("Datei hochgeladen.");
+  }catch(error){
+    console.error(error);
+    if(status)status.textContent="Upload fehlgeschlagen: "+(error?.code||error?.message||"Unbekannter Fehler");
+    toast("Upload fehlgeschlagen. Storage und Regeln prüfen.");
+  }
+};
+
+window.removeEventMedia=async slot=>{
+  if(!state.isAdmin)return toast("Keine Berechtigung.");
+  if(!confirm("Dateiverknüpfung von der Startseite entfernen? Die gespeicherte Archivdatei bleibt im Storage erhalten."))return;
+  const key=slot==="invitation"?"Invitation":slot==="paddock"?"Paddock":"Poster";
+  await setDoc(doc(db,"settings","main"),{[`media${key}Url`]:"",[`media${key}Path`]:"",updatedAt:serverTimestamp()},{merge:true});
+  toast("Verknüpfung entfernt.");
 };
 
 function helperGateLogin(e){e.preventDefault();if(document.getElementById("helperGatePassword").value!=="Helfer")return toast("Falsches Helferpasswort.");localStorage.removeItem("rvn_helper_id");localStorage.removeItem("rvn_helper_phone");localStorage.removeItem("rvn_station_access");sessionStorage.setItem("rvn_helper_gate","yes");state.page="helfer";window.renderApp()}
